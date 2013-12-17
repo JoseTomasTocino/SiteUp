@@ -36,9 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'siteup_api'
+    'south',
+    #'rest_framework',
+    #'rest_framework.authtoken',
+    'siteup_api',
+    'siteup_checker',
+    'django_extensions'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,10 +79,39 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
+import logging
+logging_format = '%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
+logging.basicConfig(level=logging.INFO, format=logging_format)
+logger = logging.getLogger(__name__)
