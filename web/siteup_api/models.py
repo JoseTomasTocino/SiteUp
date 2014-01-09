@@ -10,9 +10,10 @@ from django.core.exceptions import ValidationError
 
 from siteup_checker import monitoring
 
-# Validator OR combination
-
 class ValidateAnyOf(object):
+    """Receives a list of validators for a model field, and checks
+    if ANY of those validators passes. Raises ValidationError otherwise."""
+
     def __init__(self, *validators):
         self.validators = validators
 
@@ -30,6 +31,9 @@ class ValidateAnyOf(object):
 # Base models
 
 class BaseCheck(models.Model):
+    """Base model for the checks. It groups the common fields and relations.
+    It's an abstract base class, so no actual table is created for this model."""
+
     owner = models.ForeignKey(User, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -45,6 +49,8 @@ class BaseCheck(models.Model):
         abstract = True
 
 class CheckInList(models.Model):
+    """Generic model to represent checks of any kind in a set of checks."""
+
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey()
@@ -136,7 +142,6 @@ class HttpCheck(BaseCheck):
 
 
     def run_check(self):
-
         if not self.is_active:
             return
 
@@ -166,7 +171,6 @@ class DnsCheck(BaseCheck):
 
 
     def run_check(self):
-
         if not self.is_active:
             return
 
@@ -181,6 +185,8 @@ class DnsCheck(BaseCheck):
 # Logging
 
 class CheckLog(models.Model):
+    """Stores the result of the check."""
+
     date = models.DateTimeField(auto_now_add=True)
     is_ok = models.BooleanField(default=True)
     value = models.CharField(max_length=255, blank=True)
@@ -195,7 +201,14 @@ class CheckLog(models.Model):
 
 # Signal handlers
 
+# In order to have lists of checks regardless of their type
+# I've created a 'CheckInList' model. One is created for each check.
+# Creation and deletion of Check elements trigger the creation
+# and deletion of CheckInList elements.
+
 def add_check(sender, **kwargs):
+    """Creates a CheckInList element for the newly generated Check"""
+
     if 'created' in kwargs and kwargs['created']:
         instance = kwargs['instance']
         ctype = ContentType.objects.get_for_model(instance)
@@ -203,12 +216,15 @@ def add_check(sender, **kwargs):
                                           object_id=instance.id)
 
 def delete_check(sender, **kwargs):
+    """Deletes the CheckInList element associated to a recently deleted Check"""
+
     instance = kwargs['instance']
     object_id = instance.id
     ctype = ContentType.objects.get_for_model(instance)
 
     CheckInList.objects.get(object_id=object_id, content_type=ctype).delete()
 
+# Attachment of functions to triggers/signals
 check_types = [PortCheck, HttpCheck, DnsCheck, PingCheck]
 for check_type in check_types:
     post_save.connect(add_check, sender=check_type)
