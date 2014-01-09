@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -45,6 +46,16 @@ class BaseCheck(models.Model):
     logs = generic.GenericRelation('CheckLog')
     last_log_datetime = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def should_run_check(self):
+        if not self.is_active:
+            return False
+
+        time_since_last = datetime.now() - self.last_log_datetime
+        if time_since_last.seconds < self.check_interval * 60 - 1:
+            return False
+
+        return True
+
     class Meta:
         abstract = True
 
@@ -80,17 +91,14 @@ class PingCheck(BaseCheck):
 
 
     def run_check(self):
-
-        if not self.is_active:
+        if not self.should_run_check():
             return
+
+        # Initialize the log instance
+        log = models.CheckLog(check=self, is_ok=True)
 
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
-
-        # Initialize the log instance
-        log = models.CheckLog()
-        log.check = self
-        log.is_ok = True
 
         # Ping properly finished
         if check_result['valid']:
@@ -125,9 +133,10 @@ class PortCheck(BaseCheck):
 
 
     def run_check(self):
-
-        if not self.is_active:
+        if not self.should_run_check():
             return
+
+        # TO BE IMPLEMENTED
 
 
 class HttpCheck(BaseCheck):
@@ -142,18 +151,17 @@ class HttpCheck(BaseCheck):
 
 
     def run_check(self):
-        if not self.is_active:
+        if not self.should_run_check():
             return
 
-        # Use 404 by default
+        # Initialize the log instance
+        log = models.CheckLog(check=self)
+
+        # Check for 404 by default
         status_code = self.status_value if self.should_check_status else 404
 
         # Send check
         check_result = monitoring.check_http_header(self.target, status_code)
-
-        # Initialize the log instance
-        log = models.CheckLog()
-        log.check = self
 
         if check_result['valid']:
             log.value = check_result['status_code']
@@ -161,25 +169,20 @@ class HttpCheck(BaseCheck):
         else:
             log.is_ok = False
 
-        log.is_ok = check_result['status_ok'] if check_result['valid'] else False
-
         log.save()
 
 class DnsCheck(BaseCheck):
     resolved_address = models.CharField(max_length=255)
     register_type = models.CharField(max_length=20)
 
-
     def run_check(self):
-        if not self.is_active:
+        if not self.should_run_check():
             return
 
         check_result = monitoring.check_dns(self.target, self.resolved_address, self.register_type)
 
         # Initialize the log instance
-        log = models.CheckLog()
-        log.check = self
-        log.is_ok = check_result
+        log = models.CheckLog(check=self, is_ok=check_result)
         log.save()
 
 # Logging
