@@ -7,27 +7,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models.signals import post_save, post_delete
 from django.core import validators
-from django.core.exceptions import ValidationError
 
 from siteup_checker import monitoring
-
-class ValidateAnyOf(object):
-    """Receives a list of validators for a model field, and checks
-    if ANY of those validators passes. Raises ValidationError otherwise."""
-
-    def __init__(self, *validators):
-        self.validators = validators
-
-    def __call__(self, value):
-        errors = []
-        for validator in self.validators:
-            try:
-                validator(value)
-                return
-            except ValidationError as e:
-                errors.append(unicode(e.message) % e.params)
-
-        raise ValidationError('Combined validation failed: ' + ' '.join(errors))
+from .validators import ValidateAnyOf
 
 # Base models
 
@@ -48,12 +30,15 @@ class BaseCheck(models.Model):
 
     def should_run_check(self):
         if not self.is_active:
+            print "Check won't run: it's not active"
             return False
 
         time_since_last = datetime.now() - self.last_log_datetime
         if time_since_last.seconds < self.check_interval * 60 - 1:
+            print "Check won't run: not enough time has passed"
             return False
 
+        print "Check will run"
         return True
 
     class Meta:
@@ -65,6 +50,29 @@ class CheckInList(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey()
+
+class CheckLog(models.Model):
+    """Stores the result of the check."""
+
+    date = models.DateTimeField(auto_now_add=True)
+    is_ok = models.BooleanField(default=True)
+    value = models.CharField(max_length=255, blank=True)
+    extra = models.TextField(blank=True)
+    is_notified = models.BooleanField(default=False)
+
+    # Generic relation to the logged check
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    check = generic.GenericForeignKey()
+
+    # Update parent's last_log_datetime
+    def save(self, *args, **kwargs):
+        print "Setting date:", self.date
+        self.check.last_log_datetime = datetime.now()
+        self.check.save()
+
+        super(CheckLog, self).save(*args, **kwargs)
+
 
 # Concrete models
 
@@ -95,7 +103,7 @@ class PingCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = models.CheckLog(check=self, is_ok=True)
+        log = CheckLog(check=self, is_ok=True)
 
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
@@ -155,7 +163,7 @@ class HttpCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = models.CheckLog(check=self)
+        log = CheckLog(check=self)
 
         # Check for 404 by default
         status_code = self.status_value if self.should_check_status else 404
@@ -182,25 +190,8 @@ class DnsCheck(BaseCheck):
         check_result = monitoring.check_dns(self.target, self.resolved_address, self.register_type)
 
         # Initialize the log instance
-        log = models.CheckLog(check=self, is_ok=check_result)
+        log = CheckLog(check=self, is_ok=check_result)
         log.save()
-
-# Logging
-
-class CheckLog(models.Model):
-    """Stores the result of the check."""
-
-    date = models.DateTimeField(auto_now_add=True)
-    is_ok = models.BooleanField(default=True)
-    value = models.CharField(max_length=255, blank=True)
-    extra = models.TextField(blank=True)
-    is_notified = models.BooleanField(default=False)
-
-    # Generic relation to the logged check
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    check = generic.GenericForeignKey()
-
 
 # Signal handlers
 
