@@ -31,9 +31,9 @@ def check_ping(target):
 (?P<transmitted>\d+) \s+ packets .*? # Packets transmitted
 (?P<received>\d+) \s+ received   .*? # Packets received
 = \s+                                # Separator
-(?P<min>[^\/]*)\/                    # Min time
-(?P<avg>[^\/]*)\/                    # Avg time
-(?P<max>[^\/]*)\/                    # Max time
+(?P<min>[^/]*)/                    # Min time
+(?P<avg>[^/]*)/                    # Avg time
+(?P<max>[^/]*)/                    # Max time
 (?P<mdev>.*?) \s ms                  # Mdev
 """, re.DOTALL | re.IGNORECASE | re.MULTILINE | re.VERBOSE)
 
@@ -42,7 +42,7 @@ def check_ping(target):
 
     # If it doesn't match (due to an error)
     if not results:
-        return { 'valid' : False }
+        return {'valid': False}
 
     # Get different fields
     results = results.groupdict()
@@ -109,7 +109,7 @@ def check_http_content(target, content_string):
 
 
 if __name__ == '__main__':
-#    check_ping('localhost')
-#    print check_dns('josetomastocino.com', 'A', '78.47.140.228')
+    print check_ping('localhost')
+    print check_dns('josetomastocino.com', 'A', '78.47.140.228')
     print check_http_header('http://josetomastocino.com/', 200)
     print check_http_content('http://josetomastocino.com', 'Ingeniero')

@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 
+
 class ValidateAnyOf(object):
     """Receives a list of validators for a model field, and checks
     if ANY of those validators passes. Raises ValidationError otherwise."""

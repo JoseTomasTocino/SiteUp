@@ -5,51 +5,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.db.models.signals import post_save, post_delete
 from django.core import validators
+from django.core.exceptions import ValidationError
 
 from siteup_checker import monitoring
 from .validators import ValidateAnyOf
 
-# Base models
-
-class BaseCheck(models.Model):
-    """Base model for the checks. It groups the common fields and relations.
-    It's an abstract base class, so no actual table is created for this model."""
-
-    owner = models.ForeignKey(User, null=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
-    target = models.TextField(blank=False)
-    check_interval = models.PositiveSmallIntegerField(default=1)
-    notify_email = models.BooleanField(default=True)
-
-    logs = generic.GenericRelation('CheckLog')
-    last_log_datetime = models.DateTimeField(auto_now_add=True, blank=True)
-
-    def should_run_check(self):
-        if not self.is_active:
-            print "Check won't run: it's not active"
-            return False
-
-        time_since_last = datetime.now() - self.last_log_datetime
-        if time_since_last.seconds < self.check_interval * 60 - 1:
-            print "Check won't run: not enough time has passed"
-            return False
-
-        print "Check will run"
-        return True
-
-    class Meta:
-        abstract = True
-
-class CheckInList(models.Model):
-    """Generic model to represent checks of any kind in a set of checks."""
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    check = generic.GenericForeignKey()
 
 class CheckLog(models.Model):
     """Stores the result of the check."""
@@ -74,29 +35,62 @@ class CheckLog(models.Model):
         super(CheckLog, self).save(*args, **kwargs)
 
 
-# Concrete models
+class BaseCheck(models.Model):
+    """Base model for the checks. It groups the common fields and relations.
+    It's an abstract base class, so no actual table is created for this model."""
+
+    owner = models.ForeignKey(User, null=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    target = models.TextField(blank=False)
+    check_interval = models.PositiveSmallIntegerField(default=1)
+    notify_email = models.BooleanField(default=True)
+
+    logs = generic.GenericRelation('CheckLog')
+    last_log_datetime = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def should_run_check(self):
+        """Confirms that the check can be run, because it's both active and enough time has passed since the last
+        time it ran. """
+
+        if not self.is_active:
+            return False
+
+        # Subtract one second from the difference to handle timing deviations
+        time_since_last = datetime.now() - self.last_log_datetime
+        if time_since_last.seconds < self.check_interval * 60 - 1:
+            return False
+
+        return True
+
+    class Meta:
+        abstract = True
+
+
+#######################################################################################################################
+# Concrete Check Models
+
 
 class PingCheck(BaseCheck):
     should_check_timeout = models.BooleanField(default=False)
     timeout_value = models.PositiveSmallIntegerField(null=True, blank=True,
-        validators=[ValidateAnyOf(validators.MaxValueValidator(10),
-                                  validators.MinValueValidator(100))])
+                                                     validators=[ValidateAnyOf(validators.MaxValueValidator(10),
+                                                                               validators.MinValueValidator(100))])
 
     def clean(self):
-        target_ok = False
 
         try:
             # Check if it's an IP
             validators.validate_ipv46_address(self.target)
             target_ok = True
-        except:
+        except ValidationError:
             # Check if it's a hostname
-            hostname_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
+            hostname_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
             target_ok = re.match(hostname_regex, self.target)
 
         if not target_ok:
             raise ValidationError('Target should be an IP or a valid hostname')
-
 
     def run_check(self):
         if not self.should_run_check():
@@ -139,12 +133,11 @@ class PortCheck(BaseCheck):
     should_check_response = models.BooleanField(default=False)
     response_value = models.CharField(max_length=255, blank=True)
 
-
     def run_check(self):
         if not self.should_run_check():
             return
 
-        # TO BE IMPLEMENTED
+            # TODO
 
 
 class HttpCheck(BaseCheck):
@@ -156,7 +149,6 @@ class HttpCheck(BaseCheck):
 
     should_check_content = models.BooleanField(default=False)
     content_value = models.CharField(max_length=255, blank=True)
-
 
     def run_check(self):
         if not self.should_run_check():
@@ -179,6 +171,7 @@ class HttpCheck(BaseCheck):
 
         log.save()
 
+
 class DnsCheck(BaseCheck):
     resolved_address = models.CharField(max_length=255)
     register_type = models.CharField(max_length=20)
@@ -193,33 +186,44 @@ class DnsCheck(BaseCheck):
         log = CheckLog(check=self, is_ok=check_result)
         log.save()
 
-# Signal handlers
+
+###############################################################
+# Generic Check List
 
 # In order to have lists of checks regardless of their type
 # I've created a 'CheckInList' model. One is created for each check.
 # Creation and deletion of Check elements trigger the creation
 # and deletion of CheckInList elements.
 
-def add_check(sender, **kwargs):
-    """Creates a CheckInList element for the newly generated Check"""
+# from django.db.models.signals import post_save, post_delete
 
-    if 'created' in kwargs and kwargs['created']:
-        instance = kwargs['instance']
-        ctype = ContentType.objects.get_for_model(instance)
-        CheckInList.objects.get_or_create(content_type=ctype,
-                                          object_id=instance.id)
+# class CheckInList(models.Model):
+#     """Generic model to represent checks of any kind in a set of checks."""
 
-def delete_check(sender, **kwargs):
-    """Deletes the CheckInList element associated to a recently deleted Check"""
+#     content_type = models.ForeignKey(ContentType)
+#     object_id = models.PositiveIntegerField()
+#     check = generic.GenericForeignKey()
 
-    instance = kwargs['instance']
-    object_id = instance.id
-    ctype = ContentType.objects.get_for_model(instance)
+# def add_check(sender, **kwargs):
+#     """Creates a CheckInList element for the newly generated Check"""
 
-    CheckInList.objects.get(object_id=object_id, content_type=ctype).delete()
+#     if 'created' in kwargs and kwargs['created']:
+#         instance = kwargs['instance']
+#         ctype = ContentType.objects.get_for_model(instance)
+#         CheckInList.objects.get_or_create(content_type=ctype,
+#                                           object_id=instance.id)
 
-# Attachment of functions to triggers/signals
-check_types = [PortCheck, HttpCheck, DnsCheck, PingCheck]
-for check_type in check_types:
-    post_save.connect(add_check, sender=check_type)
-    post_delete.connect(delete_check, sender=check_type)
+# def delete_check(sender, **kwargs):
+#     """Deletes the CheckInList element associated to a recently deleted Check"""
+
+#     instance = kwargs['instance']
+#     object_id = instance.id
+#     ctype = ContentType.objects.get_for_model(instance)
+
+#     CheckInList.objects.get(object_id=object_id, content_type=ctype).delete()
+
+# # Attachment of functions to triggers/signals
+# check_types = [PortCheck, HttpCheck, DnsCheck, PingCheck]
+# for check_type in check_types:
+#     post_save.connect(add_check, sender=check_type)
+#     post_delete.connect(delete_check, sender=check_type)
