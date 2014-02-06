@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     #'rest_framework.authtoken',
     'siteup_api',
     'siteup_checker',
+    'siteup_frontend',
     'django_extensions'
 )
 
