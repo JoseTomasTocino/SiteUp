@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block "content" %}
+<div class="login form">
+    <form action="" method="POST">
+        {{ form.as_p }}
+
+        {% csrf_token %}
+
+        <fieldset class="text_right">
+            <p class="left">
+                <a href="/reset-password">
+                    {% trans "Reset my password" %}
+                </a>
+            </p>
+
+            <input type="submit" value="{% trans "Log in" %}">
+        </fieldset>
+    </form>
+</div>
+
+{% endblock %}

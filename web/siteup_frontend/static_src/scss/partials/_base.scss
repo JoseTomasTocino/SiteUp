@@ -1,0 +1,33 @@
+.container {
+    width: 1060px;
+    margin: 0 auto;
+}
+
+body {
+    background-color: #224f6b;
+    font-family: 'Open Sans', sans-serif;
+    color: #b3d2d7;
+}
+
+a {
+    text-decoration: none;
+    color: #59a8b8;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+input[type=text], input[type=password] {
+    border-radius: 2px;
+    padding: 5px 10px;
+    border: 0;
+}
+
+input[type=submit] {
+    border: 0;
+    border-radius: 1px;
+    padding: 5px 10px;
+
+    background-color: #59a8b8;
+}

@@ -2,7 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-import main_app
+
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 class BaseForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -16,6 +21,7 @@ class BaseForm(forms.Form):
                     classes += ' error'
                     self.fields[f_name].widget.attrs['class'] = classes
 
+
 class BaseModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(BaseModelForm, self).__init__(*args, **kwargs)
@@ -27,15 +33,39 @@ class BaseModelForm(forms.ModelForm):
                     classes += ' error'
                     self.fields[f_name].widget.attrs['class'] = classes
 
+
+###################################################################################
+
+
 class LoginForm(BaseForm):
-    username = forms.CharField(label="Usuario")
-    password = forms.CharField(label="Contraseña", widget=forms.PasswordInput())
+    #error_css_class = 'errorcio'
+    username = forms.CharField(label=_("Username"))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
-class AssessmentProcedureForm(BaseModelForm):
-    class Meta:
-        model = main_app.models.AssessmentProcedure
-        exclude = ['tools']
+    def clean(self):
+        super(BaseForm, self).clean()
 
-class AssessmentToolForm(BaseModelForm):
-    class Meta:
-        model  = main_app.models.AssessmentTool
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username and password:
+            self.user = authenticate(username=username, password=password)
+            if self.user is None:
+                self.user = authenticate(email=username, password=password)
+
+            if self.user is None:
+                raise forms.ValidationError(_("Invalid login"))
+            elif not self.user.is_active:
+                raise forms.ValidationError(_("This account is inactive."))
+
+        return self.cleaned_data
+
+    def get_user(self):
+        return self.user
+
+
+class SignupForm(BaseForm):
+    username = forms.CharField(label=_("Username"), max_length=254)
+    email = forms.CharField(label=_("Email"))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+
