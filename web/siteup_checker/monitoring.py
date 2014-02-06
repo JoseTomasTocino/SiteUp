@@ -9,20 +9,12 @@ import requests
 
 def check_ping(target):
     """Sends a ping to the given target, and returns a dictionary with the
-    results
-
-    :param target: the computer to ping, identified with either an IP or a
-        domain name
-
-    :returns whatever
-
-    Returns a dictionary with the different fields"""
+    fields of the result."""
 
     # Launch ping process and get stdout's content
-    ping_raw_response = subprocess.Popen(["ping", "-c3", "-w10", target],
-                                         stdout=subprocess.PIPE).stdout.read()
+    ping_raw_response = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE).stdout.read()
 
-    # Compile regular expression
+    # Compile regular expression to parse ping's output
     matcher = re.compile(r"""
 ^PING \s+                            # Header
 (?P<host>.*?) \s+                    # Host
@@ -44,11 +36,11 @@ def check_ping(target):
     if not results:
         return {'valid': False}
 
-    # Get different fields
+    # Get fields
     results = results.groupdict()
     results['valid'] = True
 
-    # Cast the numbers to float
+    # Cast the numeric fields to float
     for field in ['min', 'avg', 'max', 'mdev', 'transmitted', 'received']:
         results[field] = float(results[field])
 
@@ -56,8 +48,7 @@ def check_ping(target):
 
 
 def check_dns(target, register_type, expected_address):
-    """Checks if a certain domain has a DNS register (of the proper type) that
-    matches the expected address"""
+    """Checks if a certain domain has a DNS register (of the proper type) that matches the expected address"""
 
     return_obj = {}
 
@@ -74,14 +65,16 @@ def check_dns(target, register_type, expected_address):
             if expected_address.strip() == single_result.to_text().strip():
                 return_obj['status_ok'] = True
 
-    # On timeout, or any other problem, just return false
-    except:
+        # On timeout, or any other problem, just return false
+    except Exception, e:  # TODO: add the proper exception type
         return_obj['valid'] = False
 
     return return_obj
 
 
 def check_http_header(target, status_code):
+    """Checks if a certain http URL returns the correct status code."""
+
     return_obj = {}
 
     try:
@@ -89,13 +82,15 @@ def check_http_header(target, status_code):
         return_obj['valid'] = True
         return_obj['status_code'] = r.status_code
         return_obj['status_ok'] = r.status_code == status_code
-    except:
+    except: # TODO: add the proper exception type
         return_obj['valid'] = False
 
     return return_obj
 
 
 def check_http_content(target, content_string):
+    """Checks if a certain http URL contains the specified string."""
+
     return_obj = {}
 
     try:

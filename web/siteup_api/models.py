@@ -12,7 +12,7 @@ from siteup_checker import monitoring
 from .validators import ValidateAnyOf
 
 
-class CheckLog(models.Model):
+class BaseCheckLog(models.Model):
     """Stores the result of the check."""
 
     date = models.DateTimeField(auto_now_add=True)
@@ -21,18 +21,33 @@ class CheckLog(models.Model):
     extra = models.TextField(blank=True)
     is_notified = models.BooleanField(default=False)
 
-    # Generic relation to the logged check
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    check = generic.GenericForeignKey()
+    # # Update parent's last_log_datetime
+    # def save(self, *args, **kwargs):
+    #     print "Setting date:", self.date
+    #     print "Assoc. check:", self.check
+    #     self.check.last_log_datetime = datetime.now()
+    #     self.check.save()
+    #
+    #     super(CheckLog, self).save(*args, **kwargs)
 
-    # Update parent's last_log_datetime
-    def save(self, *args, **kwargs):
-        print "Setting date:", self.date
-        self.check.last_log_datetime = datetime.now()
-        self.check.save()
+    class Meta:
+        abstract = True
 
-        super(CheckLog, self).save(*args, **kwargs)
+
+class PingCheckLog(BaseCheckLog):
+    check = models.ForeignKey("PingCheck")
+
+
+class PortCheckLog(BaseCheckLog):
+    check = models.ForeignKey("PortCheck")
+
+
+class HttpCheckLog(BaseCheckLog):
+    check = models.ForeignKey("HttpCheck")
+
+
+class DnsCheckLog(BaseCheckLog):
+    check = models.ForeignKey("DnsCheck")
 
 
 class BaseCheck(models.Model):
@@ -48,7 +63,7 @@ class BaseCheck(models.Model):
     notify_email = models.BooleanField(default=True)
 
     logs = generic.GenericRelation('CheckLog')
-    last_log_datetime = models.DateTimeField(auto_now_add=True, blank=True)
+    last_log_datetime = models.DateTimeField(blank=True, null=True)
 
     def should_run_check(self):
         """Confirms that the check can be run, because it's both active and enough time has passed since the last
@@ -56,6 +71,10 @@ class BaseCheck(models.Model):
 
         if not self.is_active:
             return False
+
+        # If check's just been created, force check
+        if self.last_log_datetime is None:
+            return True
 
         # Subtract one second from the difference to handle timing deviations
         time_since_last = datetime.now() - self.last_log_datetime
@@ -79,7 +98,6 @@ class PingCheck(BaseCheck):
                                                                                validators.MinValueValidator(100))])
 
     def clean(self):
-
         try:
             # Check if it's an IP
             validators.validate_ipv46_address(self.target)
@@ -97,7 +115,7 @@ class PingCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = CheckLog(check=self, is_ok=True)
+        log = PingCheckLog(check=self, is_ok=True)
 
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
@@ -114,10 +132,12 @@ class PingCheck(BaseCheck):
                 # Check if response time is within boundaries
                 if self.should_check_timeout and int(check_result['avg']) > self.timeout_value:
                     log.is_ok = False
-                    log.extra = 'Ping max response time exceeded'
+                    log.extra = 'Ping max response time exceeded' # TODO: i18n these strings
 
+            # Most pings were lost
             else:
                 log.is_ok = False
+                log.extra = 'Most packets were lost'
 
         # Ping could not be launched
         else:
@@ -125,7 +145,6 @@ class PingCheck(BaseCheck):
             log.extra = 'Incorrect host'
 
         log.save()
-        print log.id
 
 
 class PortCheck(BaseCheck):
@@ -155,7 +174,7 @@ class HttpCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = CheckLog(check=self)
+        log = HttpCheckLog(check=self)
 
         # Check for 404 by default
         status_code = self.status_value if self.should_check_status else 404
@@ -180,12 +199,22 @@ class DnsCheck(BaseCheck):
         if not self.should_run_check():
             return
 
-        check_result = monitoring.check_dns(self.target, self.resolved_address, self.register_type)
+        check_result = monitoring.check_dns(target=self.target,
+                                            expected_address=self.resolved_address,
+                                            register_type=self.register_type)
 
         # Initialize the log instance
-        log = CheckLog(check=self, is_ok=check_result)
+        log = DnsCheckLog(check=self, is_ok=check_result)
+
+        if check_result['valid']:
+            log.is_ok = check_result['status_ok']
+        else:
+            log.is_ok = False
+
         log.save()
 
+
+CHECK_TYPES = [DnsCheck, PingCheck, PortCheck, HttpCheck]
 
 ###############################################################
 # Generic Check List
