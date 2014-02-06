@@ -4,7 +4,12 @@
 {% block "content" %}
 <div class="login form">
     <form action="" method="POST">
-        {{ form.as_p }}
+
+        {% for field in form %}
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+        {% endfor %}
 
         {% csrf_token %}
 
