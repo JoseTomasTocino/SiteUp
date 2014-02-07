@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 class BaseForm(forms.Form):
+    """Base form class that adds a '.error' class to input widgets"""
+
     def __init__(self, *args, **kwargs):
         super(BaseForm, self).__init__(*args, **kwargs)
 
@@ -22,6 +24,8 @@ class BaseForm(forms.Form):
 
 
 class BaseModelForm(forms.ModelForm):
+    """Base model form class that adds a '.error' class to input widgets"""
+
     def __init__(self, *args, **kwargs):
         super(BaseModelForm, self).__init__(*args, **kwargs)
 
@@ -36,7 +40,8 @@ class BaseModelForm(forms.ModelForm):
 
 
 class LoginForm(BaseForm):
-    error_css_class = 'errorcio'
+    """Form for the login process. Tries to login with both the username and email."""
+
     username = forms.CharField(label=_("Username"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
@@ -63,14 +68,16 @@ class LoginForm(BaseForm):
 
 
 class SignupForm(BaseForm):
+    """Form for the signup process. Checks if the username already exists."""
+
     username = forms.CharField(label=_("Username"), max_length=254)
-    email = forms.CharField(label=_("Email"))
+    email = forms.EmailField(label=_("Email"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def clean(self):
         try:
             User.objects.get(username=self.cleaned_data.get('username'))
-            raise forms.ValidationError(_("Username is already used"))
+            raise forms.ValidationError(_("Username is already taken"))
         except User.DoesNotExist, e:
             pass
 
