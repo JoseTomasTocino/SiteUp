@@ -1,0 +1,76 @@
+nav.controls {
+    border-bottom: 1px solid #b3d2d7;
+    padding-bottom: 10px;
+
+    > .left {
+        padding-top: 5px;
+    }
+}
+
+.check-group {
+    // border-top: 1px solid #b3d2d7;
+    // border-left: 1px solid #b3d2d7;
+    // background-color: rgba(179, 210, 215, 0.05);
+    margin: 1em 0;
+    padding-bottom: 5px;
+    overflow: hidden;
+
+    border-bottom: 1px solid #b3d2d7;
+
+    h3, h4 {
+        color: #fff;
+    }
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .check {
+        @extend .cf;
+        margin-bottom: 10px;
+        padding-top: 10px;
+
+        & + .check {
+            border-top: 1px dotted darken(#b3d2d7, 10%);
+        }
+    }
+
+    .check-status {
+        width: 50px;
+        height: 50px;
+
+        float: left;
+        margin: 0 1em 0.5em 0;
+
+        background-color: #333;
+        border-radius: 3px;
+
+        &.ok {
+            background-color: #8adc60;
+        }
+
+        &.error {
+            background-color: #f00;
+        }
+    }
+
+    .info {
+        float: left;
+        width: 600px;
+        font-size: 14px;
+
+        h4 {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        h5 {
+            margin: 0.1em 0 0.5em;
+            font-weight: normal;
+            font-family: 'Consolas', monospace;
+        }
+
+    }
+}

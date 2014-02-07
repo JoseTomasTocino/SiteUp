@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: #224f6b;
+    background: url(../images/body-bg.png) #224f6b;
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
     color: #b3d2d7;
@@ -31,4 +31,21 @@ input[type=submit] {
     padding: 5px 10px;
 
     background-color: #59a8b8;
+}
+
+.button {
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 6px 12px;
+    color: #333;
+    background-color: #eff;
+    border-color: #444;
+
+    &:hover {
+        background-color: #ebebeb;
+        border-color: #adadad;
+    }
 }
