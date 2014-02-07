@@ -3,6 +3,7 @@ from django.views.generic.edit import FormView
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 from django.shortcuts import redirect
 
@@ -23,7 +24,7 @@ class LoginView(FormView):
     def form_valid(self, form):
         login(self.request, form.get_user())
 
-        return redirect('home')
+        return redirect('dashboard')
 
 
 def logout_view(request):
@@ -41,6 +42,11 @@ class SignupView(FormView):
                                         email=form.cleaned_data['email'],
                                         password=form.cleaned_data['password'])
 
+
+        messages.info(self.request, 'User was created successfully. You can now login.')
         return redirect('home')
 
+
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
 

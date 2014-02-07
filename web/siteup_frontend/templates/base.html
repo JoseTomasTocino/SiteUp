@@ -49,6 +49,16 @@
     </div>
 </header>
 
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="message container {{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% block "content" %}
     wat
 {% endblock %}

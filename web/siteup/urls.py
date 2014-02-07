@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^login', fe_views.LoginView.as_view(), name="login"),
     url(r'^logout', fe_views.logout_view, name="logout"),
     url(r'^signup', fe_views.SignupView.as_view(), name="signup"),
+    url(r'^dashboard', fe_views.DashboardView.as_view(), name="dashboard"),
     url(r'^admin/', include(admin.site.urls)),
 )
