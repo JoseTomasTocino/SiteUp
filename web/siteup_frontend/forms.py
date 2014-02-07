@@ -17,9 +17,8 @@ class BaseForm(forms.Form):
         if self.errors:
             for f_name in self.fields:
                 if f_name in self.errors:
-                    classes = self.fields[f_name].widget.attrs.get('class', '')
-                    classes += ' error'
-                    self.fields[f_name].widget.attrs['class'] = classes
+                    classes = [self.fields[f_name].widget.attrs.get('class', ''), "error"]
+                    self.fields[f_name].widget.attrs['class'] = ' '.join(filter(None, classes))
 
 
 class BaseModelForm(forms.ModelForm):
@@ -29,16 +28,15 @@ class BaseModelForm(forms.ModelForm):
         if self.errors:
             for f_name in self.fields:
                 if f_name in self.errors:
-                    classes = self.fields[f_name].widget.attrs.get('class', '')
-                    classes += ' error'
-                    self.fields[f_name].widget.attrs['class'] = classes
+                    classes = [self.fields[f_name].widget.attrs.get('class', ''), "error"]
+                    self.fields[f_name].widget.attrs['class'] = ' '.join(filter(None, classes))
 
 
 ###################################################################################
 
 
 class LoginForm(BaseForm):
-    #error_css_class = 'errorcio'
+    error_css_class = 'errorcio'
     username = forms.CharField(label=_("Username"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
@@ -68,4 +66,14 @@ class SignupForm(BaseForm):
     username = forms.CharField(label=_("Username"), max_length=254)
     email = forms.CharField(label=_("Email"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+
+    def clean(self):
+        try:
+            User.objects.get(username=self.cleaned_data.get('username'))
+            raise forms.ValidationError(_("Username is already used"))
+        except User.DoesNotExist, e:
+            pass
+
+        return self.cleaned_data
+
 

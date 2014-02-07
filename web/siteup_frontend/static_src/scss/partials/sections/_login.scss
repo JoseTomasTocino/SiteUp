@@ -27,5 +27,28 @@
         margin: 0;
         padding: 0;
         border: 0;
+
+        a {
+            display: inline-block;
+            padding: 5px 0;
+        }
+    }
+
+    .error {
+
+    }
+
+    .errorlist {
+        list-style: none;
+        padding: 5px 10px;
+        margin-top: -0.6em;
+
+        border: 1px solid #f22;
+        background-color: rgba(255, 34,34, 0.5);
+
+        li {
+            display: inline;
+            font-size: 0.8em;
+        }
     }
 }
