@@ -50,13 +50,20 @@ class DnsCheckLog(BaseCheckLog):
     check = models.ForeignKey("DnsCheck")
 
 
+class CheckGroup(models.Model):
+    """Group of related checks"""
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    owner = models.ForeignKey(User, null=True)
+
+
 class BaseCheck(models.Model):
     """Base model for the checks. It groups the common fields and relations.
     It's an abstract base class, so no actual table is created for this model."""
 
-    owner = models.ForeignKey(User, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    group = models.ForeignKey(CheckGroup)
     is_active = models.BooleanField(default=True)
     target = models.TextField(blank=False)
     check_interval = models.PositiveSmallIntegerField(default=1)

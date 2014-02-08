@@ -64,6 +64,7 @@ nav.controls {
         h4 {
             font-weight: 600;
             margin: 0;
+            font-size: 16px;
         }
 
         h5 {
@@ -73,4 +74,33 @@ nav.controls {
         }
 
     }
+
+    .graph {
+        float: left;
+        width: 394px;
+        height: 100px;
+    }
+}
+
+#graphs{
+    margin-bottom:2em
+}
+
+.graph .axis{
+    fill:#fff;
+    font-size:10px
+}
+
+.graph .axis line,.graph .axis path{
+    stroke-width:hairline;
+    fill:none;
+    stroke:#eee;
+    shape-rendering:crispEdges;
+}
+
+.graph path.path{
+    stroke:#fff;
+    stroke-width:2px;
+    stroke-opacity:1;
+    fill:none;
 }

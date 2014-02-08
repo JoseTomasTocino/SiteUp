@@ -27,14 +27,14 @@ module.exports = function (grunt) {
                 separator: ';',
             },
             build: {
-                src: ['src/js/**/*.js'],
-                dest: 'src/js/main.js'
+                src: ['siteup_frontend/static_src/js/**/*.js'],
+                dest: 'siteup_frontend/static/js/main.js'
             }
         },
         uglify: {
             build: {
-                src: 'src/js/main.js',
-                dest: 'assets/js/main.min.js'
+                src: 'siteup_frontend/static/js/main.js',
+                dest: 'siteup_frontend/static/js/main.js'
             }
         },
         watch: {
@@ -46,8 +46,11 @@ module.exports = function (grunt) {
                 }
             },
             js: {
-                files: 'src/js/**/*.js',
-                tasks: ['clean:js', 'concat', 'uglify'],
+                files: 'siteup_frontend/static_src/js/**/*.js',
+                tasks: ['clean:js', 'concat'/*, 'uglify'*/],
+                options: {
+                    livereload: true,
+                }
             }
         }
     });
@@ -59,6 +62,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['clean:sass', 'clean:js', 'compass', 'autoprefixer']);
-//    grunt.registerTask('default', ['clean:sass', 'clean:js', 'compass', 'autoprefixer', 'concat', 'uglify']);
+    // grunt.registerTask('default', ['clean:sass', 'clean:js', 'compass', 'autoprefixer']);
+    grunt.registerTask('default', ['clean:sass', 'clean:js', 'compass', 'autoprefixer', 'concat' /*, 'uglify'*/]);
 }
