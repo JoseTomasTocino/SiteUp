@@ -1,5 +1,5 @@
 nav.controls {
-    border-bottom: 1px solid #b3d2d7;
+    // border-bottom: 1px solid #b3d2d7;
     padding-bottom: 10px;
 
     > .left {
@@ -7,41 +7,72 @@ nav.controls {
     }
 }
 
+.message-no-checks {
+    background-color: rgba(#000, 0.1);
+    text-align: center;
+    padding: 30px 0;
+    border-top: 1px solid rgba(#b3d2d7, 0.3);
+    border-bottom: 1px solid rgba(#b3d2d7, 0.3);
+}
+
 .check-group {
     // border-top: 1px solid #b3d2d7;
     // border-left: 1px solid #b3d2d7;
     // background-color: rgba(179, 210, 215, 0.05);
-    margin: 0;
+    border-collapse: collapse;
+
+    margin: 15px 0 0;
     padding-bottom: 5px;
     overflow: hidden;
 
-    border-bottom: 1px solid #b3d2d7;
+    border-top: 1px solid rgba(#b3d2d7, 0.5);
+
+    & > header {
+        @extend .cf;
+        padding: 10px;
+        background-color: rgba(#000, 0.1);
+
+        h3 {
+            width: 800px;
+            float: left;
+            margin: 0;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .actions{
+            float: right;
+            // font-size: 35px;
+            // line-height: 35px;
+        }
+
+    }
 
     h3, h4 {
         color: #fff;
     }
 
-    h3 {
-        margin: 10px 0 0;
-        font-weight: 600;
-        font-size: 25px;
-    }
-
     .check {
-        @extend .cf;
-        padding: 20px 0;
+        // @extend .cf;
+        display: table-row;
+        width: 100%;
+        padding: 20px;
+        background-color: rgba(#000, 0.05);
 
-        & + .check {
-            border-top: 1px dotted darken(#b3d2d7, 10%);
+        & > div {
+            display: table-cell;
+            vertical-align: top;
         }
+
+        border-top: 1px dotted rgba(#b3d2d7, 0.3);
+
+        // & + .check {
+        // }
     }
 
     .check-status {
-        width: 50px;
-        height: 50px;
 
-        float: left;
-        margin: 0 16px 8px 0;
+        padding: 0 16px 8px 16px;
 
         // background-color: #333;
         border-radius: 3px;
@@ -52,16 +83,15 @@ nav.controls {
             // color: #8adc60;
         }
 
-        &.error {
+        .fa-exclamation-circle {
             // background-color: #f00;
             color: mix(#b3d2d7, #f00, 30%);
         }
     }
 
-    .info {
-        float: left;
-        width: 600px;
+    .check-info {
         font-size: 14px;
+        padding: 10px 0 15px;
 
         h4 {
             font-weight: 600;
@@ -77,10 +107,32 @@ nav.controls {
 
     }
 
-    .graph {
-        float: left;
-        width: 394px;
-        height: 100px;
+    .check-graph {
+        padding: 15px;
+        width: 400px;
+
+        .check-graph-container {
+            height: 100px;
+
+            .axis{
+                fill:#fff;
+                font-size:10px;
+            }
+
+            line, path {
+                stroke-width:hairline;
+                fill:none;
+                stroke:#eee;
+                shape-rendering:crispEdges;
+            }
+
+            path.path {
+                stroke:#fff;
+                stroke-width:2px;
+                stroke-opacity:1;
+                fill:none;
+            }
+        }
     }
 }
 
@@ -88,21 +140,3 @@ nav.controls {
     margin-bottom:2em
 }
 
-.graph .axis{
-    fill:#fff;
-    font-size:10px
-}
-
-.graph .axis line,.graph .axis path{
-    stroke-width:hairline;
-    fill:none;
-    stroke:#eee;
-    shape-rendering:crispEdges;
-}
-
-.graph path.path{
-    stroke:#fff;
-    stroke-width:2px;
-    stroke-opacity:1;
-    fill:none;
-}

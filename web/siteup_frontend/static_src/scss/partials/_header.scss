@@ -26,13 +26,22 @@ header.main {
         li {
             display: inline-block;
             // float: left;
-            margin-left: 20px;
+            margin-left: 15px;
+            padding-left: 15px;
 
-            &.signup {
+            &.signup a {
                 background: rgba(0,0,0,0.2);
                 padding: 5px 10px;
                 border-radius: 5px;
             }
+
+            & + li {
+                border-left: 1px solid rgba(#59a8b8, 0.15);
+            }
         }
     }
+}
+
+.help_text {
+    font-size: 10px;
 }

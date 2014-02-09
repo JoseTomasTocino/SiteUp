@@ -112,7 +112,7 @@ $(function () {
     };
 
     renderGraphs = function () {
-        return $('.graph-container').html('').each(function () {
+        return $('.check-graph-container').html('').each(function () {
             console.log("WUT");
             var $canvas, data;
             $canvas = $(this);

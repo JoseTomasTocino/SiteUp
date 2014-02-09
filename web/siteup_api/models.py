@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core import validators
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from siteup_checker import monitoring
 from .validators import ValidateAnyOf
@@ -52,9 +53,11 @@ class DnsCheckLog(BaseCheckLog):
 
 class CheckGroup(models.Model):
     """Group of related checks"""
-    title = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    owner = models.ForeignKey(User, null=True)
+    title = models.CharField(max_length=65,
+                             help_text=_("Title for the group of checks"))
+    is_active = models.BooleanField(default=True,
+                                    help_text=_("Enables or disables all the checks within this group"))
+    owner = models.ForeignKey(User)
 
 
 class BaseCheck(models.Model):

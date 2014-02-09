@@ -15,6 +15,7 @@ a {
     color: #59a8b8;
 
     &:hover {
+        color: lighten(#59a8b8, 30%);
         text-decoration: underline;
     }
 }
@@ -44,5 +45,11 @@ input[type=submit] {
     &:hover {
         background-color: #ebebeb;
         border-color: #adadad;
+        color: #333;
+    }
+
+    &.small {
+        font-size: 12px;
+        padding: 3px 6px;
     }
 }

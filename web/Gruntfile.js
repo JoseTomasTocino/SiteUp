@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         },
         watch: {
             sass: {
-                files: ['siteup_frontend/static_src/scss/**/*.scss', 'siteup_frontend/templates/*'],
+                files: ['siteup_frontend/static_src/scss/**/*.scss', 'siteup_frontend/templates/**/*'],
                 tasks: ['clean:sass', 'compass', 'autoprefixer'],
                 options: {
                     livereload: true,

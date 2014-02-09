@@ -120,7 +120,7 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
     };
 
     renderGraphs = function () {
-        return $('.graph-container').html('').each(function () {
+        return $('.check-graph-container').html('').each(function () {
             console.log("WUT");
             var $canvas, data;
             $canvas = $(this);
