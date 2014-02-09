@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^dashboard', fe_views.DashboardView.as_view(), name="dashboard"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^groups/new', fe_views.GroupCreateView.as_view(), name="new_group"),
+    url(r'^groups/(?P<pk>\d{1,})/addcheck', fe_views.CheckCreateView.as_view(), name="new_check"),
     url(r'^groups/edit/(?P<pk>\d{1,})', fe_views.GroupUpdateView.as_view(), name="edit_group"),
 )

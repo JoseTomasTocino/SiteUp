@@ -6,11 +6,11 @@ from django.contrib import messages
 
 from django.db import IntegrityError
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
 
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from django.views.generic import TemplateView, RedirectView, CreateView, UpdateView
+from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView
 from django.views.generic.edit import FormView
 
 from .forms import LoginForm, SignupForm
@@ -61,16 +61,29 @@ class DashboardView(TemplateView):
         context['check_group_checks'] = {}
 
         for check_group in context['check_groups']:
-            context['check_group_checks'][check_group.id] = []
+            check_group.checks = []
 
             for check_type in models.CHECK_TYPES:
-                context['check_group_checks'][check_group.id].extend(check_type.objects.all())
+                check_group.checks.extend(check_type.objects.all())
 
         return context
 
 
-class ProfileView(TemplateView):
-    pass
+class ProfileView(UpdateView):
+    model = User
+    template_name = "generic_form.html"
+    fields = ['username', 'email', 'password']
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Edit profile details")
+        context["form_submit"] = _("Update details")
+
+        return context
 
 class GroupCreateView(CreateView):
     model = models.CheckGroup
@@ -112,3 +125,9 @@ class GroupUpdateView(UpdateView):
 
         return context
 
+###################################################################################
+
+class CheckCreateView(View):
+    def get(self, request, pk):
+        if not request.GET.get('step', None):
+            return render_to_response('checks/choose_check_type.html')
