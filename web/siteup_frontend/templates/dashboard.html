@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block "content" %}
 
@@ -9,11 +10,14 @@
 
     <div class="right">
         <a href="#" class="button">
-            Add group
+            <i class="fa fa-plus-circle"></i>
+            {% trans "Add group" %}
         </a>
+        {% comment %}
         <a href="#" class="button">
-            Add check
+            {% trans "Add check" %}
         </a>
+        {% endcomment %}
     </div>
 </nav>
 
@@ -24,7 +28,9 @@
         </h3>
 
         <div class="check">
-            <div class="check-status ok"></div>
+            <div class="check-status ok">
+                <i class="fa fa-check-circle-o"></i>
+            </div>
 
             <div class="info">
                 <h4>
@@ -47,7 +53,9 @@
         </div>
 
         <div class="check">
-            <div class="check-status error"></div>
+            <div class="check-status error">
+                <i class="fa fa-exclamation-circle"></i>
+            </div>
 
             <div class="info">
                 <h4>

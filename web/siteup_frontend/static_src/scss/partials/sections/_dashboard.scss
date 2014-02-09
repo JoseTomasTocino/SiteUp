@@ -11,7 +11,7 @@ nav.controls {
     // border-top: 1px solid #b3d2d7;
     // border-left: 1px solid #b3d2d7;
     // background-color: rgba(179, 210, 215, 0.05);
-    margin: 1em 0;
+    margin: 0;
     padding-bottom: 5px;
     overflow: hidden;
 
@@ -22,15 +22,14 @@ nav.controls {
     }
 
     h3 {
-        margin-top: 0;
-        margin-bottom: 12px;
-        font-weight: 700;
+        margin: 10px 0 0;
+        font-weight: 600;
+        font-size: 25px;
     }
 
     .check {
         @extend .cf;
-        margin-bottom: 10px;
-        padding-top: 10px;
+        padding: 20px 0;
 
         & + .check {
             border-top: 1px dotted darken(#b3d2d7, 10%);
@@ -42,17 +41,20 @@ nav.controls {
         height: 50px;
 
         float: left;
-        margin: 0 1em 0.5em 0;
+        margin: 0 16px 8px 0;
 
-        background-color: #333;
+        // background-color: #333;
         border-radius: 3px;
+        font-size: 58px;
 
         &.ok {
-            background-color: #8adc60;
+            // background-color: #8adc60;
+            // color: #8adc60;
         }
 
         &.error {
-            background-color: #f00;
+            // background-color: #f00;
+            color: mix(#b3d2d7, #f00, 30%);
         }
     }
 

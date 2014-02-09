@@ -4,7 +4,7 @@
 }
 
 body {
-    background: url(../images/body-bg.png) #224f6b;
+    background: url(../images/body-bgs.png) desaturate(darken(#224f6b, 5%), 10%);
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
     color: #b3d2d7;
@@ -37,12 +37,9 @@ input[type=submit] {
     display: inline-block;
     font-size: 14px;
     border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
     padding: 6px 12px;
     color: #333;
     background-color: #eff;
-    border-color: #444;
 
     &:hover {
         background-color: #ebebeb;

@@ -10,7 +10,9 @@
     <meta name="description" content="">
 
     {% load staticfiles %}
+    {% load i18n %}
 
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700,600" >
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
 
@@ -31,17 +33,20 @@
         <ul>
         {% if not user.is_authenticated %}
             <li>
-                <a href="/login">Login</a>
+                <a href="/login">{% trans "Log in" %}</a>
             </li>
             <li class="signup">
-                <a href="/signup">Sign up</a>
+                <a href="/signup">{% trans "Sign up" %}</a>
             </li>
         {% else %}
             <li>
-                <a href="/profile">{{ user.email }}</a>
+                <a href="/dashboard">{% trans "Dashboard" %}</a>
+            </li>
+            <li>
+                <a href="/profile">{% trans "Your profile" %}</a>
             </li>
             <li class="signup">
-                <a href="/logout">Log out</a>
+                <a href="/logout">{% trans "Log out" %}</a>
             </li>
         {% endif %}
 
