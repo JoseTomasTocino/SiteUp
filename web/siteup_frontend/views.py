@@ -13,7 +13,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView
 from django.views.generic.edit import FormView
 
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, PingCheckForm
 from siteup_api import models
 
 # Create your views here.
@@ -127,7 +127,27 @@ class GroupUpdateView(UpdateView):
 
 ###################################################################################
 
-class CheckCreateView(View):
-    def get(self, request, pk):
-        if not request.GET.get('step', None):
-            return render_to_response('checks/choose_check_type.html')
+class CheckCreateView(TemplateView):
+    template_name = 'checks/choose_check_type.html'
+
+class PingCheckCreateView(CreateView):
+    form_class = PingCheckForm
+    model = models.PingCheck
+    template_name = "generic_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PingCheckCreateView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Create new Ping check")
+        context["form_submit"] = _("Create check")
+
+        return context
+
+class DnsCheckCreateView(CreateView):
+    pass
+
+class PortCheckCreateView(CreateView):
+    pass
+
+class HttpCheckCreateView(CreateView):
+    pass

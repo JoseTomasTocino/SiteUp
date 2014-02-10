@@ -1,1 +1,39 @@
-choose type
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block "content" %}
+
+<div class="container">
+    <h2>
+        {% trans "Choose the type of check" %}
+    </h2>
+    <a href="{% url "new_ping_check" pk %}" class="check-type-button">
+        <h2>Ping check</h2>
+        <span class="desc">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+        </span>
+    </a>
+
+    <a href="{% url "new_dns_check" pk %}" class="check-type-button">
+        <h2>DNS check</h2>
+        <span class="desc">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+        </span>
+    </a>
+
+    <a href="{% url "new_port_check" pk %}" class="check-type-button">
+        <h2>Port check</h2>
+        <span class="desc">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+        </span>
+    </a>
+
+    <a href="{% url "new_http_check" pk %}" class="check-type-button">
+        <h2>HTTP check</h2>
+        <span class="desc">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+        </span>
+    </a>
+</div>
+
+{% endblock %}

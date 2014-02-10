@@ -5,12 +5,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.core import validators
 
 from siteup_checker import monitoring
-from .validators import ValidateAnyOf
+from .validators import ValidateAnyOf, validate_ip_or_hostname
 
 
 class BaseCheckLog(models.Model):
@@ -64,13 +64,17 @@ class BaseCheck(models.Model):
     """Base model for the checks. It groups the common fields and relations.
     It's an abstract base class, so no actual table is created for this model."""
 
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=70,
+                             help_text=_("Short title for the check"))
+    description = models.TextField(blank=True,
+                                   help_text=_("Larger description, you can include notes."))
     group = models.ForeignKey(CheckGroup)
-    is_active = models.BooleanField(default=True)
-    target = models.TextField(blank=False)
-    check_interval = models.PositiveSmallIntegerField(default=1)
-    notify_email = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True,
+                                    help_text=_("Enables or disables the check"))
+    check_interval = models.PositiveSmallIntegerField(default=1,
+        help_text=_("In minutes. How often the check should be triggered."))
+    notify_email = models.BooleanField(default=True,
+        help_text=_("Notify changes of the status of this check via email."))
 
     logs = generic.GenericRelation('CheckLog')
     last_log_datetime = models.DateTimeField(blank=True, null=True)
@@ -102,23 +106,18 @@ class BaseCheck(models.Model):
 
 
 class PingCheck(BaseCheck):
-    should_check_timeout = models.BooleanField(default=False)
+    target = models.CharField(max_length=65000, blank=False,
+                              help_text=_("Should be a hostname or an IP"))
+    should_check_timeout = models.BooleanField(default=False,
+        help_text=_("If active, triggers an alarm if the ping is larger than a certain value."))
     timeout_value = models.PositiveSmallIntegerField(null=True, blank=True,
-                                                     validators=[ValidateAnyOf(validators.MaxValueValidator(10),
-                                                                               validators.MinValueValidator(100))])
+                                                     default=200,
+                                                     validators=[ValidateAnyOf(validators.MaxValueValidator(1000),
+                                                                               validators.MinValueValidator(0))],
+                                                     help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
 
-    def clean(self):
-        try:
-            # Check if it's an IP
-            validators.validate_ipv46_address(self.target)
-            target_ok = True
-        except ValidationError:
-            # Check if it's a hostname
-            hostname_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-            target_ok = re.match(hostname_regex, self.target)
-
-        if not target_ok:
-            raise ValidationError('Target should be an IP or a valid hostname')
+    target = models.CharField(max_length=100, blank=False,
+                              help_text=_("Target machine (url, ip, etc...)"))
 
     def run_check(self):
         if not self.should_run_check():

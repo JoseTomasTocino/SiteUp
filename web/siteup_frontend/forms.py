@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+from siteup_api import models
+
 class BaseForm(forms.Form):
     """Base form class that adds a '.error' class to input widgets"""
 
@@ -83,4 +85,11 @@ class SignupForm(BaseForm):
 
         return self.cleaned_data
 
+#############################################################################
+
+class PingCheckForm(BaseModelForm):
+
+    class Meta:
+        model = models.PingCheck
+        exclude = ['group', 'last_log_datetime']
 
