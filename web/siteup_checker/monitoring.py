@@ -3,8 +3,10 @@
 
 import subprocess
 import re
-import dns.resolver
+import dns.resolver, dns.exception
 import requests
+import logging
+logger = logging.getLogger(__name__)
 
 
 def check_ping(target):
@@ -47,14 +49,14 @@ def check_ping(target):
     return results
 
 
-def check_dns(target, register_type, expected_address):
-    """Checks if a certain domain has a DNS register (of the proper type) that matches the expected address"""
+def check_dns(target, record_type, expected_address):
+    """Checks if a certain domain has a DNS record (of the proper type) that matches the expected address"""
 
     return_obj = {}
 
     try:
         # Launch the query
-        answer = dns.resolver.query(target, register_type)
+        answer = dns.resolver.query(target, record_type)
 
         # The query finished properly
         return_obj['valid'] = True
@@ -65,7 +67,10 @@ def check_dns(target, register_type, expected_address):
             if expected_address.strip() == single_result.to_text().strip():
                 return_obj['status_ok'] = True
 
-        # On timeout, or any other problem, just return false
+    # On timeout, or any other problem, just return false
+    except dns.resolver.NoAnswer as e:
+        return_obj['valid'] = False # TODO
+
     except Exception, e:  # TODO: add the proper exception type
         return_obj['valid'] = False
 
@@ -82,7 +87,8 @@ def check_http_header(target, status_code):
         return_obj['valid'] = True
         return_obj['status_code'] = r.status_code
         return_obj['status_ok'] = r.status_code == status_code
-    except: # TODO: add the proper exception type
+    except Exception as e: # TODO: add the proper exception type
+        logger.error(e)
         return_obj['valid'] = False
 
     return return_obj

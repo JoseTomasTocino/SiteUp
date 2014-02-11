@@ -1,0 +1,17 @@
+.check-type-button {
+    display: block;
+    background-color: rgba(black, 0.1);
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+
+    &:hover {
+        background-color: rgba(black, 0.2);
+        text-decoration: none;
+    }
+
+    h2 {
+        margin: 0;
+    }
+
+}

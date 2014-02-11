@@ -87,9 +87,26 @@ class SignupForm(BaseForm):
 
 #############################################################################
 
-class PingCheckForm(BaseModelForm):
-
+class CheckForm(BaseModelForm):
     class Meta:
-        model = models.PingCheck
         exclude = ['group', 'last_log_datetime']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4})
+        }
+
+class PingCheckForm(CheckForm):
+    class Meta(CheckForm.Meta):
+        model = models.PingCheck
+
+class DnsCheckForm(CheckForm):
+    class Meta(CheckForm.Meta):
+        model = models.DnsCheck
+
+class PortCheckForm(CheckForm):
+    class Meta(CheckForm.Meta):
+        model = models.PortCheck
+
+class HttpCheckForm(CheckForm):
+    class Meta(CheckForm.Meta):
+        model = models.HttpCheck
 

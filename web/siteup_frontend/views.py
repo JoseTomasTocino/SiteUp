@@ -13,7 +13,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView
 from django.views.generic.edit import FormView
 
-from .forms import LoginForm, SignupForm, PingCheckForm
+from .forms import LoginForm, SignupForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
 from siteup_api import models
 
 # Create your views here.
@@ -144,10 +144,40 @@ class PingCheckCreateView(CreateView):
         return context
 
 class DnsCheckCreateView(CreateView):
-    pass
+    form_class = DnsCheckForm
+    model = models.DnsCheck
+    template_name = "generic_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DnsCheckCreateView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Create new Dns check")
+        context["form_submit"] = _("Create check")
+
+        return context
 
 class PortCheckCreateView(CreateView):
-    pass
+    form_class = PortCheckForm
+    model = models.PortCheck
+    template_name = "generic_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PortCheckCreateView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Create new Port check")
+        context["form_submit"] = _("Create check")
+
+        return context
 
 class HttpCheckCreateView(CreateView):
-    pass
+    form_class = HttpCheckForm
+    model = models.HttpCheck
+    template_name = "generic_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HttpCheckCreateView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Create new Http check")
+        context["form_submit"] = _("Create check")
+
+        return context

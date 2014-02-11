@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import re
 from datetime import datetime
 
@@ -10,8 +13,30 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core import validators
 
 from siteup_checker import monitoring
-from .validators import ValidateAnyOf, validate_ip_or_hostname
+from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostname
 
+
+####################################################################################
+# Log related models
+
+"""
+Response Attributes
+
+Attribute   Description Type
+results.(entry).probeid Probe identifier    Integer
+results.(entry).time    Time when test was performed. Format is UNIX timestamp  Integer
+results.(entry).status  Result status   String (up, down, unconfirmed_down, unknown)
+results.(entry).responsetime    Response time (in milliseconds) (Will be 0 if no response was received) Integer
+results.(entry).statusdesc  Short status description    String
+results.(entry).statusdesclong  Long status description String
+results.(entry).analysisid  Analysis identifier Integer
+activeprobes    For your convinience, a list of used probes that produced the showed results    Array
+activeprobes.(entry)    Probe identifier    Integer
+
+from https://www.pingdom.com/features/api/documentation/
+
+
+"""
 
 class BaseCheckLog(models.Model):
     """Stores the result of the check."""
@@ -21,15 +46,6 @@ class BaseCheckLog(models.Model):
     value = models.CharField(max_length=255, blank=True)
     extra = models.TextField(blank=True)
     is_notified = models.BooleanField(default=False)
-
-    # # Update parent's last_log_datetime
-    # def save(self, *args, **kwargs):
-    #     print "Setting date:", self.date
-    #     print "Assoc. check:", self.check
-    #     self.check.last_log_datetime = datetime.now()
-    #     self.check.save()
-    #
-    #     super(CheckLog, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
@@ -51,6 +67,9 @@ class DnsCheckLog(BaseCheckLog):
     check = models.ForeignKey("DnsCheck")
 
 
+####################################################################################
+
+
 class CheckGroup(models.Model):
     """Group of related checks"""
     title = models.CharField(max_length=65,
@@ -64,20 +83,31 @@ class BaseCheck(models.Model):
     """Base model for the checks. It groups the common fields and relations.
     It's an abstract base class, so no actual table is created for this model."""
 
-    title = models.CharField(max_length=70,
-                             help_text=_("Short title for the check"))
-    description = models.TextField(blank=True,
-                                   help_text=_("Larger description, you can include notes."))
-    group = models.ForeignKey(CheckGroup)
-    is_active = models.BooleanField(default=True,
-                                    help_text=_("Enables or disables the check"))
-    check_interval = models.PositiveSmallIntegerField(default=1,
+    title = models.CharField(
+        max_length=70,
+        help_text=_("Short title for the check"))
+
+    description = models.TextField(
+        blank=True,
+        help_text=_("Larger description, you can include notes."))
+
+    is_active = models.BooleanField(
+        default=True,
+        help_text=_("Enables or disables the check"))
+
+    check_interval = models.PositiveSmallIntegerField(
+        default=1,
         help_text=_("In minutes. How often the check should be triggered."))
-    notify_email = models.BooleanField(default=True,
+
+    notify_email = models.BooleanField(
+        default=True,
         help_text=_("Notify changes of the status of this check via email."))
 
     logs = generic.GenericRelation('CheckLog')
     last_log_datetime = models.DateTimeField(blank=True, null=True)
+
+    group = models.ForeignKey(CheckGroup)
+
 
     def should_run_check(self):
         """Confirms that the check can be run, because it's both active and enough time has passed since the last
@@ -104,20 +134,22 @@ class BaseCheck(models.Model):
 #######################################################################################################################
 # Concrete Check Models
 
-
 class PingCheck(BaseCheck):
-    target = models.CharField(max_length=65000, blank=False,
-                              help_text=_("Should be a hostname or an IP"))
-    should_check_timeout = models.BooleanField(default=False,
-        help_text=_("If active, triggers an alarm if the ping is larger than a certain value."))
-    timeout_value = models.PositiveSmallIntegerField(null=True, blank=True,
-                                                     default=200,
-                                                     validators=[ValidateAnyOf(validators.MaxValueValidator(1000),
-                                                                               validators.MinValueValidator(0))],
-                                                     help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
+    target = models.CharField(
+        max_length=255, blank=False,
+        help_text=_("Should be a hostname or an IP"),
+        validators=[validate_ip_or_hostname])
 
-    target = models.CharField(max_length=100, blank=False,
-                              help_text=_("Target machine (url, ip, etc...)"))
+    should_check_timeout = models.BooleanField(
+        default=False,
+        help_text=_("If active, triggers an alarm if the ping is larger than a certain value."))
+
+    timeout_value = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        default=200,
+        validators=[ValidateAnyOf([validators.MaxValueValidator(1000), validators.MinValueValidator(50)])],
+        help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
+
 
     def run_check(self):
         if not self.should_run_check():
@@ -157,9 +189,21 @@ class PingCheck(BaseCheck):
 
 
 class PortCheck(BaseCheck):
-    target_port = models.PositiveSmallIntegerField()
-    should_check_response = models.BooleanField(default=False)
-    response_value = models.CharField(max_length=255, blank=True)
+    target = models.CharField(
+        max_length=255, blank=False,
+        help_text=_("Should be a hostname or an IP"),
+        validators=[validate_ip_or_hostname])
+
+    target_port = models.PositiveSmallIntegerField(
+        help_text=_("Remote network port to check"),
+        validators=[validators.MinValueValidator(1),
+                    validators.MaxValueValidator(65535)])
+
+    should_check_response = models.BooleanField(default=False,
+        help_text=_("If active, the response from the port should contain the text in the following field."))
+
+    response_value = models.CharField(max_length=255, blank=True,
+        help_text=_("If the previous option is active, the response should contain this text."))
 
     def run_check(self):
         if not self.should_run_check():
@@ -169,14 +213,20 @@ class PortCheck(BaseCheck):
 
 
 class HttpCheck(BaseCheck):
-    should_check_status = models.BooleanField(default=True)
-    status_value = models.PositiveSmallIntegerField(null=True,
-                                                    blank=True,
-                                                    validators=[validators.MinValueValidator(100),
-                                                                validators.MaxValueValidator(600)])
+    target = models.CharField(
+        max_length=255, blank=False,
+        help_text=_("Should be a valid http(s) URL"),
+        validators=[validators.URLValidator()])
 
-    should_check_content = models.BooleanField(default=False)
-    content_value = models.CharField(max_length=255, blank=True)
+    status_code = models.PositiveSmallIntegerField(
+        default=200,
+        help_text=_("HTTP response status code that should be received from the server"),
+        validators=[validators.MinValueValidator(100), validators.MaxValueValidator(600)])
+
+    content_check_string = models.CharField(
+        max_length=255, blank=True,
+        verbose_name=_("Check for string"),
+        help_text=_("Optionally, you can check if the response contains a certain string"))
 
     def run_check(self):
         if not self.should_run_check():
@@ -185,15 +235,19 @@ class HttpCheck(BaseCheck):
         # Initialize the log instance
         log = HttpCheckLog(check=self)
 
-        # Check for 404 by default
-        status_code = self.status_value if self.should_check_status else 404
-
         # Send check
-        check_result = monitoring.check_http_header(self.target, status_code)
+        check_result = monitoring.check_http_header(self.target, self.status_code)
+
+        logger.info(self.target)
+        logger.info(self.status_code)
+        logger.info(check_result)
 
         if check_result['valid']:
             log.value = check_result['status_code']
-            log.is_ok = check_result['status_ok']
+
+            if self.content_check_string.strip():
+                check_result = monitoring.check_http_content(self.target, self.content_check_string.strip())
+                log.is_ok = check_result['status_ok']
         else:
             log.is_ok = False
 
@@ -201,8 +255,29 @@ class HttpCheck(BaseCheck):
 
 
 class DnsCheck(BaseCheck):
-    resolved_address = models.CharField(max_length=255)
-    register_type = models.CharField(max_length=20)
+    target = models.CharField(
+        max_length=255, blank=False,
+        help_text=_("Should be a hostname"),
+        validators=[validate_hostname])
+
+    resolved_address = models.CharField(
+        max_length=255, blank=False,
+        help_text=_("Should be a valid IP"),
+        validators=[validators.validate_ipv46_address])
+
+    DNS_RECORD_TYPES = (
+        ('A', 'A'),
+        ('AAAA', 'AAAA'),
+        ('CNAME', 'CNAME'),
+        ('MX', 'MX'),
+        ('TXT', 'TXT')
+    )
+
+    record_type = models.CharField(
+        max_length=5,
+        choices=DNS_RECORD_TYPES,
+        default='A',
+        help_text=_("Type of dns resource record"))
 
     def run_check(self):
         if not self.should_run_check():
@@ -210,7 +285,7 @@ class DnsCheck(BaseCheck):
 
         check_result = monitoring.check_dns(target=self.target,
                                             expected_address=self.resolved_address,
-                                            register_type=self.register_type)
+                                            record_type=self.record_type)
 
         # Initialize the log instance
         log = DnsCheckLog(check=self, is_ok=check_result)
