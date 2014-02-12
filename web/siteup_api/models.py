@@ -103,7 +103,8 @@ class BaseCheck(models.Model):
         default=True,
         help_text=_("Notify changes of the status of this check via email."))
 
-    logs = generic.GenericRelation('CheckLog')
+    #logs = generic.GenericRelation('CheckLog')
+
     last_log_datetime = models.DateTimeField(blank=True, null=True)
 
     group = models.ForeignKey(CheckGroup)

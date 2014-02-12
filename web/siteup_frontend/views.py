@@ -1,15 +1,14 @@
-from django.core.urlresolvers import reverse_lazy
+import logging
+logger = logging.getLogger(__name__)
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from django.core.urlresolvers import reverse_lazy
 from django.db import IntegrityError
-
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response
-
 from django.utils.translation import ugettext, ugettext_lazy as _
-
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView
 from django.views.generic.edit import FormView
 
@@ -91,9 +90,6 @@ class GroupCreateView(CreateView):
     success_url = reverse_lazy("dashboard")
     fields = ['title']
 
-    def get_initial(self):
-        return { "owner": self.request.user }
-
     def form_valid(self, form):
         if form.is_valid():
           group = form.save(commit=False)
@@ -127,10 +123,22 @@ class GroupUpdateView(UpdateView):
 
 ###################################################################################
 
-class CheckCreateView(TemplateView):
+class ChooseCheckTypeTemplateView(TemplateView):
     template_name = 'checks/choose_check_type.html'
 
-class PingCheckCreateView(CreateView):
+class CheckCreateBaseView(CreateView):
+    success_url = reverse_lazy("dashboard")
+
+    def form_valid(self, form):
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.group = models.CheckGroup.objects.get(pk=self.kwargs['pk'])
+            obj.save()
+
+        return redirect('dashboard')
+
+
+class PingCheckCreateView(CheckCreateBaseView):
     form_class = PingCheckForm
     model = models.PingCheck
     template_name = "generic_form.html"
@@ -143,7 +151,8 @@ class PingCheckCreateView(CreateView):
 
         return context
 
-class DnsCheckCreateView(CreateView):
+
+class DnsCheckCreateView(CheckCreateBaseView):
     form_class = DnsCheckForm
     model = models.DnsCheck
     template_name = "generic_form.html"
@@ -156,7 +165,8 @@ class DnsCheckCreateView(CreateView):
 
         return context
 
-class PortCheckCreateView(CreateView):
+
+class PortCheckCreateView(CheckCreateBaseView):
     form_class = PortCheckForm
     model = models.PortCheck
     template_name = "generic_form.html"
@@ -169,7 +179,8 @@ class PortCheckCreateView(CreateView):
 
         return context
 
-class HttpCheckCreateView(CreateView):
+
+class HttpCheckCreateView(CheckCreateBaseView):
     form_class = HttpCheckForm
     model = models.HttpCheck
     template_name = "generic_form.html"

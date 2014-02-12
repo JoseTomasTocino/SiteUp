@@ -1,8 +1,9 @@
 import re
+import logging
+logger = logging.getLogger(__name__)
 
 from django.core import validators
 from django.core.exceptions import ValidationError
-
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 
@@ -15,6 +16,8 @@ class ValidateAnyOf(object):
         self.message = message
 
     def __call__(self, value):
+        messages = []
+        params = {}
         errors = []
 
         for validator in self.validators:
@@ -22,7 +25,11 @@ class ValidateAnyOf(object):
                 validator(value)
                 return True
             except ValidationError as e:
-                errors.append(unicode(e.message) % e.params)
+                messages.append(e.message)
+                logger.info(type(e.message))
+                logger.info(type(e.params))
+                errors.append('RABAZO')
+                #errors.append(unicode(e.message) % e.params)
 
         if self.message:
             raise ValidationError(self.message)
@@ -36,7 +43,12 @@ def validate_hostname(hostname):
     if hostname[-1] == ".":
         hostname = hostname[:-1] # strip exactly one dot from the right, if present
     allowed = re.compile("(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
-    return all(allowed.match(x) for x in hostname.split("."))
+
+    if not all(allowed.match(x) for x in hostname.split(".")):
+        raise ValidationError(
+            _("%(hostname)s is not a valid hostname"),
+            params={'hostname': hostname}
+        )
 
 
 validate_ip_or_hostname = ValidateAnyOf(validators=[validate_hostname, validators.validate_ipv46_address],

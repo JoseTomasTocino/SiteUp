@@ -3,8 +3,10 @@ logger = logging.getLogger(__name__)
 
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from siteup_api.models import *
+from siteup_api import validators
 from siteup_checker import monitoring
 
 class DnsTestCase(TestCase):
@@ -67,6 +69,26 @@ class HttpTestCase(TestCase):
         check_log = HttpCheckLog.objects.get(check=self.h2)
         print check_log.value
         self.assertTrue(check_log.is_ok)
+
+class ValidatorsTestCase(TestCase):
+    def test_validate_hostname(self):
+        try:
+            validators.validate_hostname('josetomastocino.com')
+        except ValidationError:
+            self.fail('validators.validate_hostname failed')
+
+        with self.assertRaises(ValidationError):
+            validators.validate_hostname('josetomastocino com')
+
+    def test_validate_ip_or_hostname(self):
+        try:
+            validators.validate_ip_or_hostname('josetomastocino.com')
+            validators.validate_ip_or_hostname('192.168.1.1')
+        except ValidationError:
+            self.fail('validators.validate_ip_or_hostname failed')
+
+        with self.assertRaises(ValidationError):
+            validators.validate_ip_or_hostname('Lorem ipsum dillum sit amet')
 
 
 
