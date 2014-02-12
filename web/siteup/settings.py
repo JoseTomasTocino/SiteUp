@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'siteup_api',
     'siteup_checker',
     'siteup_frontend',
-    'django_extensions'
+    'django_extensions',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -51,23 +51,6 @@ class SignupView(FormView):
         return redirect('home')
 
 
-class DashboardView(TemplateView):
-    template_name = "dashboard.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        context['check_groups'] = models.CheckGroup.objects.all()
-        context['check_group_checks'] = {}
-
-        for check_group in context['check_groups']:
-            check_group.checks = []
-
-            for check_type in models.CHECK_TYPES:
-                check_group.checks.extend(check_type.objects.all())
-
-        return context
-
-
 class ProfileView(UpdateView):
     model = User
     template_name = "generic_form.html"
@@ -83,6 +66,36 @@ class ProfileView(UpdateView):
         context["form_submit"] = _("Update details")
 
         return context
+
+
+###################################################################################
+# Dashboard
+
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        # all_checks = [item for check_type in models.CHECK_TYPES for item in check_type.objects.all()]
+
+        # context['check_groups'] = models.CheckGroup.objects.all()
+
+        # for check_group in context['check_groups']:
+        #     check_group.checks = [item for item in all_checks if item.group == check_group]
+
+        context['check_groups'] = models.CheckGroup.objects.prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set')
+        for check_group in context['check_groups']:
+            check_group.checks = []
+            check_group.checks.extend(check_group.dnscheck_set.all())
+            check_group.checks.extend(check_group.pingcheck_set.all())
+            check_group.checks.extend(check_group.httpcheck_set.all())
+            check_group.checks.extend(check_group.portcheck_set.all())
+
+        return context
+
+
+###################################################################################
+# GROUPS
 
 class GroupCreateView(CreateView):
     model = models.CheckGroup
@@ -127,7 +140,8 @@ class ChooseCheckTypeTemplateView(TemplateView):
     template_name = 'checks/choose_check_type.html'
 
 class CheckCreateBaseView(CreateView):
-    success_url = reverse_lazy("dashboard")
+    """Base CBV that adds the group, present in the URL, to the to-be-created
+    model"""
 
     def form_valid(self, form):
         if form.is_valid():

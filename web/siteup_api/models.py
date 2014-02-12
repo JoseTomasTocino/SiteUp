@@ -70,15 +70,6 @@ class DnsCheckLog(BaseCheckLog):
 ####################################################################################
 
 
-class CheckGroup(models.Model):
-    """Group of related checks"""
-    title = models.CharField(max_length=65,
-                             help_text=_("Title for the group of checks"))
-    is_active = models.BooleanField(default=True,
-                                    help_text=_("Enables or disables all the checks within this group"))
-    owner = models.ForeignKey(User)
-
-
 class BaseCheck(models.Model):
     """Base model for the checks. It groups the common fields and relations.
     It's an abstract base class, so no actual table is created for this model."""
@@ -107,7 +98,7 @@ class BaseCheck(models.Model):
 
     last_log_datetime = models.DateTimeField(blank=True, null=True)
 
-    group = models.ForeignKey(CheckGroup)
+    group = models.ForeignKey('CheckGroup')
 
 
     def should_run_check(self):
@@ -300,6 +291,31 @@ class DnsCheck(BaseCheck):
 
 
 CHECK_TYPES = [DnsCheck, PingCheck, PortCheck, HttpCheck]
+
+###############################################################
+
+class CheckGroup(models.Model):
+    """Group of related checks"""
+    title = models.CharField(max_length=65,
+                             help_text=_("Title for the group of checks"))
+    is_active = models.BooleanField(default=True,
+                                    help_text=_("Enables or disables all the checks within this group"))
+    owner = models.ForeignKey(User)
+
+    # @property
+    # def checks(self):
+    #     checks = []
+    #     checks.extend(self.dnscheck_set.all())
+    #     checks.extend(self.pingcheck_set.all())
+    #     checks.extend(self.httpcheck_set.all())
+    #     checks.extend(self.portcheck_set.all())
+
+
+    #     # for check_type in CHECK_TYPES:
+    #     #     # TODO Use select_related when logs are implemented
+    #     #     checks.extend(check_type.objects.filter(group=self))
+
+    #     return checks
 
 ###############################################################
 # Generic Check List

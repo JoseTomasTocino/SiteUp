@@ -70,6 +70,7 @@ class HttpTestCase(TestCase):
         print check_log.value
         self.assertTrue(check_log.is_ok)
 
+
 class ValidatorsTestCase(TestCase):
     def test_validate_hostname(self):
         try:
