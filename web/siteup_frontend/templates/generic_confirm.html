@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block "content" %}
+<div class="form">
+    <h2>
+        {% trans "Confirm deletion" %}
+    </h2>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% blocktrans %}
+            Are you sure you want to delete the {{ object }}?
+        {% endblocktrans %}
+
+        <fieldset class="text_right">
+            <input type="submit" value="{% trans "Delete" %}">
+        </fieldset>
+    </form>
+</div>
+
+{% endblock %}
