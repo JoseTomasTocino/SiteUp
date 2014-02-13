@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView
+from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 
 from .forms import LoginForm, SignupForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
@@ -133,6 +133,12 @@ class GroupUpdateView(UpdateView):
         context["form_submit"] = _("Edit group")
 
         return context
+
+class GroupDeleteView(DeleteView):
+    model = models.CheckGroup
+    template_name = "generic_confirm.html"
+    success_url = reverse_lazy("dashboard")
+    pass
 
 ###################################################################################
 

@@ -142,6 +142,7 @@ class PingCheck(BaseCheck):
         validators=[ValidateAnyOf([validators.MaxValueValidator(1000), validators.MinValueValidator(50)])],
         help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
 
+    typename = _("Ping check")
 
     def run_check(self):
         if not self.should_run_check():
@@ -301,6 +302,9 @@ class CheckGroup(models.Model):
     is_active = models.BooleanField(default=True,
                                     help_text=_("Enables or disables all the checks within this group"))
     owner = models.ForeignKey(User)
+
+    def __str__(self):
+        return _("Check group") + " '" + self.title + "'"
 
     # @property
     # def checks(self):

@@ -1,3 +1,5 @@
+$transitionTime: 0.2s;
+
 .container {
     width: 1060px;
     margin: 0 auto;
@@ -31,6 +33,8 @@ input[type=submit] {
 
 .button {
     display: inline-block;
+    position: relative;
+    transition: all 0.3s;
     font-size: 14px;
     border-radius: 4px;
     padding: 6px 12px;
@@ -38,14 +42,60 @@ input[type=submit] {
     background-color: #eff;
 
     &:hover {
-        background-color: #ebebeb;
-        border-color: #adadad;
-        color: #333;
+        background-color: rgba(black, 0.9);
+        color: #59a8b8;
     }
 
     &.small {
         font-size: 12px;
         padding: 3px 6px;
+    }
+}
+
+.has-submenu {
+    position: relative;
+
+    &:hover {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        .submenu {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+.submenu {
+    position: absolute;
+    top: 17px;
+    right: 0;
+    width: 150px;
+    padding: 4px 15px;
+
+    visibility: hidden;
+    opacity: 0;
+
+    background-color: rgba(black, 1);
+    border-radius: 5px 0 5px 5px;
+    transition: all 0.3s;
+    list-style: none;
+
+    li {
+        font-size: 13px;
+        padding: 5px 0;
+    }
+
+    a {
+        display: block;
+    }
+
+    .fa {
+        margin-right: 7px;
+    }
+
+    li + li {
+        border-top: 1px solid rgba(#59a8b8, 0.4);
     }
 }
 
