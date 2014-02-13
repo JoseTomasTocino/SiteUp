@@ -48,10 +48,58 @@ nav.controls {
 
         .actions{
             float: right;
-            // font-size: 35px;
-            // line-height: 35px;
-        }
 
+            .button {
+                position: relative;
+                float: right;
+                transition: all 0.3s;
+            }
+
+            .button:hover {
+                background-color: rgba(black, 0.9);
+                color: #59a8b8;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+
+                .submenu {
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+
+            .submenu {
+                position: absolute;
+                top: 17px;
+                right: 0;
+                width: 150px;
+                padding: 4px 15px;
+
+                visibility: hidden;
+                opacity: 0;
+
+                background-color: rgba(black, 1);
+                border-radius: 5px 0 5px 5px;
+                transition: all 0.3s;
+                list-style: none;
+
+                li {
+                    font-size: 13px;
+                    padding: 5px 0;
+                }
+
+                a {
+                    display: block;
+                }
+
+                .fa {
+                    margin-right: 7px;
+                }
+
+                li + li {
+                    border-top: 1px solid rgba(#59a8b8, 0.4);
+                }
+            }
+        }
     }
 
     h3, h4 {

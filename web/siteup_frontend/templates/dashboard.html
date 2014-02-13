@@ -39,14 +39,38 @@
             </h3>
 
             <div class="actions">
-                <a href="{% url "edit_group" check_group.id %}" class="button">
-                    <i class="fa fa-cog"></i>
-                    {% trans "Edit" %}
-                </a>
 
-                <a href="{% url "new_check" check_group.id %}" class="button">
+                <div class="button">
+                    <i class="fa fa-cog"></i> {% trans "Actions" %}
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="{% url "new_check" check_group.id %}">
+                                <i class="fa fa-plus-circle"></i> {% trans "Add check" %}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url "edit_group" check_group.id %}">
+                                <i class="fa fa-pencil"></i> {% trans "Edit group" %}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="">
+                                <i class="fa fa-times"></i> {% trans "Delete group" %}
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+    {% comment %}
+
+                 <a href="{% url "new_check" check_group.id %}" class="button">
                     <i class="fa fa-plus-circle"></i> {% trans "Add check" %}
                 </a>
+    {% endcomment %}
+
             </div>
         </header>
 
