@@ -1,6 +1,12 @@
 footer.main {
+    border-top: 1px solid $color7;
     padding-top: 15px;
     padding-bottom: 15px;
     overflow: hidden;
     text-align: center;
+
+    color: $color4;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }

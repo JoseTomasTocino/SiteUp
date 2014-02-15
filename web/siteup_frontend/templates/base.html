@@ -54,24 +54,26 @@
     </div>
 </header>
 
+<div class="content-wrapper">
+
 {% if messages %}
-<div class="messages">
-    {% for message in messages %}
-    <div class="message container {{ message.tags }}">
-        {{ message }}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message container {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endif %}
 
-{% block "content" %}
-    wat
-{% endblock %}
-
+    {% block "content" %}
+        wat
+    {% endblock %}
+</div>
 
 <footer class="main">
     <div class="container">
-        SiteUp 2014
+        &copy; SiteUp 2014 - All rights reserved
     </div>
 </footer>
 

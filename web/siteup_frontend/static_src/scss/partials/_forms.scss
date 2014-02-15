@@ -1,7 +1,7 @@
 .form {
     width: 400px;
-    border-radius: 2px;
-    background: rgba(0,0,0,0.2);
+    border-radius: 3px;
+    background: $color7;
     padding: 30px 30px 20px;
     margin: 0 auto;
 
@@ -12,8 +12,9 @@
     h2 {
         margin: -15px 0 10px;
         padding-bottom: 10px;
-        font-weight: 600;
-        border-bottom: 1px dotted;
+        font-weight: normal;
+        color: $color3;
+        border-bottom: 1px dotted $color5;
     }
 
     p {
@@ -21,20 +22,50 @@
     }
 
     label {
+        color: $color3;
         display: block;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    label + .help_text {
+        margin-top: -5px;
+        color: $color4;
+        font-size: 11px;
         margin-bottom: 5px;
     }
 
-    input[type=text], input[type=password], input[type=email],
-    textarea, input[type=number], select{
-
+    input[type=text], input[type=password], input[type=email], input[type=number], select, textarea{
+        font-size: 14px;
+        border: 1px solid $color5;
+        line-height: 1.4;
+        padding: 6px 12px;
         display: block;
         width: 100%;
-        margin-bottom: 1em;
-        color: #224f6b;
-        border-radius: 2px;
-        padding: 5px 10px;
+        color: $color2;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        background-color: #fff;
+        border-radius: 3px;
+    }
+
+    input[type=text], input[type=password], input[type=email], input[type=number], select{
+        height: 38px;
+    }
+
+    textarea {
+        height: 38px * 2;
+        resize: none;
+    }
+
+    input[type=submit] {
         border: 0;
+        border-radius: 1px;
+        padding: 8px 12px;
+        border-radius: 3px;
+        color: #fff;
+        background-color: #59a8b8;
     }
 
     fieldset {
@@ -46,10 +77,29 @@
             display: inline-block;
             padding: 5px 0;
         }
+
+        &.actions {
+            @extend .text_right;
+            margin-top: 1em;
+        }
+
+        &.subactions {
+            margin-top: 10px;
+            margin-bottom: -10px;
+            border-top: 1px dotted $color5;
+
+            a {
+                font-size: 13px;
+            }
+        }
     }
 
     .field {
         @extend .cf;
+
+        & + .field {
+            margin-top: 1em;
+        }
 
         & > div {
             float: left;
@@ -63,17 +113,16 @@
         .field-widget {
             width: 60%;
             padding-left: 20px;
+        }
 
-            .errorlist {
-                margin-top: -0.6em;
-            }
+        .errorlist{
+            margin-bottom: 0;
         }
     }
 
-    label + .help_text {
-        margin-top: -5px;
-        font-size: 11px;
-        margin-bottom: 5px;
+    .info {
+        font-size: 14px;
+        color: $color3;
     }
 
     .error {
@@ -83,9 +132,12 @@
     .errorlist {
         list-style: none;
         padding: 5px 10px;
+        margin-top: 5px;
 
-        border: 1px solid #f22;
-        background-color: rgba(255, 34,34, 0.5);
+        border-radius: 3px;
+        background-color: rgba(255, 34, 34, 0.5);
+        color: darken(rgba(255, 34, 34, 0.5), 60%);
+
 
         li {
             display: inline;

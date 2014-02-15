@@ -1,10 +1,10 @@
 .jumbo {
-    background-color: #d3d9d3;
+    background-color: $color6;
     overflow: hidden;
     padding: 1.5em 0 1em;
 
     h2 {
-        color: #224f6b;
+        color: $color2;
         text-align: center;
         font-size: 3em;
         margin: 0;
@@ -13,7 +13,7 @@
     }
 
     p {
-        color: #224f6b;
+        color: $color2;
         text-align: center;
         padding: 0 150px;
     }

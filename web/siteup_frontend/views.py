@@ -15,7 +15,20 @@ from django.views.generic.edit import FormView
 from .forms import LoginForm, SignupForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
 from siteup_api import models
 
-# Create your views here.
+############################################################################
+# MY MIXINS
+
+class DeleteMessageMixin(object):
+    deletion_message = None
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        if self.deletion_message:
+            messages.success(request, self.deletion_message)
+        return HttpResponseRedirect(self.get_success_url())
+
+############################################################################
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -134,11 +147,11 @@ class GroupUpdateView(UpdateView):
 
         return context
 
-class GroupDeleteView(DeleteView):
+class GroupDeleteView(DeleteMessageMixin, DeleteView):
     model = models.CheckGroup
     template_name = "generic_confirm.html"
     success_url = reverse_lazy("dashboard")
-    pass
+    deletion_message = _("Group deleted successfully")
 
 ###################################################################################
 

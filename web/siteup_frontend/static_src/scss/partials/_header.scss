@@ -1,6 +1,18 @@
 header.main {
-    @extend .cf;
-    padding: 20px 0 20px;
+    // padding: 20px 0 20px;
+
+    a:hover {
+        color: lighten($color3, 80%);
+    }
+
+    background-color: $color1;
+
+    .container {
+        @extend .cf;
+        height: 83px;
+        line-height: 83px;
+        vertical-align: middle;
+    }
 
     h1 {
         margin: 0;
@@ -8,12 +20,12 @@ header.main {
 
         a {
             @include text-shadow(rgba(black, 0.15) 0px 3px 0);
-            color: #b3d2d7;
+            color: $color5;
             letter-spacing: -2px;
 
             &:hover {
                 text-decoration: none;
-                opacity: 0.8;
+                color: $color7;
             }
         }
     }
@@ -28,6 +40,7 @@ header.main {
             // float: left;
             margin-left: 15px;
             padding-left: 15px;
+            line-height: normal;
 
             &.signup a {
                 background: rgba(0,0,0,0.2);
@@ -36,7 +49,7 @@ header.main {
             }
 
             & + li {
-                border-left: 1px solid rgba(#59a8b8, 0.15);
+                border-left: 1px solid rgba($color3, 0.3);
             }
         }
     }

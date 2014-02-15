@@ -12,11 +12,13 @@
 
         {{ form.non_field_errors }}
 
+        <div class="info">
         {% blocktrans %}
             Are you sure you want to delete the {{ object }}?
         {% endblocktrans %}
+        </div>
 
-        <fieldset class="text_right">
+        <fieldset class="actions">
             <input type="submit" value="{% trans "Delete" %}">
         </fieldset>
     </form>

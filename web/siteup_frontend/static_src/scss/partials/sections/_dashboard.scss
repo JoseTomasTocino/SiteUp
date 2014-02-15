@@ -1,7 +1,4 @@
 nav.controls {
-    // border-bottom: 1px solid #b3d2d7;
-    // padding-bottom: 10px;
-
     > .left {
         padding-top: 5px;
     }
@@ -12,38 +9,35 @@ nav.controls {
 }
 
 .message-no-checks {
-    background-color: rgba(#000, 0.1);
+    background-color: $color7;
+    border-radius: 3px;
     text-align: center;
     padding: 30px 0;
-    border-top: 1px solid rgba(#b3d2d7, 0.3);
-    border-bottom: 1px solid rgba(#b3d2d7, 0.3);
 }
 
 .check-group {
     // border-top: 1px solid #b3d2d7;
     // border-left: 1px solid #b3d2d7;
     // background-color: rgba(179, 210, 215, 0.05);
-    border-collapse: collapse;
 
     margin: 15px 0 0;
     padding-bottom: 5px;
     overflow: hidden;
-
-    border-top: 1px solid rgba(#b3d2d7, 0.5);
-
-    .message-no-checks {
-        background-color: rgba(#000, 0.05);
-    }
+    border-radius: 3px;
 
     & > header {
         @extend .cf;
-        padding: 10px;
-        background-color: rgba(#000, 0.1);
+        padding: 0 10px 0 20px;
+        background-color: $color6;
+        height: 53px;
+        line-height: 53px;
 
         h3 {
             width: 800px;
             float: left;
             margin: 0;
+            font-weight: 600;
+            color: $color3;
         }
 
         .actions{
@@ -53,6 +47,10 @@ nav.controls {
 
     h3, h4 {
         color: #fff;
+    }
+
+    .message-no-checks {
+        background-color: $color7;
     }
 
     .check {
@@ -66,11 +64,6 @@ nav.controls {
             display: table-cell;
             vertical-align: top;
         }
-
-        border-top: 1px dotted rgba(#b3d2d7, 0.3);
-
-        // & + .check {
-        // }
     }
 
     .check-status {

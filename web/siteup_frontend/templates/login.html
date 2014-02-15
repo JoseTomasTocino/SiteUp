@@ -2,27 +2,28 @@
 {% load i18n %}
 
 {% block "content" %}
-<div class="login form">
+<div class="login form narrow">
     <form action="" method="POST">
         {% csrf_token %}
 
         {{ form.non_field_errors }}
 
         {% for field in form %}
-            {{ field.label_tag }}
-            {{ field }}
-            {{ field.errors }}
+            <div class="field">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
         {% endfor %}
 
-
-        <fieldset class="text_right">
-            <p class="left">
-                <a href="/reset-password">
-                    {% trans "Reset my password" %}
-                </a>
-            </p>
-
+        <fieldset class="actions">
             <input type="submit" value="{% trans "Log in" %}">
+        </fieldset>
+
+        <fieldset class="subactions">
+            <a href="/reset-password">
+                {% trans "Reset my password" %}
+            </a>
         </fieldset>
     </form>
 </div>
