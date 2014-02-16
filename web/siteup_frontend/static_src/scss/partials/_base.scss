@@ -1,10 +1,11 @@
 $transitionTime: 0.2s;
 
 body {
-    background: url(../images/body-bgs.png) $color8;
+    background-color: $color6;
+    color: $color2;
+
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
-    color: $color2;
 }
 
 .general-wrapper {
@@ -12,9 +13,21 @@ body {
 }
 
 .content-wrapper {
-    background-color: $color9;
-    overflow: hidden;
+    background-color: $color7;
     padding: 20px 0;
+    border-bottom: 1px solid $color5;
+
+    &::after {
+        // display: block;
+        // position: absolute;
+        // content: "";
+        // z-index: -1;
+        // top: 5px;
+        // left: 5px;
+        // right: 5px;
+        // bottom: 5px;
+        // border: 5px solid #ffea00;
+    }
 }
 
 .container {
@@ -39,6 +52,7 @@ a {
     position: relative;
     transition: all 0.3s;
     font-size: 14px;
+    text-align: left;
     line-height: normal;
     border-radius: 3px;
     padding: 6px 12px;
@@ -62,6 +76,12 @@ a {
 .has-submenu {
     position: relative;
 
+    &.submenu-anchor-left .submenu {
+        left: -1px;
+        right: auto;
+        border-radius: 0px 5px 5px 5px;
+    }
+
     &:hover {
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
@@ -79,7 +99,7 @@ a {
     right: -1px;
     width: 150px;
     padding: 4px 15px;
-
+    white-space: nowrap;
     visibility: hidden;
     opacity: 0;
 

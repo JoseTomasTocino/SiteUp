@@ -12,6 +12,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 
+from braces.views import LoginRequiredMixin
+
 from .forms import LoginForm, SignupForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
 from siteup_api import models
 
@@ -64,7 +66,7 @@ class SignupView(FormView):
         return redirect('home')
 
 
-class ProfileView(UpdateView):
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = "generic_form.html"
     fields = ['username', 'email', 'password']
@@ -84,7 +86,8 @@ class ProfileView(UpdateView):
 ###################################################################################
 # Dashboard
 
-class DashboardView(TemplateView):
+
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
 
     def get_context_data(self, **kwargs):
@@ -110,7 +113,7 @@ class DashboardView(TemplateView):
 ###################################################################################
 # GROUPS
 
-class GroupCreateView(CreateView):
+class GroupCreateView(LoginRequiredMixin, CreateView):
     model = models.CheckGroup
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
@@ -133,7 +136,7 @@ class GroupCreateView(CreateView):
 
         return context
 
-class GroupUpdateView(UpdateView):
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = models.CheckGroup
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
@@ -147,7 +150,7 @@ class GroupUpdateView(UpdateView):
 
         return context
 
-class GroupDeleteView(DeleteMessageMixin, DeleteView):
+class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     model = models.CheckGroup
     template_name = "generic_confirm.html"
     success_url = reverse_lazy("dashboard")
@@ -155,10 +158,10 @@ class GroupDeleteView(DeleteMessageMixin, DeleteView):
 
 ###################################################################################
 
-class ChooseCheckTypeTemplateView(TemplateView):
+class ChooseCheckTypeTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'checks/choose_check_type.html'
 
-class CheckCreateBaseView(CreateView):
+class CheckCreateBaseView(LoginRequiredMixin, CreateView):
     """Base CBV that adds the group, present in the URL, to the to-be-created
     model"""
 

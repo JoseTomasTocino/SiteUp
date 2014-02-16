@@ -1,6 +1,6 @@
 .check-type-button {
     display: block;
-    background-color: $color7;
+    background-color: darken($color7, 2%);
     border-radius: 3px;
     padding: 10px 20px;
     margin-bottom: 10px;
@@ -17,5 +17,20 @@
 
     .desc {
         color: $color4;
+    }
+}
+
+.choose-check-type {
+    .button {
+        width: 100%;
+        margin-bottom: 10px;
+
+        h3 {
+            font-weight: 600;
+        }
+
+        .desc {
+            color: $color4;
+        }
     }
 }

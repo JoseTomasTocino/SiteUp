@@ -118,3 +118,6 @@ import logging
 logging_format = '%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
 logging.basicConfig(level=logging.INFO, format=logging_format)
 logger = logging.getLogger(__name__)
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
