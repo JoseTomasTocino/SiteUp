@@ -58,25 +58,19 @@ nav.controls {
 }
 
 .check {
-    // @extend .cf;
+    @extend .cf;
     // display: table-row;
     width: 100%;
 
     & > div {
-        display: table-cell;
-        vertical-align: top;
+        float: left;
+        // display: table-cell;
+        // vertical-align: top;
     }
 
     & + .check {
         border-top: 1px solid $color6;
     }
-
-    //     &::before {
-    //         display: block;
-    //         content: "";
-    //         border-top: 1px dotted;
-    //     }
-    // }
 }
 
 .check-status {
@@ -107,6 +101,7 @@ nav.controls {
 .check-info {
     font-size: 14px;
     padding: 10px 0 15px;
+    width: 528px;
 
     h4 {
         font-weight: 600;
