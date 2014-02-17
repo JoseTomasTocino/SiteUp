@@ -19,8 +19,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^groups/new', fe_views.GroupCreateView.as_view(), name="new_group"),
     url(r'^groups/edit/(?P<pk>\d{1,})', fe_views.GroupUpdateView.as_view(), name="edit_group"),
-    url(r'^groups/activate/(?P<pk>\d{1,})', fe_views.GroupActivateView.as_view(), name="activate_group"),
-    url(r'^groups/deactivate/(?P<pk>\d{1,})', fe_views.GroupDeactivateView.as_view(), name="deactivate_group"),
+    url(r'^groups/enable/(?P<pk>\d{1,})', fe_views.GroupEnableView.as_view(), name="enable_group"),
+    url(r'^groups/disable/(?P<pk>\d{1,})', fe_views.GroupDisableView.as_view(), name="disable_group"),
     url(r'^groups/delete/(?P<pk>\d{1,})', fe_views.GroupDeleteView.as_view(), name="delete_group"),
 
     url(r'^groups/(?P<pk>\d{1,})/addcheck/$', fe_views.ChooseCheckTypeTemplateView.as_view(), name="new_check"),
@@ -32,4 +32,6 @@ urlpatterns = patterns('',
 
     url(r'^checks/edit/(?P<type>\w{1,})/(?P<pk>\d{1,})', fe_views.CheckUpdateView.as_view(), name="edit_check"),
     url(r'^checks/delete/(?P<type>\w{1,})/(?P<pk>\d{1,})', fe_views.CheckDeleteView.as_view(), name="delete_check"),
+    url(r'^checks/enable/(?P<type>\w{1,})/(?P<pk>\d{1,})', fe_views.CheckEnableView.as_view(), name="enable_check"),
+    url(r'^checks/disable/(?P<type>\w{1,})/(?P<pk>\d{1,})', fe_views.CheckDisableView.as_view(), name="disable_check"),
 )

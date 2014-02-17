@@ -158,20 +158,20 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     deletion_message = _("Group deleted successfully")
 
 
-class GroupActivateView(View):
+class GroupEnableView(View):
     def get(self, request, *args, **kwargs):
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
-        group.activate()
-        messages.success(request, _("Check group was activated"))
+        group.enable()
+        messages.success(request, _("All checks within group were enabled"))
 
         return redirect('dashboard')
 
 
-class GroupDeactivateView(View):
+class GroupDisableView(View):
     def get(self, request, *args, **kwargs):
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
-        group.deactivate()
-        messages.success(request, _("Check group was deactivated"))
+        group.disable()
+        messages.success(request, _("All checks within group were disabled"))
 
         return redirect('dashboard')
 
@@ -232,6 +232,7 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
 
         return redirect('dashboard')
 
+
 class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
@@ -244,7 +245,26 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+
 class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     template_name = "generic_confirm.html"
     success_url = reverse_lazy("dashboard")
     deletion_message = _("Group deleted successfully")
+
+
+class CheckEnableView(GenericCheckViewMixin, LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        check = self.get_queryset().get(pk=kwargs['pk'])
+        check.is_active = True
+        check.save()
+        messages.success(request, _("Check was enabled successfully"))
+        return redirect('dashboard')
+
+
+class CheckDisableView(GenericCheckViewMixin, LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        check = self.get_queryset().get(pk=kwargs['pk'])
+        check.is_active = False
+        check.save()
+        messages.success(request, _("Check was disabled successfully"))
+        return redirect('dashboard')

@@ -138,9 +138,9 @@ class CheckGroupTestCase(TestCase):
         self.assertEqual(len(checks), 2)
 
     def test_activation(self):
-        self.g.deactivate()
+        self.g.disable()
         self.assertTrue(all([x.is_active == False for x in self.g.checks()]))
-        self.g.activate()
+        self.g.enable()
         self.assertTrue(all([x.is_active == True for x in self.g.checks()]))
 
 

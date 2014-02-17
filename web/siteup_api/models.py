@@ -327,8 +327,6 @@ class CheckGroup(models.Model):
     """Group of related checks"""
     title = models.CharField(max_length=65,
                              help_text=_("Title for the group of checks"))
-    is_active = models.BooleanField(default=True,
-                                    help_text=_("Enables or disables all the checks within this group"))
     owner = models.ForeignKey(User)
 
     def __str__(self):
@@ -339,19 +337,11 @@ class CheckGroup(models.Model):
 
         return checks
 
-    def activate(self):
-        self.is_active = True
-        # TODO activate all the checks within group
-        self.save()
-
+    def enable(self):
         for check_type in CHECK_TYPES:
             check_type.objects.filter(group=self).update(is_active=True)
 
-    def deactivate(self):
-        self.is_active = False
-        # TODO activate all the checks within group
-        self.save()
-
+    def disable(self):
         for check_type in CHECK_TYPES:
             check_type.objects.filter(group=self).update(is_active=False)
 

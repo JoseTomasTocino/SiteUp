@@ -51,17 +51,17 @@
                         </li>
 
                         <li>
-                            {% if check_group.is_active %}
-                            <a href="{% url "deactivate_group" check_group.id %}">
-                                <i class="fa fa-power-off"></i> {% trans "Deactivate" %}
+                            <a href="{% url "enable_group" check_group.id %}">
+                                <i class="fa fa-power-off"></i> {% trans "Enable all checks" %}
                             </a>
-                            {% else %}
-                            <a href="{% url "activate_group" check_group.id %}">
-                                <i class="fa fa-power-off"></i> {% trans "Activate" %}
-                            </a>
-                            {% endif %}
-
                         </li>
+
+                        <li>
+                            <a href="{% url "disable_group" check_group.id %}">
+                                <i class="fa fa-power-off"></i> {% trans "Disable all checks" %}
+                            </a>
+                        </li>
+
 
                         <li>
                             <a href="{% url "edit_group" check_group.id %}">
@@ -87,9 +87,14 @@
             {% else %}
             {% for check in check_group.checks %}
 
-                <div class="check">
+                <div class="check {% if not check.is_active %}inactive{% endif %}">
                     <div class="check-status">
-                        <i class="check-status-icon fa fa-check-circle-o"></i>
+
+                        {% if check.is_active %}
+                            <i class="check-status-icon fa fa-check-circle-o"></i>
+                        {% else %}
+                            <i class="check-status-icon fa fa-clock-o"></i>
+                        {% endif %}
 
                         <div class="button has-submenu submenu-anchor-left">
                             <i class="fa fa-cog"></i> {% trans "Actions" %}
@@ -107,12 +112,25 @@
                                         <i class="fa fa-times"></i> {% trans "Delete check" %}
                                     </a>
                                 </li>
+
+                                <li>
+                                    {% if not check.is_active %}
+                                    <a href="{% url "enable_check" type=check|classname|lower pk=check.id %}">
+                                        <i class="fa fa-power-off"></i> {% trans "Enable check" %}
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url "disable_check" type=check|classname|lower pk=check.id %}">
+                                        <i class="fa fa-power-off"></i> {% trans "Disable check" %}
+                                    </a>
+                                    {% endif %}
+                                </li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="check-info">
                         <h4>
+                            {% if not check.is_active %} <span class="inactive-preffix">[{% trans "Inactive" %}]</span> {% endif %}
                             {{ check.title }}
                         </h4>
 

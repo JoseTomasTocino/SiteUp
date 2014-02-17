@@ -57,6 +57,16 @@ nav.controls {
     border-radius: 0 0 3px 3px;
 }
 
+.inactive {
+    opacity: 0.5;
+}
+
+.inactive-preffix {
+    // font-style: italic;
+    color: $color4;
+    margin-right: 10px;
+}
+
 .check {
     @extend .cf;
     // display: table-row;
