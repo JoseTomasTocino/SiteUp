@@ -97,7 +97,7 @@
                             <ul class="submenu">
 
                                 <li>
-                                    <a href="{% url "edit_group" check_group.id %}">
+                                    <a href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
                                         <i class="fa fa-pencil"></i> {% trans "Edit check" %}
                                     </a>
                                 </li>

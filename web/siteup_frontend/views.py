@@ -177,15 +177,52 @@ class GroupDeactivateView(View):
 
 
 ###################################################################################
-# CHECK CREATION
+# CHECK CRUD
+
+CHECK_FORMS = {}
+CHECK_FORMS[models.PingCheck] = PingCheckForm
+CHECK_FORMS[models.HttpCheck] = HttpCheckForm
+CHECK_FORMS[models.DnsCheck] = DnsCheckForm
+CHECK_FORMS[models.PortCheck] = PortCheckForm
+
 
 class ChooseCheckTypeTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'checks/choose_check_type.html'
 
 
-class CheckCreateBaseView(LoginRequiredMixin, CreateView):
-    """Base CBV that adds the group, present in the URL, to the to-be-created
-    model"""
+class GenericCheckViewMixin(object):
+    """Base for views that handle single checks."""
+
+    def __init__(self, *args, **kwargs):
+        self.model_class_cache = None
+
+    def get_model_class(self):
+        """Returns the model class according to the `type` parameter passed via URL"""
+        # TODO limit models to check types
+
+        if not self.model_class_cache:
+            self.model_class_cache = ContentType.objects.get(app_label="siteup_api", model=self.kwargs['type']).model_class()
+
+        return self.model_class_cache
+
+    def get_queryset(self):
+        return self.get_model_class().objects.all()
+
+    def get_form_class(self):
+        """Returns the form associated to the check type"""
+        return CHECK_FORMS[self.get_model_class()]
+
+
+class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
+    template_name = "generic_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CheckCreateView, self).get_context_data(**kwargs)
+        verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
+        context["form_title"] = _("Create new %(checktype)s") % { 'checktype': verbose_name }
+        context["form_submit"] = _("Create check")
+
+        return context
 
     def form_valid(self, form):
         if form.is_valid():
@@ -195,72 +232,17 @@ class CheckCreateBaseView(LoginRequiredMixin, CreateView):
 
         return redirect('dashboard')
 
-
-class PingCheckCreateView(CheckCreateBaseView):
-    form_class = PingCheckForm
-    model = models.PingCheck
+class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
     template_name = "generic_form.html"
+    success_url = reverse_lazy("dashboard")
 
     def get_context_data(self, **kwargs):
-        context = super(PingCheckCreateView, self).get_context_data(**kwargs)
-
-        context["form_title"] = _("Create new Ping check")
-        context["form_submit"] = _("Create check")
-
-        return context
-
-
-class DnsCheckCreateView(CheckCreateBaseView):
-    form_class = DnsCheckForm
-    model = models.DnsCheck
-    template_name = "generic_form.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(DnsCheckCreateView, self).get_context_data(**kwargs)
-
-        context["form_title"] = _("Create new Dns check")
-        context["form_submit"] = _("Create check")
+        context = super(CheckUpdateView, self).get_context_data(**kwargs)
+        verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
+        context["form_title"] = _("Update %(checktype)s") % { 'checktype': verbose_name }
+        context["form_submit"] = _("Update check")
 
         return context
-
-
-class PortCheckCreateView(CheckCreateBaseView):
-    form_class = PortCheckForm
-    model = models.PortCheck
-    template_name = "generic_form.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(PortCheckCreateView, self).get_context_data(**kwargs)
-
-        context["form_title"] = _("Create new Port check")
-        context["form_submit"] = _("Create check")
-
-        return context
-
-
-class HttpCheckCreateView(CheckCreateBaseView):
-    form_class = HttpCheckForm
-    model = models.HttpCheck
-    template_name = "generic_form.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(HttpCheckCreateView, self).get_context_data(**kwargs)
-
-        context["form_title"] = _("Create new Http check")
-        context["form_submit"] = _("Create check")
-
-        return context
-
-
-###################################################################################
-# CHECK CRUD
-
-class GenericCheckViewMixin(object):
-    def get_queryset(self):
-        # Fetch the check type based on the pased type string
-        check_type = ContentType.objects.get(app_label="siteup_api", model=self.kwargs['type'])
-
-        return check_type.model_class().objects.all()
 
 class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     template_name = "generic_confirm.html"

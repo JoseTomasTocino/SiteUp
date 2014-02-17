@@ -15,7 +15,6 @@ from django.core import validators
 from siteup_checker import monitoring
 from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostname
 
-
 ####################################################################################
 # Log related models
 
@@ -192,6 +191,9 @@ class PingCheck(BaseCheck):
 
         log.save()
 
+    class Meta:
+        verbose_name = _("ping check")
+        verbose_name_plural = _("ping checks")
 
 class PortCheck(BaseCheck):
     target = models.CharField(
@@ -217,6 +219,10 @@ class PortCheck(BaseCheck):
             return
 
             # TODO
+
+    class Meta:
+        verbose_name = _("port check")
+        verbose_name_plural = _("port checks")
 
 
 class HttpCheck(BaseCheck):
@@ -257,6 +263,10 @@ class HttpCheck(BaseCheck):
             log.is_ok = False
 
         log.save()
+
+    class Meta:
+        verbose_name = _("http check")
+        verbose_name_plural = _("http checks")
 
 
 class DnsCheck(BaseCheck):
@@ -303,6 +313,10 @@ class DnsCheck(BaseCheck):
             log.is_ok = False
 
         log.save()
+
+    class Meta:
+        verbose_name = _("dns check")
+        verbose_name_plural = _("dns checks")
 
 
 CHECK_TYPES = [DnsCheck, PingCheck, PortCheck, HttpCheck]
