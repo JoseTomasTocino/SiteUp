@@ -11,21 +11,32 @@ from siteup_checker import monitoring
 
 class DnsTestCase(TestCase):
     def setUp(self):
-        u = User.objects.create_user(username='TestUser', email='test@user.com', password='1234')
-        g = CheckGroup.objects.create(
-          title="Test Group",
-          owner = u)
-        self.d1 = DnsCheck.objects.create(title='DNS Test 1',
-                                          group=g,
-                                          target='josetomastocino.com',
-                                          record_type='A',
-                                          resolved_address='78.47.140.228')
+        u = User.objects.create_user(
+            username='TestUser',
+            email='test@user.com',
+            password='1234'
+        )
 
-        self.d2 = DnsCheck.objects.create(title='DNS Test 1',
-                                          group=g,
-                                          target='josetomastocino.com',
-                                          record_type='A',
-                                          resolved_address='1.1.1.1')
+        g = CheckGroup.objects.create(
+            title="Test Group",
+            owner = u
+        )
+
+        self.d1 = DnsCheck.objects.create(
+            title='DNS Test 1',
+            group=g,
+            target='josetomastocino.com',
+            record_type='A',
+            resolved_address='78.47.140.228'
+        )
+
+        self.d2 = DnsCheck.objects.create(
+            title='DNS Test 1',
+            group=g,
+            target='josetomastocino.com',
+            record_type='A',
+            resolved_address='1.1.1.1'
+        )
 
     def test_dns_ok_check(self):
         self.d1.run_check()
@@ -90,6 +101,47 @@ class ValidatorsTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             validators.validate_ip_or_hostname('Lorem ipsum dillum sit amet')
+
+
+class CheckGroupTestCase(TestCase):
+    def setUp(self):
+        u = User.objects.create_user(
+            username='TestUser',
+            email='test@user.com',
+            password='1234'
+        )
+
+        self.g = CheckGroup.objects.create(
+            title="Test Group",
+            owner = u
+        )
+
+        self.d1 = DnsCheck.objects.create(
+            title='DNS Test 1',
+            group=self.g,
+            target='josetomastocino.com',
+            record_type='A',
+            resolved_address='78.47.140.228'
+        )
+
+        self.d2 = DnsCheck.objects.create(
+            title='DNS Test 1',
+            group=self.g,
+            target='josetomastocino.com',
+            record_type='A',
+            resolved_address='1.1.1.1'
+        )
+
+    def test_get_checks(self):
+        checks = self.g.checks()
+
+        self.assertEqual(len(checks), 2)
+
+    def test_activation(self):
+        self.g.deactivate()
+        self.assertTrue(all([x.is_active == False for x in self.g.checks()]))
+        self.g.activate()
+        self.assertTrue(all([x.is_active == True for x in self.g.checks()]))
 
 
 

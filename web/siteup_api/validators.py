@@ -46,7 +46,7 @@ def validate_hostname(hostname):
 
     if not all(allowed.match(x) for x in hostname.split(".")):
         raise ValidationError(
-            _("%(hostname)s is not a valid hostname"),
+            _("'%(hostname)s' is not a valid hostname"),
             params={'hostname': hostname}
         )
 

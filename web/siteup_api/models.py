@@ -1,6 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
-
+from itertools import chain
 import re
 from datetime import datetime
 
@@ -119,6 +119,18 @@ class BaseCheck(models.Model):
 
         return True
 
+    def edit_url(self):
+        return self.__class__.__name__.lower() + "_edit"
+
+    def delete_url(self):
+        return self.__class__.__name__.lower() + "_delete"
+
+    def activate_url(self):
+        return self.__class__.__name__.lower() + "_activate"
+
+    def deactivate_url(self):
+        return self.__class__.__name__.lower() + "_deactivate"
+
     class Meta:
         abstract = True
 
@@ -198,6 +210,8 @@ class PortCheck(BaseCheck):
     response_value = models.CharField(max_length=255, blank=True,
         help_text=_("If the previous option is active, the response should contain this text."))
 
+    typename = _("Port check")
+
     def run_check(self):
         if not self.should_run_check():
             return
@@ -221,6 +235,8 @@ class HttpCheck(BaseCheck):
         verbose_name=_("Check for string"),
         help_text=_("Optionally, you can check if the response contains a certain string"))
 
+    typename = _("Http check")
+
     def run_check(self):
         if not self.should_run_check():
             return
@@ -230,10 +246,6 @@ class HttpCheck(BaseCheck):
 
         # Send check
         check_result = monitoring.check_http_header(self.target, self.status_code)
-
-        logger.info(self.target)
-        logger.info(self.status_code)
-        logger.info(check_result)
 
         if check_result['valid']:
             log.value = check_result['status_code']
@@ -272,6 +284,8 @@ class DnsCheck(BaseCheck):
         default='A',
         help_text=_("Type of dns resource record"))
 
+    typename = _("DNS check")
+
     def run_check(self):
         if not self.should_run_check():
             return
@@ -306,20 +320,28 @@ class CheckGroup(models.Model):
     def __str__(self):
         return _("Check group") + " '" + self.title + "'"
 
-    # @property
-    # def checks(self):
-    #     checks = []
-    #     checks.extend(self.dnscheck_set.all())
-    #     checks.extend(self.pingcheck_set.all())
-    #     checks.extend(self.httpcheck_set.all())
-    #     checks.extend(self.portcheck_set.all())
+    def checks(self):
+        checks = list(chain(self.dnscheck_set.all(), self.pingcheck_set.all(), self.httpcheck_set.all(), self.portcheck_set.all()))
+
+        return checks
+
+    def activate(self):
+        self.is_active = True
+        # TODO activate all the checks within group
+        self.save()
+
+        for check_type in CHECK_TYPES:
+            check_type.objects.filter(group=self).update(is_active=True)
+
+    def deactivate(self):
+        self.is_active = False
+        # TODO activate all the checks within group
+        self.save()
+
+        for check_type in CHECK_TYPES:
+            check_type.objects.filter(group=self).update(is_active=False)
 
 
-    #     # for check_type in CHECK_TYPES:
-    #     #     # TODO Use select_related when logs are implemented
-    #     #     checks.extend(check_type.objects.filter(group=self))
-
-    #     return checks
 
 ###############################################################
 # Generic Check List
