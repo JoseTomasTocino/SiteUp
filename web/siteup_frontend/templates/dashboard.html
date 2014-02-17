@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load frontend_extras %}
 
 {% block "content" %}
 
@@ -50,14 +51,27 @@
                         </li>
 
                         <li>
+                            {% if check_group.is_active %}
+                            <a href="{% url "deactivate_group" check_group.id %}">
+                                <i class="fa fa-power-off"></i> {% trans "Deactivate" %}
+                            </a>
+                            {% else %}
+                            <a href="{% url "activate_group" check_group.id %}">
+                                <i class="fa fa-power-off"></i> {% trans "Activate" %}
+                            </a>
+                            {% endif %}
+
+                        </li>
+
+                        <li>
                             <a href="{% url "edit_group" check_group.id %}">
-                                <i class="fa fa-pencil"></i> {% trans "Edit group" %}
+                                <i class="fa fa-pencil"></i> {% trans "Edit" %}
                             </a>
                         </li>
 
                         <li>
                             <a href="{% url "delete_group" check_group.id %}">
-                                <i class="fa fa-times"></i> {% trans "Delete group" %}
+                                <i class="fa fa-times"></i> {% trans "Delete" %}
                             </a>
                         </li>
                     </ul>
@@ -81,21 +95,16 @@
                             <i class="fa fa-cog"></i> {% trans "Actions" %}
 
                             <ul class="submenu">
-                                <li>
-                                    <a href="{% url "new_check" check_group.id %}">
-                                        <i class="fa fa-plus-circle"></i> {% trans "Add check" %}
-                                    </a>
-                                </li>
 
                                 <li>
                                     <a href="{% url "edit_group" check_group.id %}">
-                                        <i class="fa fa-pencil"></i> {% trans "Edit group" %}
+                                        <i class="fa fa-pencil"></i> {% trans "Edit check" %}
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="{% url "delete_group" check_group.id %}">
-                                        <i class="fa fa-times"></i> {% trans "Delete group" %}
+                                    <a href="{% url "delete_check" type=check|classname|lower pk=check.id %}">
+                                        <i class="fa fa-times"></i> {% trans "Delete check" %}
                                     </a>
                                 </li>
                             </ul>

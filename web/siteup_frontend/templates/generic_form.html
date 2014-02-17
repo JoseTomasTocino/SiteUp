@@ -17,6 +17,9 @@
                 <div class="field-info">
                     {{ field.label_tag }}
                     <div class="help_text">
+                        {% if field.field.required %}
+                            <strong>{% trans "Required" %}.</strong>
+                        {% endif %}
                         {{ field.help_text }}
                     </div>
                 </div>

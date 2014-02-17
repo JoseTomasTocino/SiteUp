@@ -89,7 +89,7 @@ class SignupForm(BaseForm):
 
 class CheckForm(BaseModelForm):
     class Meta:
-        exclude = ['group', 'last_log_datetime']
+        exclude = ['group', 'last_log_datetime', 'is_active']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4})
         }
@@ -97,6 +97,7 @@ class CheckForm(BaseModelForm):
 class PingCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PingCheck
+        fields = ['target', 'title', 'description', 'check_interval', 'notify_email', 'should_check_timeout', 'timeout_value']
 
 class DnsCheckForm(CheckForm):
     class Meta(CheckForm.Meta):

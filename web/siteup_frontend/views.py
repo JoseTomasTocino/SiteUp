@@ -4,12 +4,13 @@ logger = logging.getLogger(__name__)
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse_lazy
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView, RedirectView
 from django.views.generic.edit import FormView
 
 from braces.views import LoginRequiredMixin
@@ -156,10 +157,31 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     success_url = reverse_lazy("dashboard")
     deletion_message = _("Group deleted successfully")
 
+
+class GroupActivateView(View):
+    def get(self, request, *args, **kwargs):
+        group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+        group.activate()
+        messages.success(request, _("Check group was activated"))
+
+        return redirect('dashboard')
+
+
+class GroupDeactivateView(View):
+    def get(self, request, *args, **kwargs):
+        group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+        group.deactivate()
+        messages.success(request, _("Check group was deactivated"))
+
+        return redirect('dashboard')
+
+
 ###################################################################################
+# CHECK CREATION
 
 class ChooseCheckTypeTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'checks/choose_check_type.html'
+
 
 class CheckCreateBaseView(LoginRequiredMixin, CreateView):
     """Base CBV that adds the group, present in the URL, to the to-be-created
@@ -228,3 +250,19 @@ class HttpCheckCreateView(CheckCreateBaseView):
         context["form_submit"] = _("Create check")
 
         return context
+
+
+###################################################################################
+# CHECK CRUD
+
+class GenericCheckViewMixin(object):
+    def get_queryset(self):
+        # Fetch the check type based on the pased type string
+        check_type = ContentType.objects.get(app_label="siteup_api", model=self.kwargs['type'])
+
+        return check_type.model_class().objects.all()
+
+class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMixin, DeleteView):
+    template_name = "generic_confirm.html"
+    success_url = reverse_lazy("dashboard")
+    deletion_message = _("Group deleted successfully")
