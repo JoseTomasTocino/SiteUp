@@ -77,3 +77,4 @@ docs/_build/
 .sass-cache
 .idea
 
+celerybeat-schedule

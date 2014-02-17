@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'siteup_frontend',
     'django_extensions',
     'debug_toolbar',
+    'celery',
 )
 
 MIDDLEWARE_CLASSES = (
