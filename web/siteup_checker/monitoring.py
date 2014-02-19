@@ -91,7 +91,7 @@ def check_dns(target, record_type, expected_address):
     return return_obj
 
 
-def check_http_header(target, status_code):
+def check_http_header(target, status_code=200):
     """Checks if a certain http URL returns the correct status code."""
 
     return_obj = {}
@@ -108,7 +108,7 @@ def check_http_header(target, status_code):
     return return_obj
 
 
-def check_http_content(target, content_string):
+def check_http_content(target, content_string=''):
     """Checks if a certain http URL contains the specified string."""
 
     return_obj = {}
