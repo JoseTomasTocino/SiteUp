@@ -41,11 +41,28 @@ from https://www.pingdom.com/features/api/documentation/
 class BaseCheckLog(models.Model):
     """Stores the result of the check."""
 
-    date = models.DateTimeField(auto_now_add=True)
-    is_ok = models.BooleanField(default=True)
-    value = models.CharField(max_length=255, blank=True)
-    extra = models.TextField(blank=True)
-    is_notified = models.BooleanField(default=False)
+    date = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    STATUSES = (
+        (0, 'Up'),
+        (1, 'Down'),
+        (2, 'Error'),
+    )
+
+    status = models.IntegerField(
+        default=0,
+        choices=STATUSES
+    )
+
+    status_extra = models.CharField(
+        max_length=255
+    )
+
+    notified = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         abstract = True
@@ -53,14 +70,18 @@ class BaseCheckLog(models.Model):
 
 class PingCheckLog(BaseCheckLog):
     check = models.ForeignKey("PingCheck", related_name='logs')
+    response_time = models.IntegerField()
+
 
 
 class PortCheckLog(BaseCheckLog):
     check = models.ForeignKey("PortCheck", related_name='logs')
 
 
+
 class HttpCheckLog(BaseCheckLog):
     check = models.ForeignKey("HttpCheck", related_name='logs')
+
 
 
 class DnsCheckLog(BaseCheckLog):
@@ -160,7 +181,7 @@ class PingCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = PingCheckLog(check=self, is_ok=True)
+        log = PingCheckLog(check=self)
 
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
@@ -225,6 +246,7 @@ class PortCheck(BaseCheck):
 
 
 class HttpCheck(BaseCheck):
+
     target = models.CharField(
         max_length=255, blank=False,
         help_text=_("Should be a valid http(s) URL"),
@@ -239,6 +261,7 @@ class HttpCheck(BaseCheck):
         max_length=255, blank=True,
         verbose_name=_("Check for string"),
         help_text=_("Optionally, you can check if the response contains a certain string"))
+
 
     def run_check(self):
         if not self.should_run_check():
@@ -267,6 +290,7 @@ class HttpCheck(BaseCheck):
 
 
 class DnsCheck(BaseCheck):
+
     target = models.CharField(
         max_length=255, blank=False,
         help_text=_("Should be a hostname"),
