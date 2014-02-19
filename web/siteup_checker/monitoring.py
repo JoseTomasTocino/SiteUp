@@ -6,15 +6,24 @@ import re
 import dns.resolver, dns.exception
 import requests
 import logging
+import os
+
 logger = logging.getLogger(__name__)
+
+DEVNULL = open(os.devnull, 'wb')
 
 
 def check_ping(target):
     """Sends a ping to the given target, and returns a dictionary with the
     fields of the result."""
 
-    # Launch ping process and get stdout's content
-    ping_raw_response = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE).stdout.read()
+    try:
+        # Launch ping process
+        p = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE, stderr=DEVNULL)
+        ping_raw_response = p.stdout.read()
+    except:
+        # There was a problem executing the ping command, WAT
+        return {'valid': False}
 
     # Compile regular expression to parse ping's output
     matcher = re.compile(r"""
@@ -25,9 +34,9 @@ def check_ping(target):
 (?P<transmitted>\d+) \s+ packets .*? # Packets transmitted
 (?P<received>\d+) \s+ received   .*? # Packets received
 = \s+                                # Separator
-(?P<min>[^/]*)/                    # Min time
-(?P<avg>[^/]*)/                    # Avg time
-(?P<max>[^/]*)/                    # Max time
+(?P<min>[^/]*)/                      # Min time
+(?P<avg>[^/]*)/                      # Avg time
+(?P<max>[^/]*)/                      # Max time
 (?P<mdev>.*?) \s ms                  # Mdev
 """, re.DOTALL | re.IGNORECASE | re.MULTILINE | re.VERBOSE)
 
