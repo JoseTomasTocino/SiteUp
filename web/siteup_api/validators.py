@@ -25,11 +25,10 @@ class ValidateAnyOf(object):
                 validator(value)
                 return True
             except ValidationError as e:
-                messages.append(e.message)
-                logger.info(type(e.message))
-                logger.info(type(e.params))
-                errors.append('RABAZO')
-                #errors.append(unicode(e.message) % e.params)
+                if e.params:
+                    errors.append(unicode(e.message) % e.params)
+                else:
+                    errors.append(unicode(e.message))
 
         if self.message:
             raise ValidationError(self.message)

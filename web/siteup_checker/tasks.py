@@ -18,12 +18,28 @@ def nap(t):
 def test():
     kk = models.PingCheck.objects.all()
     print "lol wut", kk
-    numtasks = randrange(2,6)
+    numtasks = randrange(4,8)
     for f in range(numtasks):
-        nap.delay(randrange(5))
+        nap.delay(randrange(6))
 
     print "Enqueued %i tasks" % numtasks
 
 
+"""
+
+Launch celery beat using:
+
+    celery beat -A siteup -l info
+
+And the worker using:
+
+    celery worker -A siteup -l info
+
+You can do it all in one single step using
+
+    celery worker -B -A siteup -l info
+
+More processes can be launched in a worker using -c 16
+"""
 
 

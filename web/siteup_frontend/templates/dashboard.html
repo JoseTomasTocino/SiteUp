@@ -135,7 +135,7 @@
                         </h4>
 
                         <h5>
-                            {{ check.typename }} - {{ check.target }}
+                            {{ check | verbose_name | title }} - {{ check.target }}
                         </h5>
 
                         <div class="desc">

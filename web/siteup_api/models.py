@@ -1,5 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
+
 from itertools import chain
 import re
 from datetime import datetime
@@ -51,19 +52,19 @@ class BaseCheckLog(models.Model):
 
 
 class PingCheckLog(BaseCheckLog):
-    check = models.ForeignKey("PingCheck")
+    check = models.ForeignKey("PingCheck", related_name='logs')
 
 
 class PortCheckLog(BaseCheckLog):
-    check = models.ForeignKey("PortCheck")
+    check = models.ForeignKey("PortCheck", related_name='logs')
 
 
 class HttpCheckLog(BaseCheckLog):
-    check = models.ForeignKey("HttpCheck")
+    check = models.ForeignKey("HttpCheck", related_name='logs')
 
 
 class DnsCheckLog(BaseCheckLog):
-    check = models.ForeignKey("DnsCheck")
+    check = models.ForeignKey("DnsCheck", related_name='logs')
 
 
 ####################################################################################
@@ -138,6 +139,7 @@ class BaseCheck(models.Model):
 # Concrete Check Models
 
 class PingCheck(BaseCheck):
+
     target = models.CharField(
         max_length=255, blank=False,
         help_text=_("Should be a hostname or an IP"),
@@ -152,8 +154,6 @@ class PingCheck(BaseCheck):
         default=200,
         validators=[ValidateAnyOf([validators.MaxValueValidator(1000), validators.MinValueValidator(50)])],
         help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
-
-    typename = _("Ping check")
 
     def run_check(self):
         if not self.should_run_check():
@@ -196,6 +196,7 @@ class PingCheck(BaseCheck):
         verbose_name_plural = _("ping checks")
 
 class PortCheck(BaseCheck):
+
     target = models.CharField(
         max_length=255, blank=False,
         help_text=_("Should be a hostname or an IP"),
@@ -211,8 +212,6 @@ class PortCheck(BaseCheck):
 
     response_value = models.CharField(max_length=255, blank=True,
         help_text=_("If the previous option is active, the response should contain this text."))
-
-    typename = _("Port check")
 
     def run_check(self):
         if not self.should_run_check():
@@ -240,8 +239,6 @@ class HttpCheck(BaseCheck):
         max_length=255, blank=True,
         verbose_name=_("Check for string"),
         help_text=_("Optionally, you can check if the response contains a certain string"))
-
-    typename = _("Http check")
 
     def run_check(self):
         if not self.should_run_check():
@@ -293,8 +290,6 @@ class DnsCheck(BaseCheck):
         choices=DNS_RECORD_TYPES,
         default='A',
         help_text=_("Type of dns resource record"))
-
-    typename = _("DNS check")
 
     def run_check(self):
         if not self.should_run_check():
