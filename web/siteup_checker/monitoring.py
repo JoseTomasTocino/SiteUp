@@ -10,6 +10,8 @@ import os
 
 logger = logging.getLogger(__name__)
 
+from django.utils.translation import ugettext, ugettext_lazy as _
+
 DEVNULL = open(os.devnull, 'wb')
 
 
@@ -60,6 +62,9 @@ def check_ping(target):
 
 def check_dns(target, record_type, expected_address):
     """Checks if a certain domain has a DNS record (of the proper type) that matches the expected address"""
+
+    if record_type not in ('A', 'AAAA', 'CNAME', 'MX', 'TXT'):
+        raise ValueError(_("Wrong record type"))
 
     return_obj = {}
 

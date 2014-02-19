@@ -5,12 +5,10 @@ from django.test import TestCase
 
 from siteup_checker import monitoring
 
-# Create your tests here.
-
 class TestPing(TestCase):
 
     def test_nonexistent_host(self):
-        res = monitoring.check_ping('quwopeiuweropti.es')
+        res = monitoring.check_ping('josetomasitotocinote.com')
         self.assertTrue('valid' in res)
         self.assertFalse(res['valid'])
 
