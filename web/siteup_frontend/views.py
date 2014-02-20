@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView, RedirectView
@@ -93,14 +94,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        # all_checks = [item for check_type in models.CHECK_TYPES for item in check_type.objects.all()]
 
-        # context['check_groups'] = models.CheckGroup.objects.all()
-
-        # for check_group in context['check_groups']:
-        #     check_group.checks = [item for item in all_checks if item.group == check_group]
-
-        context['check_groups'] = models.CheckGroup.objects.prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set')
+        context['check_groups'] = self.request.user.checkgroup_set.prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set')
         for check_group in context['check_groups']:
             check_group.checks = []
             check_group.checks.extend(check_group.dnscheck_set.all())
@@ -113,6 +108,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 ###################################################################################
 # GROUPS
+
+
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = models.CheckGroup
@@ -137,11 +134,16 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
 
         return context
 
+
 class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = models.CheckGroup
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
-    fields = ['title', 'is_active']
+    fields = ['title']
+
+    def get_queryset(self):
+        qs = super(GroupUpdateView, self).get_queryset()
+        return qs.filter(owner=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(GroupUpdateView, self).get_context_data(**kwargs)
@@ -151,16 +153,23 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
 
         return context
 
+
 class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     model = models.CheckGroup
     template_name = "generic_confirm.html"
     success_url = reverse_lazy("dashboard")
     deletion_message = _("Group deleted successfully")
 
+    def get_queryset(self):
+        qs = super(GroupDeleteView, self).get_queryset()
+        return qs.filter(owner=self.request.user)
+
 
 class GroupEnableView(View):
     def get(self, request, *args, **kwargs):
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+        if group.owner != self.request.user:
+            raise Http404
         group.enable()
         messages.success(request, _("All checks within group were enabled"))
 
@@ -170,6 +179,8 @@ class GroupEnableView(View):
 class GroupDisableView(View):
     def get(self, request, *args, **kwargs):
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+        if group.owner != self.request.user:
+            raise Http404
         group.disable()
         messages.success(request, _("All checks within group were disabled"))
 
@@ -206,7 +217,7 @@ class GenericCheckViewMixin(object):
         return self.model_class_cache
 
     def get_queryset(self):
-        return self.get_model_class().objects.all()
+        return self.get_model_class().objects.filter(group__owner=self.request.user)
 
     def get_form_class(self):
         """Returns the form associated to the check type"""

@@ -8,8 +8,11 @@ from siteup_checker import monitoring
 class TestDns(TestCase):
 
     def test_wrong_record_type(self):
-        with self.assertRaises(ValueError):
-            monitoring.check_dns('bad', 'BAD', '1.1.1.1')
+        # with self.assertRaises(ValueError):
+        #     monitoring.check_dns('bad', 'BAD', '1.1.1.1')
+
+        res = monitoring.check_dns('bad', 'BAD', '1.1.1.1')
+        self.assertFalse(res['valid'])
 
     def test_wrong_host(self):
         res = monitoring.check_dns('josetomasitotocinote.com', 'A', '1.1.1.1')
