@@ -324,12 +324,15 @@ class DnsCheck(BaseCheck):
                                             record_type=self.record_type)
 
         # Initialize the log instance
-        log = DnsCheckLog(check=self, is_ok=check_result)
+        log = DnsCheckLog(check=self)
 
         if check_result['valid']:
-            log.is_ok = check_result['status_ok']
+            if check_result['status_ok']:
+                log.status = 0
+            else:
+                log.status = 1
         else:
-            log.is_ok = False
+            log.status = 2
 
         log.save()
 

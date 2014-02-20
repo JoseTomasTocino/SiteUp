@@ -23,6 +23,7 @@ class TestHttpHeader(TestCase):
         self.assertTrue(res['status_ok'])
         self.assertEqual(res['status_code'], 404)
 
+
 class TestHttpContent(TestCase):
 
     def test_bad_host(self):
