@@ -35,6 +35,17 @@
         <fieldset class="actions">
             <input type="submit" value="{{  form_submit }}">
         </fieldset>
+
+
+        {% if subactions %}
+            <fieldset class="subactions">
+            {% for subaction in subactions %}
+                <a href="{% url subaction.url %}">
+                    {{ subaction.title }}
+                </a><br>
+            {% endfor %}
+            </fieldset>
+        {% endif %}
     </form>
 </div>
 

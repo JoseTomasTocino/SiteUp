@@ -96,6 +96,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
         context["form_title"] = _("Edit profile details")
         context["form_submit"] = _("Update details")
+        context["subactions"] = [ { 'url': 'changepassword', 'title': _("Change password") } ]
 
         return context
 
@@ -108,6 +109,14 @@ class ChangePasswordView(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         self.request.user.change_password(form.cleaned_data['password'])
         return redirect('home')
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangePasswordView, self).get_context_data(**kwargs)
+
+        context["form_title"] = _("Change user password")
+        context["form_submit"] = _("Change password")
+
+        return context
 
 
 ###################################################################################
