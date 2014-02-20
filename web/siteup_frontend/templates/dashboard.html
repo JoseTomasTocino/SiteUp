@@ -155,6 +155,7 @@
                     <div class="check-graph">
                         <div class="check-graph-container graph_{{ check.unique_name }}"></div>
 
+                        {% if check.type_name == "pingcheck" %}
                         <script>
                         google.setOnLoadCallback(function(){
                             var data = new google.visualization.DataTable();
@@ -186,6 +187,8 @@
                             chart.draw(data, options);
                         });
                         </script>
+                        {% endif %}
+
                     </div>
                 </div>
 

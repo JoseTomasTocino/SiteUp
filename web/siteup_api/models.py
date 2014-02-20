@@ -136,6 +136,9 @@ class BaseCheck(models.Model):
     def unique_name(self):
         return self.__class__.__name__.lower() + str(self.pk)
 
+    def type_name(self):
+        return self.__class__.__name__.lower()
+
     class Meta:
         abstract = True
 
