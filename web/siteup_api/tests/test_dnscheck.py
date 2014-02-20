@@ -39,10 +39,10 @@ class DnsTestCase(TestCase):
 
     def test_dns_up_check(self):
         self.d1.run_check()
-        check_log = DnsCheckLog.objects.get(check=self.d1)
+        check_log = self.d1.logs.get()
         self.assertEqual(check_log.status, 0)
 
     def test_dns_down_check(self):
         self.d2.run_check()
-        check_log = DnsCheckLog.objects.get(check=self.d2)
+        check_log = self.d2.logs.get()
         self.assertEqual(check_log.status, 1)

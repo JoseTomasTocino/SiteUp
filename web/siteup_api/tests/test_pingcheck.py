@@ -39,10 +39,10 @@ class PingTestCase(TestCase):
 
     def test_ping_up(self):
         self.h1.run_check()
-        check_log = PingCheckLog.objects.get(check=self.h1)
+        check_log = self.h1.logs.get()
         self.assertEqual(check_log.status, 0)
 
     def test_ping_up_within_timeout(self):
         self.h2.run_check()
-        check_log = PingCheckLog.objects.get(check=self.h2)
+        check_log = self.h2.logs.get()
         self.assertEqual(check_log.status, 0)

@@ -49,21 +49,21 @@ class HttpTestCase(TestCase):
 
     def test_http_up(self):
         self.h1.run_check()
-        check_log = HttpCheckLog.objects.get(check=self.h1)
+        check_log = self.h1.logs.get()
         self.assertEqual(check_log.status, 0)
 
     def test_http_up_with_content(self):
         self.h2.run_check()
-        check_log = HttpCheckLog.objects.get(check=self.h2)
+        check_log = self.h2.logs.get()
         self.assertEqual(check_log.status, 0)
 
     def test_http_404(self):
         self.h3.run_check()
-        check_log = HttpCheckLog.objects.get(check=self.h3)
+        check_log = self.h3.logs.get()
         self.assertEqual(check_log.status, 1)
         self.assertEqual(check_log.status_extra, '404')
 
     def test_http_bad_host(self):
         self.h4.run_check()
-        check_log = HttpCheckLog.objects.get(check=self.h4)
+        check_log = self.h4.logs.get()
         self.assertEqual(check_log.status, 2)

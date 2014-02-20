@@ -196,33 +196,31 @@
                             var chart = new google.visualization.Timeline(container);
                             var data = new google.visualization.DataTable();
 
+                            data.addColumn({ type: 'string', id: 'Row' });
                             data.addColumn({ type: 'string', id: 'Status' });
                             data.addColumn({ type: 'date', id: 'Start' });
-                            // data.addColumn({ type: 'date', id: 'End' });
-                            // data.addColumn('datetime', 'Date');
-                            // data.addColumn('number', 'Resp. time');
+                            data.addColumn({ type: 'date', id: 'End' });
+
                             data.addRows([
-                            {% for log in check.logs.all %}
-                                [ "{{ log.status }}",  new Date("{{ log.date.isoformat }}")],
+                            {% for status in check.statuses.all %}
+                                [ "",
+                                  "{{ status.status }}",
+                                  new Date("{{ status.get_date_start }}"),
+                                  new Date("{{ status.get_date_end   }}")],
                             {% endfor %}
                             ]);
 
-                            var options = { };
-
-                            /*
                             var options = {
-                                curveType: 'function',
                                 backgroundColor: 'transparent',
-                                legend: 'none',
-                                chartArea: { width: "83%" },
-                                vAxis: {
-                                    format:'###ms'
+                                colors: ['#E52418', '#91E547'],
+                                chartArea: {
+                                    top: 10,
+                                    width: "83%"
                                 },
-                                series: {
-                                    0: {
-                                        color: '#46596a'
-                                    }
-                                }
+                                timeline : {
+                                    showBarLabels: false,
+                                    showRowLabels: false
+                                },
                             }; //*/
 
                             chart.draw(data, options);

@@ -19,7 +19,7 @@ from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostnam
 ####################################################################################
 # Log related models
 
-class BaseCheckLog(models.Model):
+class CheckLog(models.Model):
     """Stores the result of the check."""
 
     date = models.DateTimeField(
@@ -41,37 +41,48 @@ class BaseCheckLog(models.Model):
         max_length=255
     )
 
+    response_time = models.IntegerField(
+        default=0
+    )
+
+
+    def save(self):
+        super(CheckLog, self).save()
+        self.check.update_status(self)
+
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    check = generic.GenericForeignKey('content_type', 'object_id')
+
+
+class CheckStatus(models.Model):
+    status = models.IntegerField(
+        default=0
+    )
+
+    date_start = models.DateTimeField()
+
+    date_end = models.DateTimeField(
+        null=True
+    )
+
     notified = models.BooleanField(
         default=False
     )
 
-    def save(self):
-        super(BaseCheckLog, self).save()
-        self.check.last_log_datetime = self.date
-        self.check.save()
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    check = generic.GenericForeignKey('content_type', 'object_id')
 
-    class Meta:
-        abstract = True
+    def get_date_start(self):
+        return self.date_start.isoformat()
 
-
-class PingCheckLog(BaseCheckLog):
-    check = models.ForeignKey("PingCheck", related_name='logs')
-    response_time = models.IntegerField(default=0)
-
-
-
-class PortCheckLog(BaseCheckLog):
-    check = models.ForeignKey("PortCheck", related_name='logs')
-
-
-
-class HttpCheckLog(BaseCheckLog):
-    check = models.ForeignKey("HttpCheck", related_name='logs')
-
-
-
-class DnsCheckLog(BaseCheckLog):
-    check = models.ForeignKey("DnsCheck", related_name='logs')
+    def get_date_end(self):
+        if self.date_end:
+            return self.date_end.isoformat()
+        else:
+            return datetime.now().isoformat()
 
 
 ####################################################################################
@@ -101,8 +112,6 @@ class BaseCheck(models.Model):
         default=True,
         help_text=_("Notify changes of the status of this check via email."))
 
-    #logs = generic.GenericRelation('CheckLog')
-
     last_log_datetime = models.DateTimeField(
         blank=True,
         null=True
@@ -110,6 +119,28 @@ class BaseCheck(models.Model):
 
     group = models.ForeignKey('CheckGroup')
 
+    logs = generic.GenericRelation('CheckLog')
+
+    statuses = generic.GenericRelation('CheckStatus')
+    last_status = models.ForeignKey('CheckStatus', null=True)
+
+    def update_status(self, check_log):
+        self.last_log_datetime = check_log.date
+
+        if not self.last_status or self.last_status.status != check_log.status:
+
+            if self.last_status and self.last_status.status != check_log.status:
+                self.last_status.date_end = check_log.date
+                self.last_status.save()
+
+            s = CheckStatus()
+            s.status = check_log.status
+            s.date_start = check_log.date
+            s.check = self
+            s.save()
+
+            self.last_status = s
+            self.save()
 
     def should_run_check(self):
         """Confirms that the check can be run, because it's both active and enough time has passed since the last
@@ -122,12 +153,13 @@ class BaseCheck(models.Model):
         if self.last_log_datetime is None:
             return True
 
-        # Subtract one second from the difference to handle timing deviations
-        time_since_last = datetime.now() - self.last_log_datetime
-        if time_since_last.seconds < self.check_interval * 60 - 1:
+        # Subtract some seconds from the difference to handle timing deviations
+        elapsed_seconds = (datetime.now() - self.last_log_datetime).seconds
+        if elapsed_seconds < self.check_interval * 60 - 6:
+            logger.info("Check %s will not run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
             return False
 
-        logger.info("Check %s will run" % self.title)
+        logger.info("Check %s will run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
         return True
 
     def edit_url(self):
@@ -177,7 +209,7 @@ class PingCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = PingCheckLog(check=self)
+        log = CheckLog(check=self)
         log.status = 0
 
         # Fire the ping
@@ -207,7 +239,7 @@ class PingCheck(BaseCheck):
             log.status = 2
             log.status_extra = 'Incorrect host'
 
-        logger.info('Save PingCheckLog, status %i, status_extra "%s"' % (log.status, log.status_extra))
+        logger.info('Save CheckLog, status %i, status_extra "%s"' % (log.status, log.status_extra))
         log.save()
 
     class Meta:
@@ -266,7 +298,7 @@ class HttpCheck(BaseCheck):
             return
 
         # Initialize the log instance
-        log = HttpCheckLog(check=self)
+        log = CheckLog(check=self)
 
         # Send check
         check_result = monitoring.check_http_header(self.target, self.status_code)
@@ -327,7 +359,7 @@ class DnsCheck(BaseCheck):
                                             record_type=self.record_type)
 
         # Initialize the log instance
-        log = DnsCheckLog(check=self)
+        log = CheckLog(check=self)
 
         if check_result['valid']:
             if check_result['status_ok']:
