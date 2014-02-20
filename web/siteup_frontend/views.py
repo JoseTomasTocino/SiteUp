@@ -48,10 +48,11 @@ class LoginView(FormView):
         return redirect('dashboard')
 
 
-def logout_view(request):
-    logout(request)
+class LogoutView(View):
+    def get(self, *args, **kwargs):
+        logout(self.request)
 
-    return redirect('home')
+        return redirect('home')
 
 
 class SignupView(FormView):

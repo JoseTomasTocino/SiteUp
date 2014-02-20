@@ -12,7 +12,8 @@ urlpatterns = patterns('',
 
     url(r'^$', fe_views.HomeView.as_view(), name='home'),
     url(r'^login', fe_views.LoginView.as_view(), name="login"),
-    url(r'^logout', fe_views.logout_view, name="logout"),
+    url(r'^logout', fe_views.LogoutView.as_view(), name="logout"),
+
     url(r'^signup', fe_views.SignupView.as_view(), name="signup"),
     url(r'^profile', fe_views.ProfileView.as_view(), name="profile"),
     url(r'^dashboard', fe_views.DashboardView.as_view(), name="dashboard"),
