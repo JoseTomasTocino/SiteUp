@@ -45,6 +45,11 @@ class BaseCheckLog(models.Model):
         default=False
     )
 
+    def save(self):
+        super(BaseCheckLog, self).save()
+        self.check.last_log_datetime = self.date
+        self.check.save()
+
     class Meta:
         abstract = True
 
@@ -98,7 +103,10 @@ class BaseCheck(models.Model):
 
     #logs = generic.GenericRelation('CheckLog')
 
-    last_log_datetime = models.DateTimeField(blank=True, null=True)
+    last_log_datetime = models.DateTimeField(
+        blank=True,
+        null=True
+    )
 
     group = models.ForeignKey('CheckGroup')
 
@@ -119,6 +127,7 @@ class BaseCheck(models.Model):
         if time_since_last.seconds < self.check_interval * 60 - 1:
             return False
 
+        logger.info("Check %s will run" % self.title)
         return True
 
     def edit_url(self):

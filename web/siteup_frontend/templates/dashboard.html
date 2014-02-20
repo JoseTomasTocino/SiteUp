@@ -5,7 +5,7 @@
 {% block "head_extra" %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script>
-        google.load("visualization", "1", {packages:["corechart"]});
+        google.load("visualization", "1", {packages:["corechart", "timeline"]});
     </script>
 {% endblock "head_extra" %}
 
@@ -187,6 +187,48 @@
                             chart.draw(data, options);
                         });
                         </script>
+
+                        {% elif check.type_name == "dnscheck" %}
+
+                        <script>
+                        google.setOnLoadCallback(function(){
+                            var container = document.querySelector('.graph_{{ check.unique_name }}');
+                            var chart = new google.visualization.Timeline(container);
+                            var data = new google.visualization.DataTable();
+
+                            data.addColumn({ type: 'string', id: 'Status' });
+                            data.addColumn({ type: 'date', id: 'Start' });
+                            // data.addColumn({ type: 'date', id: 'End' });
+                            // data.addColumn('datetime', 'Date');
+                            // data.addColumn('number', 'Resp. time');
+                            data.addRows([
+                            {% for log in check.logs.all %}
+                                [ "{{ log.status }}",  new Date("{{ log.date.isoformat }}")],
+                            {% endfor %}
+                            ]);
+
+                            var options = { };
+
+                            /*
+                            var options = {
+                                curveType: 'function',
+                                backgroundColor: 'transparent',
+                                legend: 'none',
+                                chartArea: { width: "83%" },
+                                vAxis: {
+                                    format:'###ms'
+                                },
+                                series: {
+                                    0: {
+                                        color: '#46596a'
+                                    }
+                                }
+                            }; //*/
+
+                            chart.draw(data, options);
+                        });
+                        </script>
+
                         {% endif %}
 
                     </div>
