@@ -1,6 +1,8 @@
 import subprocess
 import re
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 DEVNULL = open(os.devnull, 'wb')
 
@@ -9,10 +11,11 @@ def check_ping(target):
     """Sends a ping to the given target, and returns a dictionary with the
     fields of the result."""
 
+    logger.info("Check Ping, target: %s" % target)
+
     try:
         # Launch ping process
-        p = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE, stderr=DEVNULL)
-        ping_raw_response = p.stdout.read()
+        ping_raw_response = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE, stderr=DEVNULL).stdout.read()
     except Exception as e:
         # There was a problem executing the ping command, WAT
         logger.error(e)
@@ -38,6 +41,7 @@ def check_ping(target):
 
     # If it doesn't match (due to an error)
     if not results:
+        logger.error(results)
         return {'valid': False}
 
     # Get fields

@@ -51,7 +51,7 @@ class BaseCheckLog(models.Model):
 
 class PingCheckLog(BaseCheckLog):
     check = models.ForeignKey("PingCheck", related_name='logs')
-    response_time = models.IntegerField()
+    response_time = models.IntegerField(default=0)
 
 
 
@@ -163,6 +163,7 @@ class PingCheck(BaseCheck):
 
         # Initialize the log instance
         log = PingCheckLog(check=self)
+        log.status = 0
 
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
@@ -171,25 +172,25 @@ class PingCheck(BaseCheck):
         if check_result['valid']:
 
             # Save ping average response time
-            log.value = check_result['avg']
+            log.response_time = check_result['avg']
 
             # If most pings were received
             if check_result['received'] / check_result['transmitted'] >= 0.5:
 
                 # Check if response time is within boundaries
                 if self.should_check_timeout and int(check_result['avg']) > self.timeout_value:
-                    log.is_ok = False
-                    log.extra = 'Ping max response time exceeded' # TODO: i18n these strings
+                    log.status = 1
+                    log.status_extra = 'Ping max response time exceeded' # TODO: i18n these strings
 
             # Most pings were lost
             else:
-                log.is_ok = False
-                log.extra = 'Most packets were lost'
+                log.status = 1
+                log.status_extra = 'Most packets were lost'
 
         # Ping could not be launched
         else:
-            log.is_ok = False
-            log.extra = 'Incorrect host'
+            log.status = 2
+            log.status_extra = 'Incorrect host'
 
         log.save()
 
