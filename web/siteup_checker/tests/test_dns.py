@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from siteup_checker import monitoring
 
+
 class TestDns(TestCase):
 
     def test_wrong_record_type(self):
@@ -27,3 +28,7 @@ class TestDns(TestCase):
         res = monitoring.check_dns('josetomastocino.com', 'A', '78.47.140.228')
         self.assertTrue(res['valid'])
         self.assertTrue(res['status_ok'])
+
+    def test_no_register(self):
+        res = monitoring.check_dns('josetomastocino.com', 'AAAA', '78.47.140.228')
+        self.assertFalse(res['valid'])
