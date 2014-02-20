@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 
@@ -8,21 +11,24 @@ from time import sleep
 from random import randrange
 
 @app.task
-def nap(t):
-    sleep(t)
-    print "Slept for %i seconds" % t
+def run_check(x):
+    x.run_check()
 
 
 # this will run every minute, see http://celeryproject.org/docs/reference/celery.task.schedules.html#celery.task.schedules.crontab
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
-def test():
-    kk = models.PingCheck.objects.all()
-    print "lol wut", kk
-    numtasks = randrange(4,8)
-    for f in range(numtasks):
-        nap.delay(randrange(6))
+def enqueue_checks():
+    active_checks = []
 
-    print "Enqueued %i tasks" % numtasks
+    # Fetch active checks
+    for check_type in models.CHECK_TYPES:
+        active_checks.extend(check_type.objects.filter(is_active=True))
+
+    # Enqueue checking for active checks
+    for check in active_checks:
+        run_check.delay(check)
+
+    logger.info("Enqueued %i checks" % len(active_checks))
 
 
 """
