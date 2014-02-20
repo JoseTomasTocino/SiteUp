@@ -19,6 +19,9 @@
     <!--[if lt IE 9]>
         <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    {% block "head_extra" %}
+    {% endblock "head_extra" %}
 </head>
 <body>
 
@@ -77,6 +80,6 @@
     </div>
 </footer>
 
-<script src="{% static "js/main.js" %}"></script>
+<script type="text/javascript" src="{% static "js/main.js" %}"></script>
 </body>
 </html>

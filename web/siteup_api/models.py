@@ -133,6 +133,9 @@ class BaseCheck(models.Model):
     def deactivate_url(self):
         return self.__class__.__name__.lower() + "_deactivate"
 
+    def unique_name(self):
+        return self.__class__.__name__.lower() + str(self.pk)
+
     class Meta:
         abstract = True
 
@@ -192,6 +195,7 @@ class PingCheck(BaseCheck):
             log.status = 2
             log.status_extra = 'Incorrect host'
 
+        logger.info('Save PingCheckLog, status %i, status_extra "%s"' % (log.status, log.status_extra))
         log.save()
 
     class Meta:

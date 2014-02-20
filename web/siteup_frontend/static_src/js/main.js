@@ -1,5 +1,15 @@
+if (typeof drawingFunctions != "undefined") {
+    for (var i = 0; i < drawingFunctions.length; ++i){
+        drawingFunctions[i]();
+    }
+}
+
+
 $(function () {
-    var render, renderGraphs;
+
+
+
+    /*var render, renderGraphs;
 
     render = function (data, canvas) {
         var add_gradient, area, bad_at, dateEnd, dateStart, daySpan, format, gradient, h, line, lines, main_path, max, min, numdays, padb, padl, padr, padt, subs, ticks, timeFormat, transition, units, vis, w, warn_at, x, xAxis, y, yAxis, yax, _ref;
@@ -121,6 +131,6 @@ $(function () {
         });
     };
 
-    renderGraphs();
+    renderGraphs(); //*/
 
 });

@@ -128,30 +128,11 @@ nav.controls {
 }
 
 .check-graph {
-    padding: 15px;
+    padding: 0px;
     width: 400px;
 
     .check-graph-container {
-        height: 100px;
-
-        .axis{
-            fill: $color3;
-            font-size:10px;
-        }
-
-        line, path {
-            stroke-width:hairline;
-            fill:none;
-            stroke: $color6;
-            shape-rendering:crispEdges;
-        }
-
-        path.path {
-            stroke: $color3;
-            stroke-width:2px;
-            stroke-opacity:1;
-            fill:none;
-        }
+        height: 120px;
     }
 }
 

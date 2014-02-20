@@ -19,5 +19,4 @@ def classname(obj):
 def verbose_name(obj):
     """Returns the class name of a model. To be used in a template as a filter"""
 
-    logger.info(object)
     return obj._meta.verbose_name
