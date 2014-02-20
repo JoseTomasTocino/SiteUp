@@ -94,31 +94,27 @@ STATIC_URL = '/static/'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
+    'formatters': {
+        'standard': {
+            'format': '%(levelname)s - %(filename)s:%(lineno)d - %(message)s'   # %(asctime)s -
         }
     },
+
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
         },
     },
+
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+        '' : {
+            'handlers' : ['default'],
+            'level': 'INFO'
         },
     }
 }
-
-import logging
-logging_format = '%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
-logging.basicConfig(level=logging.INFO, format=logging_format)
-logger = logging.getLogger(__name__)
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'

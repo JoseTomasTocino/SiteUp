@@ -88,7 +88,7 @@ class SignupForm(BaseForm):
 
 class ChangePasswordForm(BaseForm):
     """Form for the password change process."""
-    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    password = forms.CharField(label=_("New password"), widget=forms.PasswordInput)
 
 
 #############################################################################

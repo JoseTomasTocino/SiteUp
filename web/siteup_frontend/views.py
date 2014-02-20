@@ -84,6 +84,9 @@ class SignupView(FormView):
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
+    """
+    View for the user profile panel.
+    """
     model = User
     template_name = "generic_form.html"
     fields = ['username', 'email']
@@ -101,14 +104,19 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class ChangePasswordView(SuccessMessageMixin, FormView):
+class ChangePasswordView(FormView):
+    """
+    View for the password change panel.
+    """
     form_class = ChangePasswordForm
     template_name = "generic_form.html"
     success_message = _("Password changed correctly")
 
     def form_valid(self, form):
-        self.request.user.change_password(form.cleaned_data['password'])
-        return redirect('home')
+        self.request.user.set_password(form.cleaned_data['password'])
+        self.request.user.save()
+        messages.success(self.request, self.success_message)
+        return redirect('dashboard')
 
     def get_context_data(self, **kwargs):
         context = super(ChangePasswordView, self).get_context_data(**kwargs)
