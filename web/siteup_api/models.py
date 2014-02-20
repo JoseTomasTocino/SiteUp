@@ -19,25 +19,6 @@ from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostnam
 ####################################################################################
 # Log related models
 
-"""
-Response Attributes
-
-Attribute   Description Type
-results.(entry).probeid Probe identifier    Integer
-results.(entry).time    Time when test was performed. Format is UNIX timestamp  Integer
-results.(entry).status  Result status   String (up, down, unconfirmed_down, unknown)
-results.(entry).responsetime    Response time (in milliseconds) (Will be 0 if no response was received) Integer
-results.(entry).statusdesc  Short status description    String
-results.(entry).statusdesclong  Long status description String
-results.(entry).analysisid  Analysis identifier Integer
-activeprobes    For your convinience, a list of used probes that produced the showed results    Array
-activeprobes.(entry)    Probe identifier    Integer
-
-from https://www.pingdom.com/features/api/documentation/
-
-
-"""
-
 class BaseCheckLog(models.Model):
     """Stores the result of the check."""
 
@@ -274,13 +255,18 @@ class HttpCheck(BaseCheck):
         check_result = monitoring.check_http_header(self.target, self.status_code)
 
         if check_result['valid']:
-            log.value = check_result['status_code']
+            log.status_extra = check_result['status_code']
 
-            if self.content_check_string.strip():
-                check_result = monitoring.check_http_content(self.target, self.content_check_string.strip())
-                log.is_ok = check_result['status_ok']
+            if check_result['status_ok']:
+                if self.content_check_string.strip():
+                    check_result = monitoring.check_http_content(self.target, self.content_check_string.strip())
+                    log.status = 0 if check_result['status_ok'] else 1
+                else:
+                    log.status = 0
+            else:
+                log.status = 1
         else:
-            log.is_ok = False
+            log.status = 2
 
         log.save()
 
