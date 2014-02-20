@@ -16,7 +16,7 @@ from django.views.generic.edit import FormView
 
 from braces.views import LoginRequiredMixin
 
-from .forms import LoginForm, SignupForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
+from .forms import LoginForm, SignupForm, ChangePasswordForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
 from siteup_api import models
 
 ############################################################################
@@ -35,10 +35,18 @@ class DeleteMessageMixin(object):
 ############################################################################
 
 class HomeView(TemplateView):
+    """
+    View for the homepage
+    """
     template_name = "home.html"
 
 
 class LoginView(FormView):
+    """
+    View for the login page.
+
+    On GET, it shows the form. On POST, tries to login the user.
+    """
     template_name = "login.html"
     form_class = LoginForm
 
@@ -49,6 +57,9 @@ class LoginView(FormView):
 
 
 class LogoutView(View):
+    """
+    View for the logout page.
+    """
     def get(self, *args, **kwargs):
         logout(self.request)
 
@@ -56,6 +67,9 @@ class LogoutView(View):
 
 
 class SignupView(FormView):
+    """
+    View for the signup process.
+    """
     form_class = SignupForm
     template_name = "signup.html"
 
@@ -72,7 +86,7 @@ class SignupView(FormView):
 class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = "generic_form.html"
-    fields = ['username', 'email', 'password']
+    fields = ['username', 'email']
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -84,6 +98,16 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         context["form_submit"] = _("Update details")
 
         return context
+
+
+class ChangePasswordView(SuccessMessageMixin, FormView):
+    form_class = ChangePasswordForm
+    template_name = "generic_form.html"
+    success_message = _("Password changed correctly")
+
+    def form_valid(self, form):
+        self.request.user.change_password(form.cleaned_data['password'])
+        return redirect('home')
 
 
 ###################################################################################

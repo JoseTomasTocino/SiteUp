@@ -85,6 +85,12 @@ class SignupForm(BaseForm):
 
         return self.cleaned_data
 
+
+class ChangePasswordForm(BaseForm):
+    """Form for the password change process."""
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+
+
 #############################################################################
 
 class CheckForm(BaseModelForm):
