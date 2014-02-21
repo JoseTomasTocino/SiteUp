@@ -172,7 +172,15 @@
                                 backgroundColor: 'transparent',
                                 legend: 'none',
                                 chartArea: { width: "83%" },
+                                hAxis: {
+                                    baselineColor: '#ddd',
+                                    gridlines: { color: '#ddd' },
+                                    minorGridlines: { color: '#ddd' },
+                                },
                                 vAxis: {
+                                    gridlines: { color: '#ddd' },
+                                    minorGridlines: { color: '#ddd' },
+                                    baselineColor: '#ddd',
                                     format:'###ms'
                                 },
                                 series: {
@@ -192,37 +200,45 @@
 
                         <script>
                         google.setOnLoadCallback(function(){
-                            var container = document.querySelector('.graph_{{ check.unique_name }}');
-                            var chart = new google.visualization.Timeline(container);
                             var data = new google.visualization.DataTable();
-
-                            data.addColumn({ type: 'string', id: 'Row' });
-                            data.addColumn({ type: 'string', id: 'Status' });
-                            data.addColumn({ type: 'date', id: 'Start' });
-                            data.addColumn({ type: 'date', id: 'End' });
-
+                            data.addColumn('datetime', 'Date');
+                            data.addColumn('number', 'Resp. time');
                             data.addRows([
-                            {% for status in check.statuses.all %}
-                                [ "",
-                                  "{{ status.status }}",
-                                  new Date("{{ status.get_date_start }}"),
-                                  new Date("{{ status.get_date_end   }}")],
+                            {% for log in check.logs.all %}
+                                [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
                             {% endfor %}
                             ]);
 
                             var options = {
+                                // curveType: 'function',
                                 backgroundColor: 'transparent',
-                                colors: ['#E52418', '#91E547'],
-                                chartArea: {
-                                    top: 10,
-                                    width: "83%"
+                                legend: 'none',
+                                chartArea: { width: "83%" },
+                                hAxis: {
+                                    baselineColor: '#ddd',
+                                    gridlines: { color: '#ddd' },
+                                    minorGridlines: { color: '#ddd' },
                                 },
-                                timeline : {
-                                    showBarLabels: false,
-                                    showRowLabels: false
+                                vAxis: {
+                                    gridlines: { color: '#ddd' },
+                                    minorGridlines: { color: '#ddd' },
+                                    baselineColor: '#ddd',
+                                    format:'###ms',
+                                    ticks: [{v:0, f:"Down"}, {v:1, f:"Up"}],
+                                    viewWindow : {
+                                        max: 1.25,
+                                        min: -0.25
+                                    }
                                 },
-                            }; //*/
+                                series: {
+                                    0: {
+                                        color: '#46596a'
+                                    }
+                                }
+                            };
 
+                            var container = document.querySelector('.graph_{{ check.unique_name }}');
+                            var chart = new google.visualization.LineChart(container);
                             chart.draw(data, options);
                         });
                         </script>

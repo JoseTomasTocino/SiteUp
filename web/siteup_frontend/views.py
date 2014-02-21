@@ -290,6 +290,7 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
 
+
     def get_context_data(self, **kwargs):
         context = super(CheckUpdateView, self).get_context_data(**kwargs)
         verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
@@ -306,6 +307,7 @@ class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMi
 
 
 class CheckEnableView(GenericCheckViewMixin, LoginRequiredMixin, View):
+
     def get(self, request, *args, **kwargs):
         check = self.get_queryset().get(pk=kwargs['pk'])
         check.is_active = True
@@ -321,3 +323,4 @@ class CheckDisableView(GenericCheckViewMixin, LoginRequiredMixin, View):
         check.save()
         messages.success(request, _("Check was disabled successfully"))
         return redirect('dashboard')
+

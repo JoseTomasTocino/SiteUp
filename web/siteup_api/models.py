@@ -45,15 +45,16 @@ class CheckLog(models.Model):
         default=0
     )
 
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    check = generic.GenericForeignKey('content_type', 'object_id')
 
     def save(self):
         super(CheckLog, self).save()
         self.check.update_status(self)
 
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    check = generic.GenericForeignKey('content_type', 'object_id')
+    def get_status(self):
+        return 1 - self.status
 
 
 class CheckStatus(models.Model):

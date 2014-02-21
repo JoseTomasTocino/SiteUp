@@ -95,7 +95,7 @@ class ChangePasswordForm(BaseForm):
 
 class CheckForm(BaseModelForm):
     class Meta:
-        exclude = ['group', 'last_log_datetime', 'is_active']
+        exclude = ['last_log_datetime', 'is_active', 'group']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4})
         }
