@@ -114,6 +114,8 @@ class DnsCheckForm(CheckForm):
 class PortCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PortCheck
+        fields = ['title', 'description', 'target', 'target_port', 'response_check_string', 'check_interval', 'notify_email']
+
 
 class HttpCheckForm(CheckForm):
     class Meta(CheckForm.Meta):

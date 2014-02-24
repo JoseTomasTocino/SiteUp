@@ -259,11 +259,9 @@ class PortCheck(BaseCheck):
         validators=[validators.MinValueValidator(1),
                     validators.MaxValueValidator(65535)])
 
-    should_check_response = models.BooleanField(default=False,
-        help_text=_("If active, the response from the port should contain the text in the following field."))
-
-    response_value = models.CharField(max_length=255, blank=True,
-        help_text=_("If the previous option is active, the response should contain this text."))
+    response_check_string = models.CharField(max_length=255, blank=True,
+        verbose_name=_("Check for string"),
+        help_text=_("Optionally, you can check if the response contains a certain string."))
 
     def run_check(self):
         if not self.should_run_check():
