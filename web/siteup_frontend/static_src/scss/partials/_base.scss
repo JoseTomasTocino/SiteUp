@@ -61,6 +61,8 @@ a {
     border: 1px solid $color5;
     box-shadow: 0 1px 2px rgba(0,0,0,.05);
 
+    opacity: 1 !important;
+
     &:hover {
         background-color: $color7;
         // color: $color8;

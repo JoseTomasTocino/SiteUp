@@ -11,19 +11,27 @@ def check_port(host, port_number, content = None):
     try:
         result = s.connect_ex((host, port_number))
     except Exception as e:
+        logger.error("Error: %s" % e)
         return { 'valid': False }
 
+    logger.info("Port check, connection errno: %i" % result)
+
     if result == 0:
-        if not content:
-            return { 'valid': True }
-        else:
-            recv_content = s.recv(512)
+        ret_obj = { 'status_ok': True, 'valid': True }
+
+        if content:
+            try:
+                recv_content = s.recv(512)
+            except Exception as e:
+                logger.error("Error: %s" % e)
+                return { 'valid': False }
+
             logger.info("Received: %s" % recv_content)
 
-            if content.lower() in recv_content.lower():
-                return { 'valid': True }
-            else:
-                return { 'valid': False }
+            if content.lower() not in recv_content.lower():
+                ret_obj['status_ok'] = False
+
+        return ret_obj
 
     else:
         return { 'valid': False }

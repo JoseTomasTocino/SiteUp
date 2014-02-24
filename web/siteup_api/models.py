@@ -267,7 +267,19 @@ class PortCheck(BaseCheck):
         if not self.should_run_check():
             return
 
-            # TODO
+        log = CheckLog(check=self)
+
+        check_result = monitoring.check_port(self.target, self.target_port, self.response_check_string)
+
+        if check_result['valid']:
+            if check_result['status_ok']:
+                log.status = 0
+            else:
+                log.status = 1
+        else:
+            log.status = 2
+
+        log.save()
 
     class Meta:
         verbose_name = _("port check")
