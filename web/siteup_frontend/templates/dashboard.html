@@ -94,13 +94,15 @@
             {% else %}
             {% for check in check_group.checks %}
 
-                <div class="check {% if not check.is_active %}inactive{% endif %}">
+                <div class="check {% if not check.is_active %}inactive{% endif %} {% if check.last_status.status != 0 %}check-down{% endif %}">
                     <div class="check-status">
 
                         {% if not check.is_active %}
                             <i class="check-status-icon fa fa-clock-o"></i>
                         {% elif not check.last_status %}
-                            <i class="check-status-icon fa fa-question-circle"></i>
+                            <i class="check-status-icon fa fa-refresh fa-spin"></i>
+                        {% elif check.last_status.status != 0 %}
+                            <i class="check-status-icon fa fa-exclamation-circle"></i>
                         {% else %}
                             <i class="check-status-icon fa fa-check-circle-o"></i>
                         {% endif %}
@@ -180,7 +182,7 @@
                                 curveType: 'function',
                                 backgroundColor: 'transparent',
                                 legend: 'none',
-                                chartArea: { width: "83%" },
+                                chartArea: { width: "80%" },
                                 hAxis: {
                                     baselineColor: '#ddd',
                                     gridlines: { color: '#ddd' },
@@ -194,7 +196,11 @@
                                 },
                                 series: {
                                     0: {
+                                        {% if check.last_status.status == 0 %}
                                         color: '#46596a'
+                                        {% else %}
+                                        color: '#e83f40'
+                                        {% endif %}
                                     }
                                 }
                             };
@@ -241,7 +247,11 @@
                                 },
                                 series: {
                                     0: {
+                                        {% if check.last_status.status == 0 %}
                                         color: '#46596a'
+                                        {% else %}
+                                        color: '#e83f40'
+                                        {% endif %}
                                     }
                                 }
                             };
