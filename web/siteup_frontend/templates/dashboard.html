@@ -94,7 +94,7 @@
             {% else %}
             {% for check in check_group.checks %}
 
-                <div class="check {% if not check.is_active %}inactive{% endif %} {% if check.last_status.status != 0 %}check-down{% endif %}">
+                <div class="check {% if not check.is_active %}inactive{% endif %} {% if check.last_status and check.last_status.status != 0 %}check-down{% endif %}">
                     <div class="check-status">
 
                         {% if not check.is_active %}
@@ -196,7 +196,7 @@
                                 },
                                 series: {
                                     0: {
-                                        {% if check.last_status.status == 0 %}
+                                        {% if check.last_status and check.last_status.status == 0 %}
                                         color: '#46596a'
                                         {% else %}
                                         color: '#e83f40'
@@ -211,7 +211,7 @@
                         });
                         </script>
 
-                        {% elif check.type_name == "dnscheck" %}
+                        {% else %}
 
                         <script>
                         google.setOnLoadCallback(function(){

@@ -116,4 +116,6 @@ class PortCheckForm(CheckForm):
 class HttpCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.HttpCheck
+        fields = ['title', 'description', 'target', 'status_code', 'content_check_string', 'check_interval', 'notify_email']
+
 
