@@ -97,10 +97,12 @@
                 <div class="check {% if not check.is_active %}inactive{% endif %}">
                     <div class="check-status">
 
-                        {% if check.is_active %}
-                            <i class="check-status-icon fa fa-check-circle-o"></i>
-                        {% else %}
+                        {% if not check.is_active %}
                             <i class="check-status-icon fa fa-clock-o"></i>
+                        {% elif not check.last_status %}
+                            <i class="check-status-icon fa fa-question-circle"></i>
+                        {% else %}
+                            <i class="check-status-icon fa fa-check-circle-o"></i>
                         {% endif %}
 
                         <div class="button has-submenu submenu-anchor-left">
@@ -153,6 +155,13 @@
                     </div>
 
                     <div class="check-graph">
+
+
+                        {% if not check.last_status %}
+                            <div class="check-no-graph">
+                                {% trans "No data yet" %}
+                            </div>
+                        {% else %}
                         <div class="check-graph-container graph_{{ check.unique_name }}"></div>
 
                         {% if check.type_name == "pingcheck" %}
@@ -244,6 +253,9 @@
                         </script>
 
                         {% endif %}
+                        {% endif %}
+
+
 
                     </div>
                 </div>
