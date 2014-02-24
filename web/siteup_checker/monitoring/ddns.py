@@ -40,9 +40,7 @@ def check_dns(target, record_type, expected_address):
     except dns.resolver.DNSException as e:
         return_obj['valid'] = False # TODO
 
-    # except Exception, e:  # TODO: add the proper exception type
-    #     logger.error(dir(e))
-    #     logger.error(e.args)
-    #     return_obj['valid'] = False
+    except Exception, e:  # TODO: add the proper exception type
+        return_obj['valid'] = False
 
     return return_obj
