@@ -118,3 +118,7 @@ LOGGING = {
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
+
+
+# In hours. Logs older than this will be removed by a periodic maintenance task
+CHECKLOG_EXPIRATION_TIME = 24 * 2

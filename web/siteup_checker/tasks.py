@@ -10,6 +10,10 @@ from siteup_api import models
 from time import sleep
 from random import randrange
 
+import datetime
+
+from django.conf import settings
+
 @app.task
 def run_check(x):
     x.run_check()
@@ -32,6 +36,13 @@ def enqueue_checks():
         enqueue_check(check)
 
     logger.info("Enqueued %i checks" % len(active_checks))
+
+@periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
+def remove_old_logs():
+    date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_EXPIRATION_TIME)
+    checks = models.CheckLog.objects.filter(date__lt=date_limit)
+    logger.info("Deleting %i old check logs..." % len(checks))
+    checks.delete()
 
 
 """
