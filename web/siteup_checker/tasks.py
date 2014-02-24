@@ -14,6 +14,9 @@ from random import randrange
 def run_check(x):
     x.run_check()
 
+def enqueue_check(x):
+    run_check.delay(x)
+
 
 # this will run every minute, see http://celeryproject.org/docs/reference/celery.task.schedules.html#celery.task.schedules.crontab
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
@@ -26,7 +29,7 @@ def enqueue_checks():
 
     # Enqueue checking for active checks
     for check in active_checks:
-        run_check.delay(check)
+        enqueue_check(check)
 
     logger.info("Enqueued %i checks" % len(active_checks))
 
