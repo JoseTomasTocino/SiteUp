@@ -108,6 +108,8 @@ class PingCheckForm(CheckForm):
 class DnsCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.DnsCheck
+        fields = ['title', 'description', 'target', 'record_type', 'resolved_address', 'check_interval', 'notify_email']
+
 
 class PortCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
