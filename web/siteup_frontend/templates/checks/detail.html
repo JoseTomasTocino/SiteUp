@@ -2,6 +2,61 @@
 {% load i18n %}
 {% load frontend_extras %}
 
+{% block head_extra %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script>
+        google.load("visualization", "1", {packages:["corechart", "timeline"]});
+    </script>
+{% endblock head_extra %}
+
 {% block content %}
-    {{ object }}
+    <div class="container single-check">
+
+        <header class="cf">
+            <div class="status">
+                {% if not check.is_active %}
+                    <i class="check-status-icon fa fa-clock-o"></i>
+                {% elif not check.last_status %}
+                    <i class="check-status-icon fa fa-refresh fa-spin"></i>
+                {% elif check.last_status.status != 0 %}
+                    <i class="check-status-icon fa fa-exclamation-circle"></i>
+                {% else %}
+                    <i class="check-status-icon fa fa-check-circle-o fa-4x"></i>
+                {% endif %}
+            </div>
+
+            <div class="texts cf">
+                <h2>{{ check.title }}</h2>
+                <div class="desc">
+                    {{ check.description }}
+                </div>
+            </div>
+
+        </header>
+
+        <div class="graph graph_{{ check.unique_name }}"></div>
+
+        <script>
+            if (typeof graphInfo == "undefined") {
+                graphInfo = [];
+            }
+            (function(){
+                var graphName = ".graph_{{ check.unique_name }}";
+                graphInfo[graphName] = [];
+                graphInfo['is_single'] = true;
+                graphInfo[graphName]['data'] = [
+                    {% for log in check.logs.all %}
+                        {% if check.type_name == "pingcheck" %}
+                            [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
+                        {% else %}
+                            [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
+                        {% endif %}
+                    {% endfor %}
+                ];
+                graphInfo[graphName]['status'] = {% if check.last_status and check.last_status.status == 0 %}0{% else %}1{% endif %};
+                graphInfo[graphName]['type'] = '{{ check.type_name }}';
+            })();
+        </script>
+
+    </div>
 {% endblock content %}

@@ -38,6 +38,10 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
         }
     };
 
+    if (typeof graphData['is_single'] != "undefined") {
+        // options['chartArea']['width']
+    }
+
     if (graphData['type'] == "pingcheck") {
         options['curveType'] = 'function';
     } else {

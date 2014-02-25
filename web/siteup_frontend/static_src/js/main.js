@@ -30,6 +30,10 @@ function buildGraph(graphName, graphData) {
         }
     };
 
+    if (typeof graphData['is_single'] != "undefined") {
+        // options['chartArea']['width']
+    }
+
     if (graphData['type'] == "pingcheck") {
         options['curveType'] = 'function';
     } else {

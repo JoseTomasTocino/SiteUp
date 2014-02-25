@@ -327,3 +327,4 @@ class CheckDisableView(GenericCheckViewMixin, LoginRequiredMixin, View):
 
 class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
     template_name = "checks/detail.html"
+    context_object_name = "check"

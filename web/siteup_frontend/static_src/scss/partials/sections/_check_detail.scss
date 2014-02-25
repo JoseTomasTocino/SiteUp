@@ -1,0 +1,27 @@
+.single-check {
+    margin: 15px auto;
+    // border-radius: 3px;
+    // border: 1px solid $color6;
+    // box-shadow: 0 0 2px rgba($color6, 0.5);
+
+    .status {
+        float: left;
+        font-size: 0.9em;
+    }
+
+    .texts {
+        float: left;
+        margin-left: 1em;
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 0;
+            color: $color2;
+            font-weight: 700;
+        }
+
+        .desc {
+            font-size: 0.85em;
+        }
+    }
+}
