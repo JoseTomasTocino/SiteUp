@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'siteup_checker',
     'siteup_frontend',
     'django_extensions',
+    'gunicorn',
     'celery',
 )
 
