@@ -85,6 +85,7 @@
                     {% trans "This group has no checks. Add one using the <em>add check</em> button." %}
                 </div>
             {% else %}
+
             {% for check in check_group.checks %}
 
                 <div class="check {% if not check.is_active %}inactive{% endif %} {% if check.last_status and check.last_status.status != 0 %}check-down{% endif %}">
@@ -173,7 +174,7 @@
                                 var graphName = ".graph_{{ check.unique_name }}";
                                 graphInfo[graphName] = [];
                                 graphInfo[graphName]['data'] = [
-                                    {% for log in check.logs.all %}
+                                    {% for log in check.logs.latest_hours %}
                                         {% if check.type_name == "pingcheck" %}
                                             [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
                                         {% else %}

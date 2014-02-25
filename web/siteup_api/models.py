@@ -17,6 +17,7 @@ from siteup_checker import monitoring
 from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostname
 
 from .utils import timedelta_to_string
+import managers
 
 ####################################################################################
 # Log related models
@@ -50,6 +51,8 @@ class CheckLog(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey('content_type', 'object_id')
+
+    objects = managers.CheckLogManager()
 
     def save(self):
         super(CheckLog, self).save()
