@@ -11,7 +11,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView, RedirectView
+from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView, RedirectView, DetailView
 from django.views.generic.edit import FormView
 
 from braces.views import LoginRequiredMixin
@@ -324,3 +324,6 @@ class CheckDisableView(GenericCheckViewMixin, LoginRequiredMixin, View):
         messages.success(request, _("Check was disabled successfully"))
         return redirect('dashboard')
 
+
+class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
+    template_name = "checks/detail.html"
