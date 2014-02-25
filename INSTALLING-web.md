@@ -31,18 +31,18 @@ Now you need to configure your web server. I'm using __nginx__ because it's very
     
         # Static files
         location /static/ {
-                root /srv/siteup.josetomastocino.com/siteup/web/siteup_frontend;
-                try_files $uri $uri/ =404;
+            root /srv/siteup.josetomastocino.com/siteup/web/siteup_frontend;
+            try_files $uri $uri/ =404;
         }
     
     
         location / {
-                    proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                    proxy_set_header Host      $http_host;
+            proxy_set_header X-Real-IP        $remote_addr;
+            proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+            proxy_set_header Host             $http_host;
             proxy_redirect off;
             if (!-f $request_filename) {
-                        proxy_pass       http://127.0.0.1:8000;
+                proxy_pass       http://127.0.0.1:8000;
                 break;
             }
         }
