@@ -2,10 +2,12 @@
 {% load i18n %}
 
 {% block content %}
-<div class="form">
-    <h2>
-        {% trans "Confirm deletion" %}
-    </h2>
+<div class="block narrow simple">
+    <header>
+        <h2>
+            {% trans "Confirm deletion" %}
+        </h2>
+    </header>
 
     <form action="" method="POST">
         {% csrf_token %}
@@ -14,8 +16,10 @@
 
         <div class="info">
         {% blocktrans %}
-            Are you sure you want to delete the {{ object }}?
+            Are you sure you want to delete the check?
         {% endblocktrans %}
+        <br>
+        {% trans "Title" %}: {{ object.title }}
         </div>
 
         <fieldset class="actions">
