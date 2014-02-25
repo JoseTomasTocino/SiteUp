@@ -14,8 +14,9 @@ body {
 
 .content-wrapper {
     background-color: $color7;
-    padding: 20px 0;
+    padding: 0 0 20px;
     border-bottom: 1px solid $color5;
+    overflow: hidden;
 
     &::after {
         // display: block;

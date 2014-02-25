@@ -26,17 +26,15 @@
     </div>
 </nav>
 
-<div class="check-list container">
-
 {% if not check_groups %}
-    <div class="message-no-groups">
+    <div class="message-no-groups container">
         {% trans "You currently have no check groups. Add one using the button above." %}
     </div>
 {% else %}
 
 {% for check_group in check_groups %}
-    <div class="check-group">
-        <header class="check-group-header">
+    <div class="block complex check-group">
+        <header>
             <h3>
                 {{ check_group.title | truncatechars:70 }}
             </h3>
@@ -81,7 +79,7 @@
             </div>
         </header>
 
-        <div class="check-group-content">
+        <div class="content check-group-content">
             {% if not check_group.checks %}
                 <div class="message-no-checks">
                     {% trans "This group has no checks. Add one using the <em>add check</em> button." %}
@@ -106,6 +104,12 @@
                             <i class="fa fa-cog"></i> {% trans "Actions" %}
 
                             <ul class="submenu">
+
+                                <li>
+                                    <a href="{% url "view_check" type=check|classname|lower pk=check.id  %}">
+                                        <i class="fa fa-info-circle"></i> {% trans "View details" %}
+                                    </a>
+                                </li>
 
                                 <li>
                                     <a href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
@@ -194,6 +198,5 @@
 {% endfor %}
 
 {% endif %}
-</div>
 
 {% endblock %}

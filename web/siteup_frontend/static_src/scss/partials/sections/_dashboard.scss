@@ -2,6 +2,9 @@ nav.controls {
     > .left {
         padding-top: 5px;
     }
+
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .check-list {
@@ -17,44 +20,6 @@ nav.controls {
 
 .message-no-groups {
     background-color: $color6;
-}
-
-.check-group {
-    // border-top: 1px solid #b3d2d7;
-    // border-left: 1px solid #b3d2d7;
-    // background-color: rgba(179, 210, 215, 0.05);
-
-    margin: 15px 0 0;
-    border-radius: 3px;
-    border: 1px solid $color6;
-    box-shadow: 0 0 2px rgba($color6, 0.5);
-}
-
-.check-group-header {
-    @extend .cf;
-    padding: 0 10px 0 20px;
-    background-color: darken($color7, 3%);
-    height: 53px;
-    line-height: 53px;
-    border-bottom: 1px solid $color6;
-    border-radius: 3px 3px 0 0;
-
-    h3 {
-        width: 800px;
-        float: left;
-        margin: 0;
-        font-weight: 600;
-        color: $color3;
-    }
-
-    .actions{
-        float: right;
-    }
-}
-
-.check-group-content {
-    background-color: lighten($color7, 3%);
-    border-radius: 0 0 3px 3px;
 }
 
 .inactive {

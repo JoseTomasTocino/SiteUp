@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 
 from itertools import chain
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -15,6 +15,8 @@ from django.core import validators
 
 from siteup_checker import monitoring
 from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostname
+
+from .utils import timedelta_to_string
 
 ####################################################################################
 # Log related models
@@ -62,6 +64,11 @@ class CheckStatus(models.Model):
         default=0
     )
 
+    status_extra = models.CharField(
+        blank=True,
+        max_length=255
+    )
+
     date_start = models.DateTimeField()
 
     date_end = models.DateTimeField(
@@ -84,6 +91,9 @@ class CheckStatus(models.Model):
             return self.date_end.isoformat()
         else:
             return datetime.now().isoformat()
+
+    def get_duration(self):
+        return timedelta_to_string(self.date_end - self.date_start + timedelta(seconds=1))
 
 
 ####################################################################################
@@ -126,22 +136,31 @@ class BaseCheck(models.Model):
     last_status = models.ForeignKey('CheckStatus', null=True)
 
     def update_status(self, check_log):
+        """After a check log, this updates the CheckStatus accordingly"""
+
         self.last_log_datetime = check_log.date
 
+        # If status has changed since last time (or there's no previous status)
         if not self.last_status or self.last_status.status != check_log.status:
 
+            # If there was a previous status, close it
             if self.last_status and self.last_status.status != check_log.status:
                 self.last_status.date_end = check_log.date
                 self.last_status.save()
 
             s = CheckStatus()
             s.status = check_log.status
+            s.status_extra = check_log.status_extra
             s.date_start = check_log.date
             s.check = self
             s.save()
 
             self.last_status = s
-            self.save()
+
+        self.save()
+
+    def get_statuses(self):
+        return self.statuses.order_by('-date_start')
 
     def should_run_check(self):
         """Confirms that the check can be run, because it's both active and enough time has passed since the last
@@ -243,6 +262,12 @@ class PingCheck(BaseCheck):
         logger.info('Save CheckLog, status %i, status_extra "%s"' % (log.status, log.status_extra))
         log.save()
 
+    def __unicode__(self):
+        if self.should_check_timeout:
+            return _("Ping check to {}, timeout limit {}ms").format(self.target, self.timeout_value)
+        else:
+            return _("Ping check to {}").format(self.target)
+
     class Meta:
         verbose_name = _("ping check")
         verbose_name_plural = _("ping checks")
@@ -280,6 +305,9 @@ class PortCheck(BaseCheck):
             log.status = 2
 
         log.save()
+
+    def __unicode__(self):
+        return _("Port check to port {} of {}").format(self.target_port, self.target)
 
     class Meta:
         verbose_name = _("port check")
@@ -330,6 +358,9 @@ class HttpCheck(BaseCheck):
 
         log.save()
 
+    def __unicode__(self):
+        return _("Http check to {}, expected status code {}").format(self.target, self.status_code)
+
     class Meta:
         verbose_name = _("http check")
         verbose_name_plural = _("http checks")
@@ -344,8 +375,8 @@ class DnsCheck(BaseCheck):
 
     resolved_address = models.CharField(
         max_length=255, blank=False,
-        help_text=_("Should be a valid IP"),
-        validators=[validators.validate_ipv46_address])
+        help_text=_("Should be a valid value for the selected record type"),
+    )
 
     DNS_RECORD_TYPES = (
         ('A', 'A'),
@@ -381,6 +412,9 @@ class DnsCheck(BaseCheck):
             log.status = 2
 
         log.save()
+
+    def __unicode__(self):
+        return _("DNS check to {}, register type '{}' should resolve to {}").format(self.target, self.record_type, self.resolved_address)
 
     class Meta:
         verbose_name = _("dns check")

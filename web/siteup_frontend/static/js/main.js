@@ -19,7 +19,10 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
     var options = {
         backgroundColor: 'transparent',
         legend: 'none',
-        chartArea: { width: "80%" },
+        chartArea: {
+            left: 70,
+            width: "78%" ,
+        },
         hAxis: {
             baselineColor: '#ddd',
             gridlines: { color: '#ddd' },
@@ -39,7 +42,12 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
     };
 
     if (typeof graphData['is_single'] != "undefined") {
-        // options['chartArea']['width']
+        options['chartArea'] = {
+            width: "80%" ,
+            top: 20,
+            left: 70,
+            height: "70%",
+        };
     }
 
     if (graphData['type'] == "pingcheck") {

@@ -2,10 +2,13 @@
 {% load i18n %}
 
 {% block content %}
-<div class="form wide">
-    <h2>
-        {{ form_title }}
-    </h2>
+<div class="block simple wide">
+
+    <header>
+        <h2>
+            {{ form_title }}
+        </h2>
+    </header>
 
     <form action="" method="POST">
         {% csrf_token %}
@@ -47,6 +50,7 @@
             </fieldset>
         {% endif %}
     </form>
+
 </div>
 
 {% endblock %}

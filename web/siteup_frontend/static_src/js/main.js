@@ -11,7 +11,10 @@ function buildGraph(graphName, graphData) {
     var options = {
         backgroundColor: 'transparent',
         legend: 'none',
-        chartArea: { width: "80%" },
+        chartArea: {
+            left: 70,
+            width: "78%" ,
+        },
         hAxis: {
             baselineColor: '#ddd',
             gridlines: { color: '#ddd' },
@@ -31,7 +34,12 @@ function buildGraph(graphName, graphData) {
     };
 
     if (typeof graphData['is_single'] != "undefined") {
-        // options['chartArea']['width']
+        options['chartArea'] = {
+            width: "80%" ,
+            top: 20,
+            left: 70,
+            height: "70%",
+        };
     }
 
     if (graphData['type'] == "pingcheck") {

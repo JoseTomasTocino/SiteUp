@@ -3,38 +3,43 @@
 
 {% block content %}
 
-<div class="container form wide choose-check-type">
-    <h2>
-        {% trans "Choose the type of check" %}
-    </h2>
+<div class="block simple wide choose-check-type">
+    <header>
+        <h2>
+            {% trans "Choose the type of check" %}
+        </h2>
+    </header>
 
-    <a href="{% url "new_check_next" pk=pk type='pingcheck' %}" class="button">
-        <h3>Ping check</h3>
-        <span class="desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
-        </span>
-    </a>
+    <div class="content">
 
-    <a href="{% url "new_check_next" pk=pk type='dnscheck' %}" class="button">
-        <h3>DNS check</h3>
-        <span class="desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
-        </span>
-    </a>
+        <a href="{% url "new_check_next" pk=pk type='pingcheck' %}" class="button">
+            <h3>Ping check</h3>
+            <span class="desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+            </span>
+        </a>
 
-    <a href="{% url "new_check_next" pk=pk type='portcheck' %}" class="button">
-        <h3>Port check</h3>
-        <span class="desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
-        </span>
-    </a>
+        <a href="{% url "new_check_next" pk=pk type='dnscheck' %}" class="button">
+            <h3>DNS check</h3>
+            <span class="desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+            </span>
+        </a>
 
-    <a href="{% url "new_check_next" pk=pk type='httpcheck' %}" class="button">
-        <h3>HTTP check</h3>
-        <span class="desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
-        </span>
-    </a>
+        <a href="{% url "new_check_next" pk=pk type='portcheck' %}" class="button">
+            <h3>Port check</h3>
+            <span class="desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+            </span>
+        </a>
+
+        <a href="{% url "new_check_next" pk=pk type='httpcheck' %}" class="button">
+            <h3>HTTP check</h3>
+            <span class="desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+            </span>
+        </a>
+    </div>
 </div>
 
 {% endblock %}

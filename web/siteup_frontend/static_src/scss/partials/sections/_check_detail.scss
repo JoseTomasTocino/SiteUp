@@ -4,12 +4,14 @@
     // border: 1px solid $color6;
     // box-shadow: 0 0 2px rgba($color6, 0.5);
 
-    .status {
+    .current-status {
+        width: 50px;
         float: left;
         font-size: 0.9em;
     }
 
     .texts {
+        width: 990px;
         float: left;
         margin-left: 1em;
 
@@ -22,6 +24,48 @@
 
         .desc {
             font-size: 0.85em;
+            strong {
+                font-weight: 600;
+            }
+        }
+    }
+
+    .graph {
+        height: 150px;
+    }
+
+    .status-table {
+        width: 100%;
+
+        th {
+            font-weight: 600;
+        }
+
+        tbody {
+        }
+
+        td {
+            padding: 7px 0;
+            font-size: 0.85em;
+            text-align: center;
+        }
+    }
+
+    .single-status {
+        padding: 0 0 10px;
+
+        & + .single-status {
+            border-top: 1px dotted $color5;
+            padding-top: 10px;
+        }
+
+        .info {
+        }
+        .fa-arrow-down {
+            color: #e52418;
+        }
+        .fa-arrow-up {
+            color: #91e547;
         }
     }
 }

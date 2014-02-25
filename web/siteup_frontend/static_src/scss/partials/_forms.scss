@@ -1,25 +1,4 @@
-.form {
-    width: 400px;
-    border-radius: 3px;
-    background: $color9;
-    border: 1px solid $color6;
-    padding: 30px 30px 20px;
-    margin: 0 auto;
-    box-shadow: 0 0 2px rgba($color6, 0.5);
-
-
-    &.wide {
-        width: 800px;
-    }
-
-    h2 {
-        margin: -15px 0 10px;
-        padding-bottom: 10px;
-        font-weight: 600;
-        color: $color3;
-        border-bottom: 1px dotted $color5;
-    }
-
+form {
     h3 {
         margin: 0;
         font-weight: normal;
@@ -54,7 +33,7 @@
         width: 100%;
         color: $color2;
         box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-        background-color: $color8;
+        background-color: $color9;
         border-radius: 3px;
 
         &:focus {
@@ -102,7 +81,7 @@
 
         &.subactions {
             margin-top: 10px;
-            margin-bottom: -10px;
+            // margin-bottom: -10px;
             border-top: 1px dotted $color5;
 
             a {
