@@ -1,3 +1,5 @@
+from .base import *
+
 ALLOWED_HOSTS = ['*.josetomastocino.com']
 
 DEBUG = False
