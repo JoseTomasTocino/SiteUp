@@ -137,7 +137,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['check_groups'] = self.request.user.checkgroup_set.prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set', 'dnscheck_set__logs', 'pingcheck_set__logs', 'httpcheck_set__logs', 'portcheck_set__logs',)
+        context['check_groups'] = self.request.user.checkgroup_set \
+            .prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set', 'dnscheck_set__logs', 'pingcheck_set__logs', 'httpcheck_set__logs', 'portcheck_set__logs',)
         for check_group in context['check_groups']:
             check_group.checks = []
             check_group.checks.extend(check_group.dnscheck_set.all())

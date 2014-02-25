@@ -43,12 +43,14 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
 
     if (typeof graphData['is_single'] != "undefined") {
         options['chartArea'] = {
-            width: "80%" ,
+            width: "90%" ,
             top: 20,
             left: 70,
             height: "70%",
         };
     }
+
+    console.log(options['chartArea']);
 
     if (graphData['type'] == "pingcheck") {
         options['curveType'] = 'function';

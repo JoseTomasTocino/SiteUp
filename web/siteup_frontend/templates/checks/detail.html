@@ -50,7 +50,7 @@
                 (function(){
                     var graphName = ".graph_{{ check.unique_name }}";
                     graphInfo[graphName] = [];
-                    graphInfo['is_single'] = true;
+                    graphInfo[graphName]['is_single'] = true;
                     graphInfo[graphName]['data'] = [
                         {% for log in check.logs.all %}
                             {% if check.type_name == "pingcheck" %}

@@ -16,7 +16,8 @@ body {
     background-color: $color7;
     padding: 0 0 20px;
     border-bottom: 1px solid $color5;
-    overflow: hidden;
+    // overflow: hidden;
+    border-top: 1px solid $color1;
 
     &::after {
         // display: block;
