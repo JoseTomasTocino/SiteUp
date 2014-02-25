@@ -1,1 +1,0 @@
-* * * * * cd /home/jose/pfc-ii/web && /home/jose/.virtualenvs/pfc/bin/python /home/jose/pfc-ii/web/manage.py runchecks > /tmp/cronlog.txt 2>&1 
