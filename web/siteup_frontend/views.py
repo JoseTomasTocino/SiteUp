@@ -74,10 +74,11 @@ class SignupView(FormView):
     template_name = "signup.html"
 
     def form_valid(self, form):
-        user = User.objects.create_user(username=form.cleaned_data['username'],
-                                        email=form.cleaned_data['email'],
-                                        password=form.cleaned_data['password'])
-
+        user = User.objects.create_user(
+            username=form.cleaned_data['username'],
+            email=form.cleaned_data['email'],
+            password=form.cleaned_data['password']
+        )
 
         messages.info(self.request, _('User was created successfully. You can now login.'))
         return redirect('home')
@@ -139,6 +140,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         context['check_groups'] = self.request.user.checkgroup_set \
             .prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set', 'dnscheck_set__logs', 'pingcheck_set__logs', 'httpcheck_set__logs', 'portcheck_set__logs',)
+
         for check_group in context['check_groups']:
             check_group.checks = []
             check_group.checks.extend(check_group.dnscheck_set.all())
@@ -151,8 +153,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 ###################################################################################
 # GROUPS
-
-
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = models.CheckGroup

@@ -9,7 +9,12 @@ def check_http_header(target, status_code=200):
     return_obj = {}
 
     try:
-        r = requests.head(target)
+        # Don't follow redirections if status_code is in the 30x family
+        if status_code / 10 == 30:
+            r = requests.head(target)
+        else:
+            r = requests.head(target, allow_redirects=True)
+
         return_obj['valid'] = True
         return_obj['status_code'] = r.status_code
         return_obj['status_ok'] = r.status_code == status_code
