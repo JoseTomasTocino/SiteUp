@@ -1,3 +1,5 @@
+# Installing the web app #
+
 To install the web system, you should first __clone the repo__ somewhere in your server. We'll be working in the `web` folder from now on.
 
 In order to install the proper requirements you need to create a __virtualenv__. I highly recommend using [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/).
@@ -53,3 +55,12 @@ After that you should just restart both supervisord and nginx and you should be 
     sudo service nginx restart
     sudo service supervisord restart
 
+## Performance issues ##
+
+__Rabbitmq__ default configuration makes it consume a lot of memory and can become a problem in systems with limited resources, such as low-end vps. In order to fix that you can add the following to `/etc/rabbitmq/rabbitmq.config` to limit the max memory to 15% of the total.
+
+    [
+        {rabbit, [{vm_memory_high_watermark, 0.15}]}
+    ].
+
+If the number of checks in your system is going to be low, you can decrease the number of __celery__ workers by modifying the `sup_celery.conf` file generated before, modifying the `-c 16` parameter in the `command` attribute.

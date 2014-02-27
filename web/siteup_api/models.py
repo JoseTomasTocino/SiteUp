@@ -136,6 +136,7 @@ class BaseCheck(models.Model):
     logs = generic.GenericRelation('CheckLog')
 
     statuses = generic.GenericRelation('CheckStatus')
+
     last_status = models.ForeignKey('CheckStatus', null=True)
 
     def update_status(self, check_log):
@@ -262,7 +263,7 @@ class PingCheck(BaseCheck):
             log.status = 2
             log.status_extra = 'Incorrect host'
 
-        logger.info('Save CheckLog, status %i, status_extra "%s"' % (log.status, log.status_extra))
+        logger.info('Save CheckLog, status %i, response_time %i, status_extra "%s"' % (log.status, log.response_time, log.status_extra))
         log.save()
 
     def __unicode__(self):

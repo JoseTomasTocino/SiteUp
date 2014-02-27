@@ -15,7 +15,10 @@ def check_ping(target):
 
     try:
         # Launch ping process
-        ping_raw_response = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE, stderr=DEVNULL).stdout.read()
+        process = subprocess.Popen(["ping", "-c3", "-w10", target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Get the output
+        ping_raw_response, ping_raw_error = process.communicate()
     except Exception as e:
         # There was a problem executing the ping command, WAT
         logger.error(e)
