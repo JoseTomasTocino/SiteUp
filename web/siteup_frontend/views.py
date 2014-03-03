@@ -53,7 +53,7 @@ class LoginView(FormView):
 
     def form_valid(self, form):
         login(self.request, form.get_user())
-        oplogger.info("LOGIN: User '{}' logged in ".format(form.get_user().username))
+        oplogger.info("USER_LOGIN: User '{}' logged in ".format(form.get_user().username))
 
         return redirect('dashboard')
 
@@ -72,7 +72,7 @@ class LogoutView(View):
     View for the logout page.
     """
     def get(self, *args, **kwargs):
-        oplogger.info("LOGOUT: User '{}' logged out ".format(self.request.user.username))
+        oplogger.info("USER_LOGOUT: User '{}' logged out ".format(self.request.user.username))
 
         logout(self.request)
 
@@ -93,6 +93,8 @@ class SignupView(FormView):
             password=form.cleaned_data['password']
         )
 
+        oplogger.info("USER_SIGNUP: User '{}' was created".format(user.username))
+
         messages.info(self.request, _('User was created successfully. You can now login.'))
         return redirect('home')
 
@@ -105,16 +107,22 @@ class SignupView(FormView):
         return context
 
 
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     View for the user profile panel.
     """
     model = User
     template_name = "generic_form.html"
     fields = ['username', 'email']
+    success_url = reverse_lazy("dashboard")
+    success_message = _("Your profile was changed successfully")
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def form_valid(self, form):
+        oplogger.info("USER_UPDATE: User '{}' updated his profile".format(self.request.user.username))
+        return super(ProfileView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
@@ -135,6 +143,8 @@ class ChangePasswordView(FormView):
     success_message = _("Password changed correctly")
 
     def form_valid(self, form):
+        oplogger.info("USER_PASS_CHANGE: User '{}' changed his password".format(self.request.user.username))
+
         self.request.user.set_password(form.cleaned_data['password'])
         self.request.user.save()
         messages.success(self.request, self.success_message)
