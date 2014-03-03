@@ -346,6 +346,8 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
             obj.group = models.CheckGroup.objects.get(pk=self.kwargs['pk'])
             obj.save()
 
+            oplogger.info("CHECK_CREATE: User '{}' created {} - id: {}, name: {}".format(self.request.user.username, obj.type_name(), obj.pk, obj.title))
+
         return redirect('dashboard')
 
 
@@ -353,6 +355,10 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
 
+    def form_valid(self, form):
+        oplogger.info("CHECK_UPDATE: User '{}' updated {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
+
+        return super(CheckUpdateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(CheckUpdateView, self).get_context_data(**kwargs)
@@ -367,6 +373,12 @@ class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMi
     template_name = "generic_confirm.html"
     success_url = reverse_lazy("dashboard")
     deletion_message = _("Group deleted successfully")
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        oplogger.info("CHECK_DELETE: User '{}' deleted {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
+
+        return super(CheckDeleteView, self).delete(request, *args, **kwargs)
 
 
 class CheckEnableView(GenericCheckViewMixin, LoginRequiredMixin, View):
