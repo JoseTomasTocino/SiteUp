@@ -138,7 +138,7 @@ class BaseCheck(models.Model):
 
     statuses = generic.GenericRelation('CheckStatus')
 
-    last_status = models.ForeignKey('CheckStatus', null=True)
+    last_status = models.ForeignKey('CheckStatus', blank=True, null=True, on_delete=models.SET_NULL)
 
     def update_status(self, check_log):
         """After a check log, this updates the CheckStatus accordingly"""
