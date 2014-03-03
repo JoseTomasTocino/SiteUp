@@ -44,7 +44,7 @@ def remove_old_logs():
     logger.info("Deleting %i old check logs..." % len(checks))
     checks.delete()
 
-    statuses = models.CheckStatus.objects.filter(date_start__lt=date_limit)
+    statuses = models.CheckStatus.objects.filter(date_start__lt=date_limit).exclude(date_end=None)
     logger.info("Deleting %i old check statuses..." % len(statuses))
     statuses.delete()
 
