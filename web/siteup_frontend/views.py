@@ -198,6 +198,8 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
           group.save()
           messages.info(self.request, _("Group created successfully"))
 
+          oplogger.info("GROUP_CREATE: User '{}' created group {},'{}'".format(self.request.user.username, group.pk, group.title))
+
         return super(GroupCreateView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -214,6 +216,11 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
     fields = ['title']
+
+    def form_valid(self, form):
+        ret = super(GroupUpdateView, self).form_valid(form)
+        oplogger.info("GROUP_UPDATE: User '{}' updated group {},'{}'".format(self.request.user.username, self.object.pk, self.object.title))
+        return ret
 
     def get_queryset(self):
         qs = super(GroupUpdateView, self).get_queryset()
@@ -234,6 +241,10 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     success_url = reverse_lazy("dashboard")
     deletion_message = _("Group deleted successfully")
 
+    def delete(self, request, *args, **kwargs):
+        oplogger.info("GROUP_DELETE: User '{}' deleted group {},'{}'".format(self.request.user.username, self.get_object().pk, self.get_object().title))
+        return super(GroupDeleteView, self).delete(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = super(GroupDeleteView, self).get_queryset()
         return qs.filter(owner=self.request.user)
@@ -241,22 +252,42 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
 
 class GroupEnableView(View):
     def get(self, request, *args, **kwargs):
+
+        # Get the group
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+
+        # Check if the logged in user owns the group
         if group.owner != self.request.user:
             raise Http404
+
+        # Enable the group
         group.enable()
+
+        # Show success message
         messages.success(request, _("All checks within group were enabled"))
+
+        oplogger.info("GROUP_ENABLE: User '{}' enabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
 
         return redirect('dashboard')
 
 
 class GroupDisableView(View):
     def get(self, request, *args, **kwargs):
+
+        # Get the group
         group = models.CheckGroup.objects.get(pk=kwargs['pk'])
+
+        # Check if the logged in user owns the group
         if group.owner != self.request.user:
             raise Http404
+
+        # Disable teh group
         group.disable()
+
+        # Show success message
         messages.success(request, _("All checks within group were disabled"))
+
+        oplogger.info("GROUP_DISABLE: User '{}' disabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
 
         return redirect('dashboard')
 
