@@ -47,13 +47,22 @@ class LoginView(FormView):
 
     On GET, it shows the form. On POST, tries to login the user.
     """
-    template_name = "login.html"
+    template_name = "generic_form.html"
     form_class = LoginForm
 
     def form_valid(self, form):
         login(self.request, form.get_user())
 
         return redirect('dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginView, self).get_context_data(**kwargs)
+
+        context["form_submit"] = _("Log in")
+        context["form_class"] = "narrow"
+        context["subactions"] = [ { 'url': 'login', 'title': _("Forgot password?") } ]
+
+        return context
 
 
 class LogoutView(View):
@@ -71,7 +80,7 @@ class SignupView(FormView):
     View for the signup process.
     """
     form_class = SignupForm
-    template_name = "signup.html"
+    template_name = "generic_form.html"
 
     def form_valid(self, form):
         user = User.objects.create_user(
@@ -82,6 +91,14 @@ class SignupView(FormView):
 
         messages.info(self.request, _('User was created successfully. You can now login.'))
         return redirect('home')
+
+    def get_context_data(self, **kwargs):
+        context = super(SignupView, self).get_context_data(**kwargs)
+
+        context["form_submit"] = _("Sign up")
+        context["form_class"] = "narrow"
+
+        return context
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):

@@ -101,19 +101,19 @@ form {
             float: left;
         }
 
-        .field-info {
-            text-align: right;
-            width: 40%;
-        }
-
-        .field-widget {
-            width: 60%;
-            padding-left: 20px;
-        }
-
         .errorlist{
             margin-bottom: 0;
         }
+    }
+
+    .field-info {
+        text-align: right;
+        width: 40%;
+    }
+
+    .field-widget {
+        width: 60%;
+        padding-left: 20px;
     }
 
     .info {
@@ -139,5 +139,18 @@ form {
             display: inline;
             font-size: 0.8em;
         }
+    }
+}
+
+.narrow form {
+    .field-info, .field-widget {
+        float: none;
+        width: auto;
+        padding-left: 0;
+        text-align: left;
+    }
+
+    .help_text {
+        display: none;
     }
 }

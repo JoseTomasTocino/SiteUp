@@ -2,13 +2,15 @@
 {% load i18n %}
 
 {% block content %}
-<div class="block simple wide">
+<div class="block simple {{ form_class|default:"wide" }} ">
 
-    <header>
-        <h2>
-            {{ form_title }}
-        </h2>
-    </header>
+    {% if form_title %}
+        <header>
+            <h2>
+                {{ form_title }}
+            </h2>
+        </header>
+    {% endif %}
 
     <form action="" method="POST">
         {% csrf_token %}
@@ -17,6 +19,7 @@
 
         {% for field in form %}
             <div class="field">
+
                 <div class="field-info">
                     {{ field.label_tag }}
                     <div class="help_text">
