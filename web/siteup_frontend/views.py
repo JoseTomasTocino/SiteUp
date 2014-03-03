@@ -1,5 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
+oplogger = logging.getLogger("operations")
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -52,6 +53,7 @@ class LoginView(FormView):
 
     def form_valid(self, form):
         login(self.request, form.get_user())
+        oplogger.info("LOGIN: User '{}' logged in ".format(form.get_user().username))
 
         return redirect('dashboard')
 
@@ -70,6 +72,8 @@ class LogoutView(View):
     View for the logout page.
     """
     def get(self, *args, **kwargs):
+        oplogger.info("LOGOUT: User '{}' logged out ".format(self.request.user.username))
+
         logout(self.request)
 
         return redirect('home')

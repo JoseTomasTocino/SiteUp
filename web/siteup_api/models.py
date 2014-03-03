@@ -1,5 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
+oplogger = logging.getLogger("operations")
 
 from itertools import chain
 import re

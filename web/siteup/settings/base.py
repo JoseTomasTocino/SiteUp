@@ -81,9 +81,14 @@ STATIC_URL = '/static/'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'formatters': {
         'standard': {
             'format': '%(levelname)s - %(filename)s:%(lineno)d - %(message)s'   # %(asctime)s -
+        },
+
+        'simple': {
+            'format': '%(asctime)s - %(message)s'
         }
     },
 
@@ -93,9 +98,21 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
         },
+
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'siteup1.log',
+            'formatter': 'simple',
+        }
     },
 
     'loggers': {
+        'operations': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+
         '' : {
             'handlers' : ['default'],
             'level': 'INFO'
