@@ -19,6 +19,7 @@ def check_ping(target):
 
         # Get the output
         ping_raw_response, ping_raw_error = process.communicate()
+
     except Exception as e:
         # There was a problem executing the ping command, WAT
         logger.error(e)
