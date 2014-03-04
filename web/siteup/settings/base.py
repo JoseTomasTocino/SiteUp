@@ -126,3 +126,10 @@ LOGOUT_URL = '/logout/'
 
 # In hours. Logs older than this will be removed by a periodic maintenance task
 CHECKLOG_EXPIRATION_TIME = 24 * 2
+
+# EMAIL_BACKEND
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'siteup.pfc@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ['GMAIL_PASS']
+EMAIL_USE_TLS = True
