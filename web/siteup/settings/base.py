@@ -9,10 +9,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'uxc*54zvjl^n%9t##1r+rfw&&e$fq88-k6vac8%&x8_q)qp=)_'
 
-
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -123,6 +120,7 @@ LOGGING = {
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
+BASE_URL = 'http://siteup.josetomastocino.com'
 
 # In hours. Logs older than this will be removed by a periodic maintenance task
 CHECKLOG_EXPIRATION_TIME = 24 * 2
@@ -133,3 +131,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'siteup.pfc@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['GMAIL_PASS']
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'siteup.pfc@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
