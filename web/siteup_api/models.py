@@ -15,6 +15,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core import validators
 
 from siteup_checker import monitoring
+from siteup_checker.tasks_notification import enqueue_notification
+
 from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostname
 
 from .utils import timedelta_to_string
@@ -143,15 +145,12 @@ class BaseCheck(models.Model):
     def update_status(self, check_log):
         """After a check log, this updates the CheckStatus accordingly"""
 
+        logger.info("Update status of {}, new status is {}, last status was {}".format(self.title, check_log.status, self.last_status.status if self.last_status else "unknown"))
+
         self.last_log_datetime = check_log.date
 
         # If status has changed since last time (or there's no previous status)
         if not self.last_status or self.last_status.status != check_log.status:
-
-            # If there was a previous status, close it
-            if self.last_status and self.last_status.status != check_log.status:
-                self.last_status.date_end = check_log.date
-                self.last_status.save()
 
             s = CheckStatus()
             s.status = check_log.status
@@ -159,6 +158,14 @@ class BaseCheck(models.Model):
             s.date_start = check_log.date
             s.check = self
             s.save()
+
+            # If there was a previous status, update its date_end and close it
+            if self.last_status and self.last_status.status != check_log.status:
+                self.last_status.date_end = check_log.date
+                self.last_status.save()
+
+                # Also send notification
+                enqueue_notification(self, s)
 
             self.last_status = s
 

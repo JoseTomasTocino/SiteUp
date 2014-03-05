@@ -37,6 +37,7 @@ def enqueue_checks():
 
     logger.info("Enqueued %i checks" % len(active_checks))
 
+
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
 def remove_old_logs():
     date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_EXPIRATION_TIME)
