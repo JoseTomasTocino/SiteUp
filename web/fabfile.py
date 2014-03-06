@@ -7,6 +7,13 @@ env.hosts = ['maquinita']
 
 code_dir = '/srv/siteup.josetomastocino.com/siteup'
 
+def build_supervisor_conf():
+    with cd(code_dir):
+        with prefix('workon siteup'):
+            run("web/manage.py supervisor_conf")
+            run("sudo mv web/supervisor-siteup.conf /etc/supervisor/conf.d")
+            run("sudo supervisorctl update")
+
 def deploy():
     with cd(code_dir):
         with prefix('workon siteup'):

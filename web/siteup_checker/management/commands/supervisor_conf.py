@@ -4,10 +4,10 @@ import sys
 import os, os.path, getpass
 
 class Command(BaseCommand):
-    help = 'Outputs the contents for the supervisord configuration file'
+    help = 'Outputs the contents for the supervisor configuration file'
 
     def handle(self, *args, **options):
-        base = open(os.path.join(settings.BASE_DIR, 'siteup_checker', 'deployment', 'supervisord_template.conf'), 'r').read()
+        base = open(os.path.join(settings.BASE_DIR, 'siteup_checker', 'deployment', 'supervisor_template.conf'), 'r').read()
         template_fields = {
             'VIRTUAL_ENV_DIR': os.environ['VIRTUAL_ENV'],
             'PROJECT_DIR': settings.BASE_DIR,
@@ -16,4 +16,8 @@ class Command(BaseCommand):
 
         conf_file_content = base.format(**template_fields)
 
-        self.stdout.write(conf_file_content)
+        output_file = open(os.path.join(settings.BASE_DIR, 'supervisor-siteup.conf'), 'w')
+        output_file.write(conf_file_content)
+        output_file.close()
+
+        self.stdout.write("Supervisor configuration written to 'supervisor-siteup.conf'")
