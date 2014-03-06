@@ -22,12 +22,16 @@
 
                 <div class="field-info">
                     {{ field.label_tag }}
-                    <div class="help_text">
-                        {% if field.field.required %}
-                            <strong>{% trans "Required" %}.</strong>
-                        {% endif %}
-                        {{ field.help_text }}
-                    </div>
+
+                    {# Only show the help_text div if there's... help text #}
+                    {% if field.field.required or field.help_text %}
+                        <div class="help_text">
+                            {% if field.field.required %}
+                                <strong>{% trans "Required" %}.</strong>
+                            {% endif %}
+                            {{ field.help_text }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="field-widget">

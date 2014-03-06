@@ -1,5 +1,5 @@
 header.main {
-    // padding: 20px 0 20px;
+    overflow: hidden;
 
     a:hover {
         color: lighten($color3, 80%);
@@ -8,15 +8,24 @@ header.main {
     background-color: $color1;
 
     .container {
-        @extend .cf;
-        height: 83px;
         line-height: 83px;
         vertical-align: middle;
+
+        @media (max-width: 570px) {
+            line-height: normal;
+        }
     }
 
     h1 {
         margin: 0;
         float: left;
+        font-size: 1.75rem;
+
+        @media (max-width: 570px) {
+            float: none;
+            text-align: center;
+            margin: 10px 0;
+        }
 
         a {
             @include text-shadow(rgba(black, 0.15) 0px 3px 0);
@@ -31,15 +40,22 @@ header.main {
     }
 
     ul {
+        font-size: 0.80rem;
         float: right;
         list-style: none;
         margin: 0;
+        padding: 0;
+
+
+        @media (max-width: 570px) {
+            float: none;
+            margin-bottom: 15px;
+            text-align: center;
+        }
 
         li {
             display: inline-block;
             // float: left;
-            margin-left: 15px;
-            padding-left: 15px;
             line-height: normal;
 
             &.signup a {
@@ -50,6 +66,8 @@ header.main {
 
             & + li {
                 border-left: 1px solid rgba($color3, 0.3);
+                margin-left: 15px;
+                padding-left: 15px;
             }
         }
     }

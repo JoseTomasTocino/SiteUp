@@ -1,11 +1,60 @@
 form {
-    h3 {
+
+    // h3 {
+    //     margin: 0;
+    //     font-weight: normal;
+    // }
+
+    fieldset {
         margin: 0;
-        font-weight: normal;
+        padding: 0;
+        border: 0;
+
+        a {
+            display: inline-block;
+            padding: 5px 0;
+        }
+
+        &.actions {
+            @extend .text_right;
+            margin-top: 1em;
+        }
+
+        &.subactions {
+            margin-top: 10px;
+            // margin-bottom: -10px;
+            border-top: 1px dotted $color5;
+
+            a {
+                font-size: 13px;
+            }
+        }
     }
 
-    p {
-        margin: 0;
+    .field {
+        @extend .cf;
+
+        & + .field {
+            margin-top: 1em;
+        }
+
+        .errorlist{
+            margin-bottom: 0;
+        }
+    }
+
+    /* ################################################################### */
+    /*  FIELD INFO */
+
+    .field-info {
+        text-align: right;
+        width: 40%;
+        float: left;
+
+        @media (max-width: 640px) {
+            float: none;
+            width: auto;
+        }
     }
 
     label {
@@ -22,6 +71,21 @@ form {
         color: $color4;
         font-size: 11px;
         margin-bottom: 5px;
+    }
+
+    /* ################################################################### */
+    /* FIELD WIDGET */
+
+    .field-widget {
+        width: 60%;
+        padding-left: 20px;
+        float: left;
+
+        @media (max-width: 640px) {
+            float: none;
+            width: auto;
+            padding-left: 0;
+        }
     }
 
     input[type=text], input[type=password], input[type=email], input[type=number], select, textarea {
@@ -59,62 +123,16 @@ form {
         color: #fff;
         background-color: $niceColor1;
 
+        font-size: 0.8rem;
+
         &:hover {
             background-color: lighten($niceColor1, 20%);
         }
     }
 
-    fieldset {
-        margin: 0;
-        padding: 0;
-        border: 0;
 
-        a {
-            display: inline-block;
-            padding: 5px 0;
-        }
 
-        &.actions {
-            @extend .text_right;
-            margin-top: 1em;
-        }
 
-        &.subactions {
-            margin-top: 10px;
-            // margin-bottom: -10px;
-            border-top: 1px dotted $color5;
-
-            a {
-                font-size: 13px;
-            }
-        }
-    }
-
-    .field {
-        @extend .cf;
-
-        & + .field {
-            margin-top: 1em;
-        }
-
-        & > div {
-            float: left;
-        }
-
-        .errorlist{
-            margin-bottom: 0;
-        }
-    }
-
-    .field-info {
-        text-align: right;
-        width: 40%;
-    }
-
-    .field-widget {
-        width: 60%;
-        padding-left: 20px;
-    }
 
     .info {
         font-size: 14px;

@@ -1,8 +1,8 @@
 .block {
     @extend .container;
 
-    margin-bottom: 15px;
-    margin-top: 15px;
+    margin: 0.7rem auto;
+
     border-radius: 3px;
     border: 1px solid $color6;
     box-shadow: 0 0 2px rgba($color6, 0.5);
@@ -10,15 +10,19 @@
 
 
     &.narrow {
-        width: 400px;
+        max-width: 400px;
     }
 
     &.wide {
-        width: 800px;
+        max-width: 800px;
     }
 
     &.simple {
         padding: 15px 30px 20px;
+
+        @media (max-width: 640px) {
+            padding: 10px 20px;
+        }
 
         header {
             h2 {
@@ -27,6 +31,7 @@
                 font-weight: 600;
                 color: $color3;
                 border-bottom: 1px dotted $color5;
+                font-size: 1.1rem;
             }
         }
     }
@@ -36,13 +41,14 @@
             @extend .cf;
             padding: 0 10px 0 20px;
             background-color: darken($color7, 3%);
-            height: 53px;
-            line-height: 53px;
+            line-height: 2.5rem;
+            // height: 1.1rem;
             border-bottom: 1px solid $color6;
             border-radius: 3px 3px 0 0;
 
             h3 {
-                width: 800px;
+                width: 65%;
+                font-size: 1rem;
                 float: left;
                 margin: 0;
                 font-weight: 600;
@@ -50,7 +56,9 @@
             }
 
             .actions{
+                text-align: right;
                 float: right;
+                width: 35%;
             }
         }
     }

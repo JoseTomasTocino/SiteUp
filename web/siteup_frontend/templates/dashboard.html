@@ -88,76 +88,25 @@
 
             {% for check in check_group.checks %}
 
-                <div class="check {% if not check.is_active %}inactive{% endif %} {% if check.last_status and check.last_status.status != 0 %}check-down{% endif %}">
-                    <div class="check-status">
+                <div class="check-in-list cf {% if not check.is_active %}inactive{% endif %} {% if check.last_status and check.last_status.status != 0 %}check-down{% endif %}">
 
+                    <div class="check-status">
                         {% if not check.is_active %}
                             <i class="check-status-icon fa fa-clock-o"></i>
+                            {% trans "No data yet" %}
                         {% elif not check.last_status %}
                             <i class="check-status-icon fa fa-refresh fa-spin"></i>
+                            {% trans "Fetching..." %}
                         {% elif check.last_status.status != 0 %}
-                            <i class="check-status-icon fa fa-exclamation-circle"></i>
+                            <i class="check-status-icon fa fa-arrow-circle-down"></i>
+                            {% trans "DOWN" %}
                         {% else %}
-                            <i class="check-status-icon fa fa-check-circle-o"></i>
+                            <i class="check-status-icon fa fa-arrow-circle-up"></i>
+                            {% trans "UP" %}
                         {% endif %}
-
-                        <div class="button has-submenu submenu-anchor-left">
-                            <i class="fa fa-cog"></i> {% trans "Actions" %}
-
-                            <ul class="submenu">
-
-                                <li>
-                                    <a href="{% url "view_check" type=check|classname|lower pk=check.id  %}">
-                                        <i class="fa fa-info-circle"></i> {% trans "View details" %}
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
-                                        <i class="fa fa-pencil"></i> {% trans "Edit check" %}
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="{% url "delete_check" type=check|classname|lower pk=check.id %}">
-                                        <i class="fa fa-times"></i> {% trans "Delete check" %}
-                                    </a>
-                                </li>
-
-                                <li>
-                                    {% if not check.is_active %}
-                                    <a href="{% url "enable_check" type=check|classname|lower pk=check.id %}">
-                                        <i class="fa fa-power-off"></i> {% trans "Enable check" %}
-                                    </a>
-                                    {% else %}
-                                    <a href="{% url "disable_check" type=check|classname|lower pk=check.id %}">
-                                        <i class="fa fa-power-off"></i> {% trans "Disable check" %}
-                                    </a>
-                                    {% endif %}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="check-info">
-                        <h4>
-                            {% if not check.is_active %} <span class="inactive-preffix">[{% trans "Inactive" %}]</span> {% endif %}
-                            {{ check.title }}
-                        </h4>
-
-                        <h5>
-                            {{ check | verbose_name | title }} - {{ check.target }}
-                        </h5>
-
-                        <div class="desc">
-                            {{ check.description }}
-                        </div>
-
-
-                    </div>
+                    </div> {# .check-inner #}
 
                     <div class="check-graph">
-
 
                         {% if not check.last_status %}
                             <div class="check-no-graph">
@@ -188,8 +137,49 @@
                         </script>
 
                         {% endif %}
-                    </div>
-                </div>
+                    </div> {# .check-graph #}
+
+                    <div class="check-info">
+                        <h4>
+                            {% if not check.is_active %} <span class="inactive-preffix">[{% trans "Inactive" %}]</span> {% endif %}
+                            {{ check.title }}
+                        </h4>
+
+                        <h5>
+                            {{ check | verbose_name | title }} - {{ check.target }}
+                        </h5>
+
+                        <div class="desc">
+                            {{ check.description }}
+                        </div>
+
+                        <div class="button-group">
+                            <a class="button" href="{% url "view_check" type=check|classname|lower pk=check.id  %}">
+                                <i class="fa fa-info-circle"></i> {% trans "Details" %}
+                            </a>
+
+                            <a class="button" href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
+                                <i class="fa fa-pencil"></i> {% trans "Edit" %}
+                            </a>
+
+                            <a class="button" href="{% url "delete_check" type=check|classname|lower pk=check.id %}">
+                                <i class="fa fa-times"></i> {% trans "Delete" %}
+                            </a>
+
+                            {% if not check.is_active %}
+                                <a class="button" href="{% url "enable_check" type=check|classname|lower pk=check.id %}">
+                                    <i class="fa fa-power-off"></i> {% trans "Enable" %}
+                                </a>
+                            {% else %}
+                                <a class="button" href="{% url "disable_check" type=check|classname|lower pk=check.id %}">
+                                    <i class="fa fa-power-off"></i> {% trans "Disable" %}
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </div> {# .check-info #}
+
+                </div> {# .check #}
 
             {% endfor %}
             {% endif %}

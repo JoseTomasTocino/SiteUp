@@ -1,14 +1,14 @@
+/* ################################################################### */
+/* MAIN CONTROLS */
+
 nav.controls {
     > .left {
         padding-top: 5px;
     }
 
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
+    font-size: 0.9rem;
 
-.check-list {
-    margin-top: 10px;
+    margin: 0.7rem auto;
 }
 
 .message-no-groups, .message-no-checks {
@@ -20,6 +20,15 @@ nav.controls {
 
 .message-no-groups {
     background-color: $color6;
+}
+
+/* ################################################################### */
+/* CHECK */
+
+.check-in-list {
+    & + .check-in-list {
+        border-top: 1px solid $color6;
+    }
 }
 
 .inactive {
@@ -36,19 +45,10 @@ nav.controls {
     margin-right: 10px;
 }
 
-.check {
-    @extend .cf;
-    // display: table-row;
+.check-inner {
     width: 100%;
-
     & > div {
-        float: left;
-        // display: table-cell;
-        // vertical-align: top;
-    }
-
-    & + .check {
-        border-top: 1px solid $color6;
+        vertical-align: top;
     }
 }
 
@@ -57,13 +57,22 @@ nav.controls {
     color: #e83f40;
 }
 
+/* -------------------------------------------------------- */
+/* Check status */
+
 .check-status {
+    float: left;
 
     padding: 10px 16px 8px 16px;
 
     border-radius: 3px;
     text-align: center;
-    min-width: 130px;
+    width: 100px;
+
+    @media (max-width: 570px) {
+        padding: 10px;
+    }
+
 
     &.ok {
         // background-color: #8adc60;
@@ -82,10 +91,19 @@ nav.controls {
     }
 }
 
+/* -------------------------------------------------------- */
+/* Check info */
+
 .check-info {
+    margin-left: 1rem;
+
     font-size: 14px;
-    padding: 10px 0 15px;
-    width: 528px;
+    padding: 10px 10px 15px 0;
+
+    @media (max-width: 570px) {
+        float: none;
+        width: auto;
+    }
 
     h4 {
         font-weight: 600;
@@ -99,11 +117,40 @@ nav.controls {
         font-family: 'Consolas', monospace;
     }
 
+    .button-group {
+        margin-top: 0.7rem;
+    }
+
 }
 
+/* -------------------------------------------------------- */
+/* Check actions */
+
+.check-in-list .check-actions {
+    display: block;
+    clear: both;
+    margin-bottom: 10px;
+    margin-left: 100px;
+
+    @media (max-width: 800px) {
+        text-align: center;
+    }
+}
+
+/* -------------------------------------------------------- */
+/* Check graph */
+
 .check-graph {
+    float: right;
     padding: 0px;
     width: 400px;
+
+    @media (max-width: 800px) {
+        display: none !important;
+        float: none;
+        clear: both;
+        width: 100%;
+    }
 
     .check-graph-container {
         height: 140px;

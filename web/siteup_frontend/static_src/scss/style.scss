@@ -9,9 +9,12 @@
 @import "partials/variables";
 @import "partials/colors";
 
+// Components
+@import "partials/messages";
+@import "partials/buttons";
+
 @import "partials/base";
 @import "partials/header";
-@import "partials/messages";
 @import "partials/footer";
 @import "partials/forms";
 @import "partials/block";

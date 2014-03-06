@@ -1,0 +1,115 @@
+.button, .button-group {
+    border-radius: 3px;
+    color: $color2;
+    background-color: $color8;
+    border: 1px solid $color5;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.button {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s;
+    font-size: 0.75rem;
+    text-align: left;
+    line-height: normal;
+    padding: 0.30rem 0.75rem;
+
+    opacity: 1 !important;
+
+    &:hover {
+        background-color: $color7;
+        // color: $color8;
+        text-decoration: none;
+    }
+
+    &.small {
+        font-size: 0.5rem;
+        padding: 3px 6px;
+    }
+}
+
+.has-submenu {
+    position: relative;
+
+    &.submenu-anchor-left .submenu {
+        left: -1px;
+        right: auto;
+        border-radius: 0px 5px 5px 5px;
+    }
+
+    &:hover {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        .submenu {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+.submenu {
+    position: absolute;
+    z-index: 100;
+    top: 17px;
+    right: -1px;
+    width: 150px;
+    padding: 4px 15px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+
+    border: 1px solid $color5;
+    background-color: $color7;
+    border-radius: 5px 0 5px 5px;
+    transition: all 0.3s;
+    list-style: none;
+
+    li {
+        font-size: 0.8rem;
+        padding: 5px 0;
+    }
+
+    a {
+        display: block;
+    }
+
+    .fa {
+        margin-right: 7px;
+    }
+
+    li + li {
+        border-top: 1px solid $color5;
+    }
+}
+
+.button-group {
+    @extend .cf;
+    display: inline-block;
+
+    .button:first-child {
+        border-radius: 3px 0 0 3px;
+    }
+
+    .button:last-child {
+        border-radius: 0 3px 3px 0;
+    }
+
+    .button {
+        display: block;
+        float: left;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+
+        &:hover {
+            background-color: $color7;
+        }
+    }
+
+    .button + .button {
+        border-left: 1px solid $color5;
+    }
+}

@@ -5,14 +5,14 @@
     // box-shadow: 0 0 2px rgba($color6, 0.5);
 
     .current-status {
+        margin-right: 1rem;
+        margin-bottom: 1rem;
         width: 50px;
         float: left;
         font-size: 0.9em;
     }
 
     .texts {
-        width: 990px;
-        float: left;
         margin-left: 1em;
 
         h2 {
@@ -23,7 +23,7 @@
         }
 
         .desc {
-            font-size: 0.85em;
+            font-size: 0.8rem;
             strong {
                 font-weight: 600;
             }
@@ -37,6 +37,8 @@
     .status-table {
         width: 100%;
 
+        font-size: 0.8rem;
+
         th {
             font-weight: 600;
         }
@@ -45,7 +47,7 @@
         }
 
         td {
-            padding: 7px 0;
+            padding: 0.5rem 0;
             font-size: 0.85em;
             text-align: center;
         }
@@ -67,5 +69,9 @@
         .fa-arrow-up {
             color: #91e547;
         }
+    }
+
+    .check-actions {
+        text-align: center;
     }
 }

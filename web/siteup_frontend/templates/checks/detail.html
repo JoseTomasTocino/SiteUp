@@ -10,9 +10,9 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="container single-check">
+    <div class="single-check">
 
-        <header class="cf">
+        <header class="cf container">
             <div class="current-status">
                 {% if not check.is_active %}
                     <i class="check-status-icon fa fa-clock-o fa-4x"></i>
@@ -37,7 +37,7 @@
 
         </header>
 
-        <div class="block complex">
+        <div class="container block complex">
 
             <div class="content">
                 <div class="graph graph_{{ check.unique_name }}"></div>
@@ -67,28 +67,29 @@
 
         </div>
 
-        <div class="button-group">
+        <div class="check-actions container">
+            <div class="button-group">
+                <a class="button" href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
+                    <i class="fa fa-pencil"></i> {% trans "Edit" %}
+                </a>
 
-            <a class="button" href="{% url "edit_check" type=check|classname|lower pk=check.id  %}">
-                <i class="fa fa-pencil"></i> {% trans "Edit check" %}
-            </a>
+                <a class="button" href="{% url "delete_check" type=check|classname|lower pk=check.id %}">
+                    <i class="fa fa-times"></i> {% trans "Delete" %}
+                </a>
 
-            <a class="button" href="{% url "delete_check" type=check|classname|lower pk=check.id %}">
-                <i class="fa fa-times"></i> {% trans "Delete check" %}
-            </a>
-
-            {% if not check.is_active %}
-            <a class="button" href="{% url "enable_check" type=check|classname|lower pk=check.id %}">
-                <i class="fa fa-power-off"></i> {% trans "Enable check" %}
-            </a>
-            {% else %}
-            <a class="button" href="{% url "disable_check" type=check|classname|lower pk=check.id %}">
-                <i class="fa fa-power-off"></i> {% trans "Disable check" %}
-            </a>
-            {% endif %}
+                {% if not check.is_active %}
+                <a class="button" href="{% url "enable_check" type=check|classname|lower pk=check.id %}">
+                    <i class="fa fa-power-off"></i> {% trans "Enable" %}
+                </a>
+                {% else %}
+                <a class="button" href="{% url "disable_check" type=check|classname|lower pk=check.id %}">
+                    <i class="fa fa-power-off"></i> {% trans "Disable" %}
+                </a>
+                {% endif %}
+            </div>
         </div>
 
-        <div class="block complex">
+        <div class="container block complex">
             <header>
                 <h3>
                     {% trans "Last events" %}

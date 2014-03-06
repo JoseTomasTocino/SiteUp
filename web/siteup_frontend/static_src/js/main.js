@@ -11,10 +11,10 @@ function buildGraph(graphName, graphData) {
     var options = {
         backgroundColor: 'transparent',
         legend: 'none',
-        chartArea: {
+        /*chartArea: {
             left: 70,
             width: "78%" ,
-        },
+        },//*/
         hAxis: {
             baselineColor: '#ddd',
             gridlines: { color: '#ddd' },
@@ -39,7 +39,7 @@ function buildGraph(graphName, graphData) {
             top: 20,
             left: 70,
             height: "70%",
-        };
+        };//*/
     }
 
     console.log(options['chartArea']);
