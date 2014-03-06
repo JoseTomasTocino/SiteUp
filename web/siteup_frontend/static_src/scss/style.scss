@@ -4,8 +4,11 @@
 // Compass
 @import "compass/css3/text-shadow";
 
-@import "partials/colors";
+// Auxiliary
 @import "partials/helpers";
+@import "partials/variables";
+@import "partials/colors";
+
 @import "partials/base";
 @import "partials/header";
 @import "partials/messages";
