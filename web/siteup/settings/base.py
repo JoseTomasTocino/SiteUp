@@ -99,7 +99,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'siteup1.log',
+            'filename': os.path.join(BASE_DIR, '..', 'logs', 'siteup.log'),
             'formatter': 'simple',
         }
     },
