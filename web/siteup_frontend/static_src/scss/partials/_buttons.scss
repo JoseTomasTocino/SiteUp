@@ -53,7 +53,7 @@
 .submenu {
     position: absolute;
     z-index: 100;
-    top: 17px;
+    top: 0.83rem;
     right: -1px;
     width: 150px;
     padding: 4px 15px;
@@ -68,7 +68,7 @@
     list-style: none;
 
     li {
-        font-size: 0.8rem;
+        font-size: 0.6rem;
         padding: 5px 0;
     }
 
@@ -77,7 +77,7 @@
     }
 
     .fa {
-        margin-right: 7px;
+        margin-right: 2px;
     }
 
     li + li {
