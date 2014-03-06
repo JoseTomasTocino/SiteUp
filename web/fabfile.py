@@ -5,8 +5,9 @@ from fabric.contrib.console import confirm
 env.user = 'omegote'
 env.hosts = ['maquinita']
 
+code_dir = '/srv/siteup.josetomastocino.com/siteup'
+
 def deploy():
-    code_dir = '/srv/siteup.josetomastocino.com/siteup'
     with cd(code_dir):
         with prefix('workon siteup'):
             run("git pull")
