@@ -14,6 +14,12 @@ def build_supervisor_conf():
             run("sudo mv web/supervisor-siteup.conf /etc/supervisor/conf.d")
             run("sudo supervisorctl update")
 
+
+def install():
+    with cd(code_dir):
+        with prefix('workon siteup'):
+            run("mkdir -p logs")
+
 def deploy():
     with cd(code_dir):
         with prefix('workon siteup'):

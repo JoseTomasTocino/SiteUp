@@ -11,6 +11,7 @@ class Command(BaseCommand):
         template_fields = {
             'VIRTUAL_ENV_DIR': os.environ['VIRTUAL_ENV'],
             'PROJECT_DIR': settings.BASE_DIR,
+            'PROJECT_LOG_DIR': os.path.abspath(os.path.join(settings.BASE_DIR, '..', 'logs')),
             'GMAIL_PASS': raw_input('Type the gmail account password: ')
         }
 
