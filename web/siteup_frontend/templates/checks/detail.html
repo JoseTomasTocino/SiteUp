@@ -31,7 +31,7 @@
                     <strong>{% trans "Type" %}:</strong> {{ check }}
                 </div>
                 <div class="desc">
-                    <strong>{% trans "Description" %}:</strong> {{ check.description }}
+                    <strong>{% trans "Description" %}:</strong> {{ check.description|default:"<em>No description</em>"}}
                 </div>
             </div>
 

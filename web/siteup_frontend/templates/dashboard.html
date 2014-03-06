@@ -150,7 +150,7 @@
                         </h5>
 
                         <div class="desc">
-                            {{ check.description }}
+                            {{ check.description|default:"<em>No description</em>" }}
                         </div>
 
                         <div class="button-group">
