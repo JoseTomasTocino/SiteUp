@@ -3,6 +3,8 @@
 *.pyc
 local_settings.py
 db.sqlite3
+django-db.sqlite3
+celerybeat-db
 
 lib-cov
 lcov.info
