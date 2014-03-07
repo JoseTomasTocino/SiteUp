@@ -93,16 +93,16 @@
                     <div class="check-status">
                         {% if not check.is_active %}
                             <i class="check-status-icon fa fa-clock-o"></i>
-                            {% trans "No data yet" %}
+                            <span class="check-status-text">{% trans "Disabled" %}</span>
                         {% elif not check.last_status %}
                             <i class="check-status-icon fa fa-refresh fa-spin"></i>
-                            {% trans "Fetching..." %}
+                            <span class="check-status-text">{% trans "Fetching..." %}</span>
                         {% elif check.last_status.status != 0 %}
                             <i class="check-status-icon fa fa-arrow-circle-down"></i>
-                            {% trans "Down" %}
+                            <span class="check-status-text">{% trans "Down" %}</span>
                         {% else %}
                             <i class="check-status-icon fa fa-arrow-circle-up"></i>
-                            {% trans "Up" %}
+                            <span class="check-status-text">{% trans "Up" %}</span>
                         {% endif %}
                     </div> {# .check-inner #}
 

@@ -67,23 +67,22 @@ nav.controls {
 
     border-radius: 3px;
     text-align: center;
-    width: 100px;
+    width: 5rem;
 
     @media (max-width: 570px) {
         padding: 10px;
     }
 
-
-    &.ok {
-        // background-color: #8adc60;
-        // color: #8adc60;
-    }
-
     .check-status-icon {
-        font-size: 58px;
+        font-size: 3.7rem;
         display: block;
-        margin-bottom: 10px;
+        // margin-bottom: 0.4rem;
     }
+
+    .check-status-text {
+        font-size: 0.7rem;
+    }
+
 
     .fa-exclamation-circle {
         // background-color: #f00;
