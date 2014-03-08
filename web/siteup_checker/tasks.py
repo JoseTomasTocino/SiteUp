@@ -35,18 +35,18 @@ def enqueue_checks():
     for check in active_checks:
         enqueue_check(check)
 
-    logger.info("Enqueued %i checks" % len(active_checks))
+    logger.info(u"Enqueued %i checks" % len(active_checks))
 
 
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
 def remove_old_logs():
     date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_EXPIRATION_TIME)
     checks = models.CheckLog.objects.filter(date__lt=date_limit)
-    logger.info("Deleting %i old check logs..." % len(checks))
+    logger.info(u"Deleting %i old check logs..." % len(checks))
     checks.delete()
 
     statuses = models.CheckStatus.objects.filter(date_start__lt=date_limit).exclude(date_end=None)
-    logger.info("Deleting %i old check statuses..." % len(statuses))
+    logger.info(u"Deleting %i old check statuses..." % len(statuses))
     statuses.delete()
 
 

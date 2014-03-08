@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 def check_port(host, port_number, content = None):
-    logger.info("Port check, host: %s, port: %s, content: '%s'" % (host, port_number, content))
+    logger.info(u"Port check, host: %s, port: %s, content: '%s'" % (host, port_number, content))
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(10)
 
@@ -11,10 +11,10 @@ def check_port(host, port_number, content = None):
     try:
         result = s.connect_ex((host, port_number))
     except Exception as e:
-        logger.error("Error: %s" % e)
+        logger.error(u"Error: %s" % e)
         return { 'valid': False }
 
-    logger.info("Port check, connection errno: %i" % result)
+    logger.info(u"Port check, connection errno: %i" % result)
 
     if result == 0:
         ret_obj = { 'status_ok': True, 'valid': True }
@@ -23,10 +23,10 @@ def check_port(host, port_number, content = None):
             try:
                 recv_content = s.recv(512)
             except Exception as e:
-                logger.error("Error: %s" % e)
+                logger.error(u"Error: %s" % e)
                 return { 'valid': False }
 
-            logger.info("Received: %s" % recv_content)
+            logger.info(u"Received: %s" % recv_content)
 
             if content.lower() not in recv_content.lower():
                 ret_obj['status_ok'] = False

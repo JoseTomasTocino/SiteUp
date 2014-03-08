@@ -7,7 +7,7 @@ import dns.exception, dns.resolver
 def check_dns(target, record_type, expected_address):
     """Checks if a certain domain has a DNS record (of the proper type) that matches the expected address"""
 
-    logger.info("Check DNS, target: %s, record_type: %s, expected_address: %s" % (target, record_type, expected_address))
+    logger.info(u"Check DNS, target: %s, record_type: %s, expected_address: %s" % (target, record_type, expected_address))
 
     if record_type not in ('A', 'AAAA', 'CNAME', 'MX', 'TXT'):
         return {'valid': False}
@@ -26,7 +26,7 @@ def check_dns(target, record_type, expected_address):
         # Check if any of the results matches the expected address
         for single_result in answer.rrset:
             ans = single_result.to_text().strip()
-            logger.info("Record: %s" % ans)
+            logger.info(u"Record: %s" % ans)
             if expected_address.strip() == ans:
                 return_obj['status_ok'] = True
 

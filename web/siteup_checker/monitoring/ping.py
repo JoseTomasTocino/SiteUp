@@ -11,7 +11,7 @@ def check_ping(target):
     """Sends a ping to the given target, and returns a dictionary with the
     fields of the result."""
 
-    logger.info("Check Ping, target: %s" % target)
+    logger.info(u"Check Ping, target: %s" % target)
 
     try:
         # Launch ping process

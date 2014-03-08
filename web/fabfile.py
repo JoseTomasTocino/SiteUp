@@ -26,5 +26,5 @@ def deploy():
             run("git pull")
             run("web/manage.py syncdb")
             run("web/manage.py migrate siteup_api")
-            run("sudo supervisorctl restart all")
+            run("sudo supervisorctl restart siteup_gunicorn siteup_celery")
 

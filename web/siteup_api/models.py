@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import logging
 logger = logging.getLogger(__name__)
 oplogger = logging.getLogger("operations")
@@ -145,7 +147,7 @@ class BaseCheck(models.Model):
     def update_status(self, check_log):
         """After a check log, this updates the CheckStatus accordingly"""
 
-        logger.info("Update status of {}, new status is {}, last status was {}".format(self.title, check_log.status, self.last_status.status if self.last_status else "unknown"))
+        logger.info(u"Update status of {}, new status is {}, last status was {}".format(self.title, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
         self.last_log_datetime = check_log.date
 
@@ -188,10 +190,10 @@ class BaseCheck(models.Model):
         # Subtract some seconds from the difference to handle timing deviations
         elapsed_seconds = (datetime.now() - self.last_log_datetime).seconds
         if elapsed_seconds < self.check_interval * 60 - 6:
-            logger.info("Check %s will not run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
+            logger.info(u"Check %s will not run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
             return False
 
-        logger.info("Check %s will run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
+        logger.info(u"Check %s will run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
         return True
 
     def edit_url(self):

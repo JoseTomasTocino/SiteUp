@@ -53,7 +53,7 @@ class LoginView(FormView):
 
     def form_valid(self, form):
         login(self.request, form.get_user())
-        oplogger.info("USER_LOGIN: User '{}' logged in ".format(form.get_user().username))
+        oplogger.info(u"USER_LOGIN: User '{}' logged in ".format(form.get_user().username))
 
         return redirect('dashboard')
 
@@ -72,7 +72,7 @@ class LogoutView(View):
     View for the logout page.
     """
     def get(self, *args, **kwargs):
-        oplogger.info("USER_LOGOUT: User '{}' logged out ".format(self.request.user.username))
+        oplogger.info(u"USER_LOGOUT: User '{}' logged out ".format(self.request.user.username))
 
         logout(self.request)
 
@@ -93,7 +93,7 @@ class SignupView(FormView):
             password=form.cleaned_data['password']
         )
 
-        oplogger.info("USER_SIGNUP: User '{}' was created".format(user.username))
+        oplogger.info(u"USER_SIGNUP: User '{}' was created".format(user.username))
 
         messages.info(self.request, _('User was created successfully. You can now login.'))
         return redirect('home')
@@ -121,7 +121,7 @@ class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
-        oplogger.info("USER_UPDATE: User '{}' updated his profile".format(self.request.user.username))
+        oplogger.info(u"USER_UPDATE: User '{}' updated his profile".format(self.request.user.username))
         return super(ProfileView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -143,7 +143,7 @@ class ChangePasswordView(FormView):
     success_message = _("Password changed correctly")
 
     def form_valid(self, form):
-        oplogger.info("USER_PASS_CHANGE: User '{}' changed his password".format(self.request.user.username))
+        oplogger.info(u"USER_PASS_CHANGE: User '{}' changed his password".format(self.request.user.username))
 
         self.request.user.set_password(form.cleaned_data['password'])
         self.request.user.save()
@@ -198,7 +198,7 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
           group.save()
           messages.info(self.request, _("Group created successfully"))
 
-          oplogger.info("GROUP_CREATE: User '{}' created group {},'{}'".format(self.request.user.username, group.pk, group.title))
+          oplogger.info(u"GROUP_CREATE: User '{}' created group {},'{}'".format(self.request.user.username, group.pk, group.title))
 
         return super(GroupCreateView, self).form_valid(form)
 
@@ -219,7 +219,7 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         ret = super(GroupUpdateView, self).form_valid(form)
-        oplogger.info("GROUP_UPDATE: User '{}' updated group {},'{}'".format(self.request.user.username, self.object.pk, self.object.title))
+        oplogger.info(u"GROUP_UPDATE: User '{}' updated group {},'{}'".format(self.request.user.username, self.object.pk, self.object.title))
         return ret
 
     def get_queryset(self):
@@ -242,7 +242,7 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
     deletion_message = _("Group deleted successfully")
 
     def delete(self, request, *args, **kwargs):
-        oplogger.info("GROUP_DELETE: User '{}' deleted group {},'{}'".format(self.request.user.username, self.get_object().pk, self.get_object().title))
+        oplogger.info(u"GROUP_DELETE: User '{}' deleted group {},'{}'".format(self.request.user.username, self.get_object().pk, self.get_object().title))
         return super(GroupDeleteView, self).delete(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -266,7 +266,7 @@ class GroupEnableView(View):
         # Show success message
         messages.success(request, _("All checks within group were enabled"))
 
-        oplogger.info("GROUP_ENABLE: User '{}' enabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
+        oplogger.info(u"GROUP_ENABLE: User '{}' enabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
 
         return redirect('dashboard')
 
@@ -287,7 +287,7 @@ class GroupDisableView(View):
         # Show success message
         messages.success(request, _("All checks within group were disabled"))
 
-        oplogger.info("GROUP_DISABLE: User '{}' disabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
+        oplogger.info(u"GROUP_DISABLE: User '{}' disabled group {},'{}'".format(self.request.user.username, group.pk, group.title))
 
         return redirect('dashboard')
 
@@ -346,7 +346,7 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
             obj.group = models.CheckGroup.objects.get(pk=self.kwargs['pk'])
             obj.save()
 
-            oplogger.info("CHECK_CREATE: User '{}' created {} - id: {}, name: {}".format(self.request.user.username, obj.type_name(), obj.pk, obj.title))
+            oplogger.info(u"CHECK_CREATE: User '{}' created {} - id: {}, name: {}".format(self.request.user.username, obj.type_name(), obj.pk, obj.title))
 
         return redirect('dashboard')
 
@@ -356,7 +356,7 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("dashboard")
 
     def form_valid(self, form):
-        oplogger.info("CHECK_UPDATE: User '{}' updated {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
+        oplogger.info(u"CHECK_UPDATE: User '{}' updated {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
 
         return super(CheckUpdateView, self).form_valid(form)
 
@@ -376,7 +376,7 @@ class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMi
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        oplogger.info("CHECK_DELETE: User '{}' deleted {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
+        oplogger.info(u"CHECK_DELETE: User '{}' deleted {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
 
         return super(CheckDeleteView, self).delete(request, *args, **kwargs)
 

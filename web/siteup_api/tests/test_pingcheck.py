@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -23,13 +26,21 @@ class PingTestCase(TestCase):
         )
 
         self.h1 = PingCheck.objects.create(
-            title='Ping Test 1',
+            title='Ping Testáá 1',
             group=g,
             target='josetomastocino.com'
         )
 
         self.h2 = PingCheck.objects.create(
-            title='Ping Test 2',
+            title='Ping Testáá 2',
+            group=g,
+            target='josetomastocino.com',
+            should_check_timeout = True,
+            timeout_value=1000,
+        )
+
+        self.h3 = PingCheck.objects.create(
+            title='Ping Testááá 2',
             group=g,
             target='josetomastocino.com',
             should_check_timeout = True,
