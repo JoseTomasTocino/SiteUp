@@ -117,10 +117,6 @@ LOGGING = {
     }
 }
 
-import sys, codecs, locale
-sys.stdout = codecs.getwriter( locale.getpreferredencoding() )( sys.stdout )
-
-
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
