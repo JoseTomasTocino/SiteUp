@@ -33,7 +33,7 @@ def check_http_content(target, content_string=''):
     try:
         r = requests.get(target)
         return_obj['valid'] = True
-        return_obj['status_ok'] = content_string in r.text
+        return_obj['status_ok'] = content_string.lower() in r.text.lower()
     except Exception as e:
         logger.error(e)
         return_obj['valid'] = False

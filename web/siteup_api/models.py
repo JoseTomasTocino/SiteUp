@@ -145,12 +145,13 @@ class BaseCheck(models.Model):
     def update_status(self, check_log):
         """After a check log, this updates the CheckStatus accordingly"""
 
-        logger.info(u"Update status of {}, new status is {}, last status was {}".format(self.title, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
         self.last_log_datetime = check_log.date
 
         # If status has changed since last time (or there's no previous status)
         if not self.last_status or self.last_status.status != check_log.status:
+
+            oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
             s = CheckStatus()
             s.status = check_log.status
@@ -351,16 +352,24 @@ class HttpCheck(BaseCheck):
         # Initialize the log instance
         log = CheckLog(check=self)
 
+        status_extra = []
+
         # Send check
         check_result = monitoring.check_http_header(self.target, self.status_code)
 
         if check_result['valid']:
-            log.status_extra = check_result['status_code']
+            status_extra.append("Received status {}.".format(check_result['status_code']))
 
             if check_result['status_ok']:
                 if self.content_check_string.strip():
                     check_result = monitoring.check_http_content(self.target, self.content_check_string.strip())
-                    log.status = 0 if check_result['status_ok'] else 1
+
+                    if check_result['status_ok']:
+                        status_extra.append("String found.")
+                        log.status = 0
+                    else:
+                        status_extra.append("String not found.")
+                        log.status = 1
                 else:
                     log.status = 0
             else:

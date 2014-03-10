@@ -104,6 +104,7 @@
                         <th>{% trans "Duration" %}</th>
                         <th>{% trans "Start date" %}</th>
                         <th>{% trans "End date" %}</th>
+                        <th>{% trans "Extra" %}</th>
                     </thead>
 
                     <tbody>
@@ -136,6 +137,9 @@
                             </td>
                             <td>
                                 {{ status.date_end | date:"Y/m/d - G:i"  }}
+                            </td>
+                            <td>
+                                {{ status.status_extra }}
                             </td>
                         </tr>
                     {% endfor %}

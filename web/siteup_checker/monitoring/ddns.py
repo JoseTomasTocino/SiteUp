@@ -27,6 +27,7 @@ def check_dns(target, record_type, expected_address):
         for single_result in answer.rrset:
             ans = single_result.to_text().strip()
             logger.info(u"Record: %s" % ans)
+
             if expected_address.strip() == ans:
                 return_obj['status_ok'] = True
 

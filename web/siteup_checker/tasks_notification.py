@@ -1,3 +1,6 @@
+import logging
+oplogger = logging.getLogger("operations")
+
 from siteup.celery import app
 
 from celery.task.schedules import crontab
@@ -28,7 +31,7 @@ def send_notification_email(check, check_status):
     subject = _('[SiteUp] Status report of "{}"').format(check.title[:30] + "...")
     message_html = render_to_string('email_status_report.html', {
         "check_name": check.title,
-        "new_status": "DOWN"if check_status.status != 0 else "UP",
+        "new_status": "DOWN" if check_status.status != 0 else "UP",
         "status_date": check_status.date_start.isoformat(),
         "check_details": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
     })
