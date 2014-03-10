@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 oplogger = logging.getLogger("operations")
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
@@ -42,6 +43,10 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
+############################################################################
+# USER MANAGEMENT
+
+
 class LoginView(FormView):
     """
     View for the login page.
@@ -62,7 +67,7 @@ class LoginView(FormView):
 
         context["form_submit"] = _("Log in")
         context["form_class"] = "narrow"
-        context["subactions"] = [ { 'url': 'login', 'title': _("Forgot password?") } ]
+        context["subactions"] = [ { 'url': 'password_reset', 'title': _("Forgot password?") } ]
 
         return context
 
@@ -157,6 +162,46 @@ class ChangePasswordView(FormView):
         context["form_submit"] = _("Change password")
 
         return context
+
+
+def password_reset(request):
+    context = {}
+    context["form_submit"] = _("Send reset code")
+    context["form_class"] = "narrow"
+    context["site_name"] = "SiteUp"
+
+    return auth_views.password_reset(
+        request=request,
+        template_name="generic_form.html",
+        email_template_name="auth/password_reset_email.html",
+        subject_template_name="auth/password_reset_subject.html",
+        extra_context=context
+    )
+
+def password_reset_done(request):
+    return auth_views.password_reset_done(
+        request=request,
+        template_name="auth/password_reset_done.html"
+    )
+
+def password_reset_confirm(request, uidb64, token):
+    return auth_views.password_reset_confirm(
+        request=request,
+        uidb64=uidb64,
+        token=token,
+        template_name="generic_form.html",
+        extra_context={
+            'form_class': 'narrow',
+            'form_submit': _('Set new password')
+        }
+    )
+
+def password_reset_complete(request):
+    return auth_views.password_reset_complete(
+        request=request,
+        template_name="auth/password_reset_complete.html"
+    )
+
 
 
 ###################################################################################
