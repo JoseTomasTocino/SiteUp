@@ -1,15 +1,89 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbo">
-    <div class="container">
-        <h2>
-            Website monitoring, made easy
-        </h2>
+<div class="jumbo container">
+    <h2>
+        Website monitoring, made easy
+    </h2>
 
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, quas laboriosam deleniti veniam fugiat quis quidem corrupti corporis maiores dignissimos.
-        </p>
+    <h3>
+        <strong>SiteUp</strong> lets you monitor your websites and remote
+        machines really easily, with just a couple of clicks.
+    </h3>
+
+    <div class="services cf">
+
+        <div class="service">
+            <div>
+                <i class="fa fa-bolt"></i>
+                <span>
+                    Ping checks
+                </span>
+            </div>
+        </div>
+
+        <div class="service">
+            <div>
+                <i class="fa fa-code"></i>
+                <span>
+                    HTTP checks
+                </span>
+            </div>
+        </div>
+
+        <div class="service">
+            <div>
+                <i class="fa fa-exchange"></i>
+                <span>
+                    DNS checks
+                </span>
+            </div>
+        </div>
+
+        <div class="service">
+            <div>
+                <i class="fa fa-sitemap"></i>
+                <span>
+                    Port checks
+                </span>
+            </div>
+        </div>
     </div>
+
+    <div class="services">
+
+        <div class="service">
+            <div>
+                <i class="fa fa-clock-o"></i>
+                <span>
+                    Checks every minute
+                </span>
+            </div>
+        </div>
+
+        <div class="service">
+            <div>
+                <i class="fa fa-envelope-o"></i>
+                <span>
+                    Email notifications
+                </span>
+            </div>
+        </div>
+
+        <div class="service">
+            <div>
+                <i class="fa fa-android"></i>
+                <span>
+                    Android notifications <em>(soon)</em>
+                </span>
+            </div>
+        </div>
+
+    </div> {# .services #}
+
+    <h4>
+        <a href="{% url 'signup' %}">Get started</a> now, it's free!
+    </h4>
+
 </div>
 {% endblock %}

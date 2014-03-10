@@ -1,19 +1,77 @@
 .jumbo {
-    margin-top: 20px;
     overflow: hidden;
 
     h2 {
         color: $color2;
         text-align: center;
-        font-size: 3em;
-        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 1.5rem 0;
 
-        @include text-shadow(rgba(black, 0.15) 0px 3px 0);
+        @include text-shadow(rgba(white, 1) 0px 1px 0);
     }
 
-    p {
+    h3 {
+        font-weight: normal;
+        font-size: 0.9rem;
         color: $color2;
         text-align: center;
-        padding: 0 150px;
+        max-width: 25rem;
+        width: 90%;
+        margin: 0 auto 2rem;
+    }
+
+    .services {
+        text-align: center;
+
+        @media (max-width: 30rem) {
+            .service:nth-child(3) {
+                margin-left: 0;
+            }
+        }
+    }
+
+    .service {
+
+        display: inline-block;
+
+        text-align: center;
+        width: 7rem;
+        height: 7rem;
+        line-height: 7rem;
+        border: 1px solid $color6;
+        background-color: $color8;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+
+        div {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+        }
+
+        span {
+            font-size: 0.7rem;
+        }
+
+        .fa {
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        & + .service {
+            margin-left: 1rem;
+        }
+    }
+
+    h4 {
+        text-align: center;
+        font-weight: normal;
+        font-size: 2rem;
+
+        a {
+            font-weight: 600;
+        }
     }
 }
