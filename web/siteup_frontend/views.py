@@ -60,7 +60,10 @@ class LoginView(FormView):
         login(self.request, form.get_user())
         oplogger.info(u"USER_LOGIN: User '{}' logged in ".format(form.get_user().username))
 
-        return redirect('dashboard')
+        if 'next' in self.request.GET:
+            return redirect(self.request.GET.get('next'))
+        else:
+            return redirect('dashboard')
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)

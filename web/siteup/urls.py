@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', fe_views.HomeView.as_view(), name='home'),
-    url(r'^login$', fe_views.LoginView.as_view(), name="login"),
+    url(r'^login/', fe_views.LoginView.as_view(), name="login"),
     url(r'^logout$', fe_views.LogoutView.as_view(), name="logout"),
     url(r'^password_reset$', fe_views.password_reset, name="password_reset"),
     url(r'^password_reset_done$', fe_views.password_reset_done, name="password_reset_done"),
