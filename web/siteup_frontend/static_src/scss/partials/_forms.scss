@@ -115,7 +115,7 @@ form {
         resize: none;
     }
 
-    input[type=submit] {
+    input[type=submit], .actions a {
         border: 0;
         border-radius: 1px;
         padding: 8px 12px;
@@ -127,12 +127,13 @@ form {
 
         &:hover {
             background-color: lighten($niceColor1, 20%);
+            text-decoration: none;
         }
     }
 
-
-
-
+    .actions a {
+        background-color: lighten($color4, 10%);
+    }
 
     .info {
         font-size: 14px;

@@ -37,10 +37,10 @@ urlpatterns = patterns('',
     # url(r'^groups/(?P<pk>\d{1,})/addportcheck', fe_views.PortCheckCreateView.as_view(), name="new_port_check"),
     # url(r'^groups/(?P<pk>\d{1,})/addhttpcheck', fe_views.HttpCheckCreateView.as_view(), name="new_http_check"),
 
+    url(r'^checks/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDetailView.as_view(), name="view_check"),
     url(r'^checks/edit/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckUpdateView.as_view(), name="edit_check"),
     url(r'^checks/delete/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDeleteView.as_view(), name="delete_check"),
     url(r'^checks/enable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckEnableView.as_view(), name="enable_check"),
     url(r'^checks/disable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDisableView.as_view(), name="disable_check"),
-    url(r'^checks/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDetailView.as_view(), name="view_check"),
 
 )

@@ -408,11 +408,21 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
 
         return super(CheckUpdateView, self).form_valid(form)
 
+    def get_success_url(self):
+        back_to = self.request.GET.get('back_to', None)
+
+        if back_to in (None, 'dashboard'):
+            return reverse_lazy('dashboard')
+        elif back_to == 'detail':
+            return self.get_object().detail_url()
+
     def get_context_data(self, **kwargs):
         context = super(CheckUpdateView, self).get_context_data(**kwargs)
+
         verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
         context["form_title"] = _("Update %(checktype)s") % { 'checktype': verbose_name }
         context["form_submit"] = _("Update check")
+        context["back_to"] = self.get_success_url()
 
         return context
 

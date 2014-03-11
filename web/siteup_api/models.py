@@ -12,6 +12,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.core.urlresolvers import reverse, reverse_lazy
+
 from django.core import validators
 
 from siteup_checker import monitoring
@@ -195,17 +197,24 @@ class BaseCheck(models.Model):
         logger.info(u"Check %s will run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
         return True
 
+    def generic_url(self, action):
+        kwargs = { 'pk': self.id, 'type': self.type_name() }
+        return reverse(action, kwargs=kwargs)
+
+    def detail_url(self):
+        return self.generic_url('view_check')
+
     def edit_url(self):
-        return self.__class__.__name__.lower() + "_edit"
+        return self.generic_url('edit_check')
 
     def delete_url(self):
-        return self.__class__.__name__.lower() + "_delete"
+        return self.generic_url('delete_check')
 
-    def activate_url(self):
-        return self.__class__.__name__.lower() + "_activate"
+    def enable_url(self):
+        return self.generic_url('enablecheck')
 
-    def deactivate_url(self):
-        return self.__class__.__name__.lower() + "_deactivate"
+    def disable_url(self):
+        return self.generic_url('disable_check')
 
     def unique_name(self):
         return self.__class__.__name__.lower() + str(self.pk)
