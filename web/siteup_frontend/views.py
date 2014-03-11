@@ -362,6 +362,7 @@ CHECK_FORMS[models.PortCheck] = PortCheckForm
 
 
 class ChooseCheckTypeTemplateView(LoginRequiredMixin, TemplateView):
+    """Simple view for the user to choose the kind of Check to create."""
     template_name = 'checks/choose_check_type.html'
 
 
@@ -373,10 +374,14 @@ class GenericCheckViewMixin(object):
 
     def get_model_class(self):
         """Returns the model class according to the `type` parameter passed via URL"""
-        # TODO limit models to check types
 
+        # Get the actual model class using the ContentType framework
         if not self.model_class_cache:
             self.model_class_cache = ContentType.objects.get(app_label="siteup_api", model=self.kwargs['type']).model_class()
+
+        # Only allow working with check types
+        if self.model_class_cache not in models.CHECK_TYPES:
+            raise Http404
 
         return self.model_class_cache
 
