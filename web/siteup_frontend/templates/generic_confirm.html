@@ -23,6 +23,9 @@
         </div>
 
         <fieldset class="actions">
+            {% if back_to %}
+                <a href="{{ back_to }}">Go back</a>
+            {% endif %}
             <input type="submit" value="{% trans "Delete" %}">
         </fieldset>
     </form>

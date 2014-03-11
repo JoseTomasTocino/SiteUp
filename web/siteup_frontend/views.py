@@ -298,6 +298,10 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
         qs = super(GroupDeleteView, self).get_queryset()
         return qs.filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super(GroupDeleteView, self).get_context_data(**kwargs)
+        context['back_to'] = reverse_lazy('dashboard')
+
 
 class GroupEnableView(View):
     def get(self, request, *args, **kwargs):
@@ -410,6 +414,9 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
         return super(CheckUpdateView, self).form_valid(form)
 
     def get_success_url(self):
+
+        # Redirection depends on 'back_to' GET parameter (if it exists)
+
         back_to = self.request.GET.get('back_to', None)
 
         if back_to in (None, 'dashboard'):
@@ -434,11 +441,28 @@ class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMi
     deletion_message = _("Group deleted successfully")
 
     def delete(self, request, *args, **kwargs):
+
+        # Get the object
         self.object = self.get_object()
+
+        # Post to the logger
         oplogger.info(u"CHECK_DELETE: User '{}' deleted {} - id: {}, name: {}".format(self.request.user.username, self.object.type_name(), self.object.pk, self.object.title))
 
+        # Call the original delete method
         return super(CheckDeleteView, self).delete(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(CheckDeleteView, self).get_context_data(**kwargs)
+
+        # Url of the 'go back' button
+        back_to = self.request.GET.get('back_to', None)
+
+        if back_to in (None, 'dashboard'):
+            context['back_to'] = reverse_lazy('dashboard')
+        elif back_to == 'detail':
+            context['back_to'] =  self.get_object().detail_url()
+
+        return context
 
 class CheckEnableView(GenericCheckViewMixin, LoginRequiredMixin, View):
 
