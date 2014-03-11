@@ -279,6 +279,7 @@ class GroupUpdateView(LoginRequiredMixin, UpdateView):
 
         context["form_title"] = _("Edit group")
         context["form_submit"] = _("Edit group")
+        context["back_to"] = reverse_lazy("dashboard")
 
         return context
 
