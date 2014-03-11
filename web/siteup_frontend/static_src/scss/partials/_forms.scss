@@ -133,6 +133,10 @@ form {
 
     .actions a {
         background-color: lighten($color4, 10%);
+
+        &:hover {
+            background-color: $color4;
+        }
     }
 
     .info {
