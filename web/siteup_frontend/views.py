@@ -302,6 +302,12 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
         context = super(GroupDeleteView, self).get_context_data(**kwargs)
         context['back_to'] = reverse_lazy('dashboard')
 
+    def get_context_data(self, **kwargs):
+        context = super(GroupDeleteView, self).get_context_data(**kwargs)
+        context["back_to"] = reverse_lazy("dashboard")
+
+        return context
+
 
 class GroupEnableView(View):
     def get(self, request, *args, **kwargs):
