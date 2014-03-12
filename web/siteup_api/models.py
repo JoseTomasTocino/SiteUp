@@ -299,16 +299,19 @@ class PortCheck(BaseCheck):
     target = models.CharField(
         max_length=255, blank=False,
         help_text=_("Should be a hostname or an IP"),
-        validators=[validate_ip_or_hostname])
+        validators=[validate_ip_or_hostname]
+    )
 
     target_port = models.PositiveSmallIntegerField(
         help_text=_("Remote network port to check"),
         validators=[validators.MinValueValidator(1),
-                    validators.MaxValueValidator(65535)])
+                    validators.MaxValueValidator(65535)]
+    )
 
     response_check_string = models.CharField(max_length=255, blank=True,
         verbose_name=_("Check for string"),
-        help_text=_("Optionally, you can check if the response contains a certain string."))
+        help_text=_("Optionally, you can check if the response contains a certain string.")
+    )
 
     def run_check(self):
         if not self.should_run_check():

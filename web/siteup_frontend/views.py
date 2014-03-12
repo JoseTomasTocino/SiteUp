@@ -370,6 +370,8 @@ class GenericCheckViewMixin(object):
     """Base for views that handle single checks."""
 
     def __init__(self, *args, **kwargs):
+
+        # DB is only hit once when trying to fetch the model class
         self.model_class_cache = None
 
     def get_model_class(self):
@@ -394,9 +396,13 @@ class GenericCheckViewMixin(object):
 
 
 class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
+    """View to create a new check"""
+
     template_name = "generic_form.html"
 
     def get_context_data(self, **kwargs):
+        """Adds the proper labels to the form for the selected check type"""
+
         context = super(CheckCreateView, self).get_context_data(**kwargs)
         verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
         context["form_title"] = _("Create new %(checktype)s") % { 'checktype': verbose_name }
@@ -406,6 +412,7 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         if form.is_valid():
+            # Before actually saving the check, link it to its group check
             obj = form.save(commit=False)
             obj.group = models.CheckGroup.objects.get(pk=self.kwargs['pk'])
             obj.save()
@@ -416,6 +423,8 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
 
 
 class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
+    """View to update a new check."""
+
     template_name = "generic_form.html"
     success_url = reverse_lazy("dashboard")
 
