@@ -53,15 +53,23 @@ class CheckLog(models.Model):
         default=0
     )
 
+    collapse_level = models.IntegerField(
+        default=0
+    )
+
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey('content_type', 'object_id')
 
     objects = managers.CheckLogManager()
 
-    def save(self):
+    def save(self, update_check=True):
+        """Saves itself, then informs the parent Check to see if it needs to create a CheckStatus."""
+
         super(CheckLog, self).save()
-        self.check.update_status(self)
+
+        if update_check:
+            self.check.update_status(self)
 
     def get_status(self):
         return 1 - self.status
@@ -146,7 +154,6 @@ class BaseCheck(models.Model):
 
     def update_status(self, check_log):
         """After a check log, this updates the CheckStatus accordingly"""
-
 
         self.last_log_datetime = check_log.date
 

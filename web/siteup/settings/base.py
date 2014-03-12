@@ -123,7 +123,13 @@ LOGOUT_URL = '/logout/'
 BASE_URL = 'http://siteup.josetomastocino.com'
 
 # In hours. Logs older than this will be removed by a periodic maintenance task
-CHECKLOG_EXPIRATION_TIME = 24 * 2
+CHECKLOG_EXPIRATION_TIME = 24 * 7
+
+# The same for CheckStatus objects
+CHECKSTATUS_EXPIRATION_TIME = 24 * 2
+
+# In hours. Logs older than this will get first level collapsing (1 min -> 30 min)
+CHECKLOG_COLLAPSE_TIME_1 = 24
 
 # EMAIL_BACKEND
 EMAIL_HOST = 'smtp.gmail.com'
