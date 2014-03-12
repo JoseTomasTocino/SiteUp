@@ -66,13 +66,16 @@ def remove_old_logs():
     statuses.delete()
 
 
-@periodic_task(run_every=crontab(hour="*", minute="*/10", day_of_week="*"))
+@periodic_task(run_every=crontab(hour="*", minute="*/35", day_of_week="*"))
 def collapse_logs():
 
     logger.info(u"Issued COLLAPSE_LOGS task")
 
     # Calcualte the limit date
     date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_COLLAPSE_TIME_1)
+
+    # To group the logs by 30-min intervals, the group function checks the first digit of the minutes in the time
+    get_interval = lambda l: l.date.isoformat()[:14] + ('0' if int(l.date.isoformat()[14]) < 3 else '3')
 
     # Go check by check
     for check_type in models.CHECK_TYPES:
@@ -83,31 +86,54 @@ def collapse_logs():
             # Get uncollapsed, old enough logs
             uncollapsed_logs = check.logs.order_by('date').filter(collapse_level=0, date__lt=date_limit)
 
-            # To group the logs by 30-min intervals, the group function checks the first digit of the minutes in the time
-            grouping_function = lambda l: l.date.isoformat()[:14] + ('0' if int(l.date.isoformat()[14]) < 3 else '3')
+            if not uncollapsed_logs:
+                continue
 
-            # Iterate over the group intervals
-            for key, log_interval in groupby(uncollapsed_logs, grouping_function):
+            # Get the first interval
+            last_interval = None
+            current_interval_start = None
 
-                # Build a list out of the groupby thingy
-                log_interval = list(log_interval)
+            # Go through all logs
+            for i, log in enumerate(uncollapsed_logs):
 
-                print "New interval, from %s to %s" % (log_interval[0].date, log_interval[-1].date)
+                # Calculate interval for current log
+                current_interval = get_interval(log)
+
+                # If still on the same interval, keep going
+                if current_interval == last_interval:
+                    continue
+
+                # If intervals do not match but last interval was not initialized, continue as well
+                elif not last_interval:
+                    last_interval = current_interval
+                    current_interval_start = i
+                    # assert(i == 0)
+                    continue
+
+                last_interval = current_interval
+
+                # If not, close the previous interval
+                current_interval_end = i
+
+                # Get the logs within the interval
+                current_interval_logs = uncollapsed_logs[current_interval_start:current_interval_end]
+
+                print "New interval, from %s to %s" % (current_interval_logs[0].date, current_interval_logs[-1].date)
 
                 # Just cache the base for the mean calculations
-                avg_base = float(len(log_interval))
+                avg_base = float(len(current_interval_logs))
 
                 # Calculate the average status of the CheckLogs within the interval.
-                mean_status = round(sum((1 if x.status in (1, 2) else 0 for x in log_interval)) / avg_base)
+                mean_status = round(sum((1 if x.status in (1, 2) else 0 for x in current_interval_logs)) / avg_base)
 
                 # Calculate the average response time. Does not make sense for anything else than PingCheck's logs, but still
-                mean_response_time = round(sum((x.response_time for x in log_interval)) / avg_base)
+                mean_response_time = round(sum((x.response_time for x in current_interval_logs)) / avg_base)
 
                 # Build new time zeroing out the second digit of the minutes and the seconds
-                new_date = datetime.datetime.strptime( key + "0:00", "%Y-%m-%dT%H:%M:%S" )
+                new_date = datetime.datetime.strptime( current_interval + "0:00", "%Y-%m-%dT%H:%M:%S" )
 
                 # Save the new information in the first CheckLog of the interval
-                cl = log_interval[0]
+                cl = current_interval_logs[0]
                 cl.status = mean_status
                 cl.response_time = mean_response_time
                 cl.date = new_date
@@ -115,7 +141,10 @@ def collapse_logs():
                 cl.save(update_check=False)
 
                 # Delete the rest of CheckLogs in the interval
-                [x.delete() for x in log_interval[1:]]
+                [x.delete() for x in current_interval_logs[1:]]
+
+                #Reset the counter
+                current_interval_start = i
 
 
 
