@@ -66,7 +66,7 @@ def remove_old_logs():
     statuses.delete()
 
 
-@periodic_task(run_every=crontab(hour="*", minute="*/35", day_of_week="*"))
+@periodic_task(run_every=crontab(hour="*", minute="*/10", day_of_week="*"))
 def collapse_logs():
 
     logger.info(u"Issued COLLAPSE_LOGS task")
@@ -87,7 +87,7 @@ def collapse_logs():
             if not uncollapsed_logs:
                 continue
 
-            logger.info("COLLAPSE - Check {} has {} logs to be collapsed".format(check.title, len(uncollapsed_logs)))
+            logger.info(u"COLLAPSE - Check {} has {} logs to be collapsed".format(check.title, len(uncollapsed_logs)))
 
             # Get the first interval
             last_interval = None
@@ -118,7 +118,7 @@ def collapse_logs():
                 # Get the logs within the interval
                 current_interval_logs = uncollapsed_logs[current_interval_start:current_interval_end]
 
-                logger.info("New interval, from %s to %s" % (current_interval_logs[0].date, current_interval_logs[-1].date))
+                logger.info(u"New interval, from %s to %s" % (current_interval_logs[0].date, current_interval_logs[-1].date))
 
                 # Just cache the base for the mean calculations
                 avg_base = float(len(current_interval_logs))
