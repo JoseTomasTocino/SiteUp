@@ -81,13 +81,13 @@ def collapse_logs():
     for check_type in models.CHECK_TYPES:
         for check in check_type.objects.all():
 
-            print "New check '%s'" % check.title
-
             # Get uncollapsed, old enough logs
             uncollapsed_logs = check.logs.order_by('date').filter(collapse_level=0, date__lt=date_limit)
 
             if not uncollapsed_logs:
                 continue
+
+            logger.info("COLLAPSE - Check {} has {} logs to be collapsed".format(check.title, len(uncollapsed_logs)))
 
             # Get the first interval
             last_interval = None
@@ -118,7 +118,7 @@ def collapse_logs():
                 # Get the logs within the interval
                 current_interval_logs = uncollapsed_logs[current_interval_start:current_interval_end]
 
-                print "New interval, from %s to %s" % (current_interval_logs[0].date, current_interval_logs[-1].date)
+                logger.info("New interval, from %s to %s" % (current_interval_logs[0].date, current_interval_logs[-1].date))
 
                 # Just cache the base for the mean calculations
                 avg_base = float(len(current_interval_logs))
@@ -129,13 +129,17 @@ def collapse_logs():
                 # Calculate the average response time. Does not make sense for anything else than PingCheck's logs, but still
                 mean_response_time = round(sum((x.response_time for x in current_interval_logs)) / avg_base)
 
+                # Get the max response time in the interval
+                max_response_time = max((x.response_time for x in current_interval_logs))
+
                 # Build new time zeroing out the second digit of the minutes and the seconds
                 new_date = datetime.datetime.strptime( current_interval + "0:00", "%Y-%m-%dT%H:%M:%S" )
 
                 # Save the new information in the first CheckLog of the interval
                 cl = current_interval_logs[0]
                 cl.status = mean_status
-                cl.response_time = mean_response_time
+                # cl.response_time = mean_response_time
+                cl.response_time = max_response_time
                 cl.date = new_date
                 cl.collapse_level = 1
                 cl.save(update_check=False)
