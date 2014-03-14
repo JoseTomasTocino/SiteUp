@@ -25,7 +25,6 @@ INSTALLED_APPS = (
     'django_extensions',
     'gunicorn',
     'celery',
-    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -35,7 +34,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'siteup.urls'
@@ -144,9 +142,11 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'siteup.pfc@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# DJANGO TOOLBAR
 
-INTERNAL_IPS = ('127.0.0.1',)
+# DJANGO TOOLBAR SETTINGS
+
+INSTALLED_APPS += ('debug_toolbar',)
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
@@ -154,6 +154,7 @@ def show_toolbar(request):
     if request.user and request.user.username == "jose":
         return True
     return False
+
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'siteup.settings.base.show_toolbar',
