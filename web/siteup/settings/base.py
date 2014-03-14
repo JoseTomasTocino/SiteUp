@@ -87,7 +87,7 @@ LOGGING = {
     },
 
     'handlers': {
-        'default': {
+        'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
@@ -107,12 +107,41 @@ LOGGING = {
             'level': 'DEBUG'
         },
 
+        'django': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'WARN',
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'WARN',
+            'propagate': False,
+        },
+
         '' : {
-            'handlers' : ['default'],
+            'handlers' : ['console'],
             'level': 'INFO'
         },
+
     }
 }
+
+"""
+'gunicorn.error': {
+    'level': 'INFO',
+    'handlers': ['logfile'],
+    'propagate': True,
+},
+'gunicorn.access': {
+    'level': 'INFO',
+    'handlers': ['logfile'],
+    'propagate': False,
+},
+'celery': {
+    'handlers': ['celery'],
+    'level': 'DEBUG',
+},
+"""
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
