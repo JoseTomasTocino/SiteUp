@@ -24,6 +24,8 @@ from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostnam
 from .utils import timedelta_to_string
 import managers
 
+logger.info(u"Test log message")
+
 ####################################################################################
 # Log related models
 
