@@ -24,6 +24,7 @@ def deploy():
     with cd(code_dir):
         with prefix('workon siteup'):
             run("git pull")
+            run("web/manage.py collectstatic --noinput")
             run("web/manage.py syncdb")
             run("web/manage.py migrate siteup_api")
             run("sudo supervisorctl restart siteup_gunicorn siteup_celery")

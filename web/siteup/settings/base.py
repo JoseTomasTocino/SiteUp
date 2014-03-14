@@ -9,10 +9,6 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'uxc*54zvjl^n%9t##1r+rfw&&e$fq88-k6vac8%&x8_q)qp=)_'
 
-ALLOWED_HOSTS = []
-
-# Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,6 +72,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGGING = {
     'version': 1,
