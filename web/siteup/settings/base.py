@@ -112,6 +112,14 @@ LOGGING = {
             'propagate': True,
             'level':'WARN',
         },
+
+        'django.request': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'WARN',
+        },
+
+
         'django.db.backends': {
             'handlers': ['console'],
             'level': 'WARN',
