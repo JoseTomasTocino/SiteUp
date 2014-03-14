@@ -44,3 +44,14 @@ urlpatterns = patterns('',
     url(r'^checks/disable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDisableView.as_view(), name="disable_check"),
 
 )
+
+# DJANGO TOOLBAR
+
+from django.conf import settings
+from django.conf.urls import include, patterns, url
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )

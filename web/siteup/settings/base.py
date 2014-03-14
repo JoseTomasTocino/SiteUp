@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'gunicorn',
     'celery',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -38,6 +39,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'siteup.urls'
@@ -129,7 +131,12 @@ CHECKLOG_EXPIRATION_TIME = 24 * 7
 CHECKSTATUS_EXPIRATION_TIME = 24 * 2
 
 # In hours. Logs older than this will get first level collapsing (1 min -> 30 min)
-CHECKLOG_COLLAPSE_TIME_1 = 4
+CHECKLOG_COLLAPSE_TIME_1 = 24
+
+# CELERY Settings
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'pickle'
 
 # EMAIL_BACKEND
 EMAIL_HOST = 'smtp.gmail.com'
@@ -139,3 +146,19 @@ EMAIL_HOST_PASSWORD = os.environ['GMAIL_PASS']
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'siteup.pfc@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# DJANGO TOOLBAR
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+def show_toolbar(request):
+    if request.user and request.user.username == "jose":
+        return True
+    return False
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'siteup.settings.base.show_toolbar',
+    # Rest of config
+}
