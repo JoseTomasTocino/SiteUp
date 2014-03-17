@@ -12,8 +12,8 @@
 {% block content %}
 <div class="single-check">
 
-    <header class="cf container">
-        <div class="current-status">
+    <header class="container cf">
+        <div class="icon">
             {% if not check.is_active %}
                 <i class="check-status-icon fa fa-clock-o fa-4x"></i>
             {% elif not check.last_status %}
@@ -23,9 +23,9 @@
             {% else %}
                 <i class="check-status-icon fa fa-check-circle-o fa-4x"></i>
             {% endif %}
-        </div> {# .current-status #}
+        </div> {# .icon #}
 
-        <div class="texts cf">
+        <div class="texts">
             <h2>{{ check.title }}</h2>
             <div class="desc">
                 <strong>{% trans "Type" %}:</strong> {{ check }}
@@ -60,6 +60,7 @@
     </div> {# .check-actions #}
 
     <div class="container tabs">
+
         <header class="tabs-header cf">
             <a href="#">
                 Last 24 hours
@@ -71,10 +72,34 @@
         </header>
 
         <div class="tabs-content">
+            {% with logs=check.logs.last_24_hours_with_avg %}
 
-            <div class="content">
-                <div class="graph graph_{{ check.unique_name }}"></div>
+            <div class="content summary">
+                <div>
+                     <span>{{ logs.avg_status }}%</span>
+                    uptime
+                </div>
+
+                {% if check.type_name == "pingcheck" %}
+                <div>
+                    <span>{{ logs.avg_response_time|floatformat:"0" }}ms</span>
+                    avg. response
+                </div>
+
+                <div>
+                    <span>{{ logs.max_response_time|floatformat }}ms</span>
+                    max response
+                </div>
+
+                <div>
+                    <span>{{ logs.min_response_time|floatformat }}ms</span>
+                    min response
+                </div>
+
+                {% endif %}
             </div>
+
+            <div class="graph graph_{{ check.unique_name }}"></div>
 
             <script>
                 if (typeof graphInfo == "undefined") {
@@ -87,11 +112,11 @@
                     graphInfo[graphName]['data'] = [
 
                         {% if check.type_name == "pingcheck" %}
-                            {% for log in check.logs.last_24_hours %}
+                            {% for log in logs.objs %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
                             {% endfor %}
                         {% else %}
-                            {% for log in check.logs.last_24_hours %}
+                            {% for log in logs.objs %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
                             {% endfor %}
                         {% endif %}
@@ -102,15 +127,40 @@
                 })();
             </script>
 
+            {% endwith %}
         </div>
 
         {# Last week info #}
 
         <div class="tabs-content">
+            {% with logs=check.logs.last_week_with_avg %}
 
-            <div class="content">
-                <div class="graph graph_{{ check.unique_name }}_week"></div>
+            <div class="content summary">
+                <div>
+                     <span>{{ logs.avg_status }}%</span>
+                    uptime
+                </div>
+
+                {% if check.type_name == "pingcheck" %}
+                <div>
+                    <span>{{ logs.avg_response_time|floatformat:"0" }}ms</span>
+                    avg. response
+                </div>
+
+                <div>
+                    <span>{{ logs.max_response_time|floatformat }}ms</span>
+                    max. response
+                </div>
+
+                <div>
+                    <span>{{ logs.min_response_time|floatformat }}ms</span>
+                    min. response
+                </div>
+
+                {% endif %}
             </div>
+
+            <div class="graph graph_{{ check.unique_name }}_week"></div>
 
             <script>
                 if (typeof graphInfo == "undefined") {
@@ -123,11 +173,11 @@
                     graphInfo[graphName]['data'] = [
 
                         {% if check.type_name == "pingcheck" %}
-                            {% for log in check.logs.last_week %}
+                            {% for log in logs.objs %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
                             {% endfor %}
                         {% else %}
-                            {% for log in check.logs.last_week %}
+                            {% for log in logs.objs %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
                             {% endfor %}
                         {% endif %}
@@ -138,7 +188,8 @@
                 })();
             </script>
 
-        </div>
+            {% endwith %}
+        </div> {# .tabs-content #}
 
     </div>
 

@@ -4,34 +4,66 @@
     // border: 1px solid $color6;
     // box-shadow: 0 0 2px rgba($color6, 0.5);
 
-    .current-status {
-        margin-right: 1rem;
-        margin-bottom: 1rem;
-        width: 50px;
-        float: left;
-        font-size: 0.9em;
-    }
-
-    .texts {
-        margin-left: 1em;
-
-        h2 {
-            margin-top: 0;
-            margin-bottom: 0;
-            color: $color2;
-            font-weight: 700;
+    header {
+        .icon {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            width: 50px;
+            float: left;
+            font-size: 0.9em;
         }
 
-        .desc {
-            font-size: 0.8rem;
-            strong {
-                font-weight: 600;
+        .texts {
+            margin-left: 1em;
+
+            h2 {
+                margin-top: 0;
+                margin-bottom: 0;
+                color: $color2;
+                font-weight: 700;
+            }
+
+            .desc {
+                font-size: 0.8rem;
+                strong {
+                    font-weight: 600;
+                }
             }
         }
     }
 
     .graph {
         height: 150px;
+    }
+
+    .summary {
+        text-align: center;
+
+        > div {
+            display: inline-block;
+            max-width: 20%;
+            vertical-align: middle;
+        }
+
+        > div + div {
+            margin-left: 1rem;
+            padding-left: 1rem;
+            border-left: 1px solid $color6;
+        }
+
+        span {
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        @media (max-width: 40rem) {
+            font-size: 0.7rem;
+
+            span {
+                font-size: 1rem;
+            }
+        }
     }
 
     .status-table {
