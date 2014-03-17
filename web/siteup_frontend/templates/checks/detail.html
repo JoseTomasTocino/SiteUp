@@ -123,11 +123,11 @@
                     graphInfo[graphName]['data'] = [
 
                         {% if check.type_name == "pingcheck" %}
-                            {% for log in check.logs.all %}
+                            {% for log in check.logs.last_week %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
                             {% endfor %}
                         {% else %}
-                            {% for log in check.logs.all %}
+                            {% for log in check.logs.last_week %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
                             {% endfor %}
                         {% endif %}
