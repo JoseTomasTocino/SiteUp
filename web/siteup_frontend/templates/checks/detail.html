@@ -10,34 +10,67 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="single-check">
+<div class="single-check">
 
-        <header class="cf container">
-            <div class="current-status">
-                {% if not check.is_active %}
-                    <i class="check-status-icon fa fa-clock-o fa-4x"></i>
-                {% elif not check.last_status %}
-                    <i class="check-status-icon fa fa-refresh fa-spin fa-4x"></i>
-                {% elif check.last_status.status != 0 %}
-                    <i class="check-status-icon fa fa-exclamation-circle fa-4x"></i>
-                {% else %}
-                    <i class="check-status-icon fa fa-check-circle-o fa-4x"></i>
-                {% endif %}
+    <header class="cf container">
+        <div class="current-status">
+            {% if not check.is_active %}
+                <i class="check-status-icon fa fa-clock-o fa-4x"></i>
+            {% elif not check.last_status %}
+                <i class="check-status-icon fa fa-refresh fa-spin fa-4x"></i>
+            {% elif check.last_status.status != 0 %}
+                <i class="check-status-icon fa fa-exclamation-circle fa-4x"></i>
+            {% else %}
+                <i class="check-status-icon fa fa-check-circle-o fa-4x"></i>
+            {% endif %}
+        </div> {# .current-status #}
+
+        <div class="texts cf">
+            <h2>{{ check.title }}</h2>
+            <div class="desc">
+                <strong>{% trans "Type" %}:</strong> {{ check }}
             </div>
-
-            <div class="texts cf">
-                <h2>{{ check.title }}</h2>
-                <div class="desc">
-                    <strong>{% trans "Type" %}:</strong> {{ check }}
-                </div>
-                <div class="desc">
-                    <strong>{% trans "Description" %}:</strong> {{ check.description|default:"<em>No description</em>"}}
-                </div>
+            <div class="desc">
+                <strong>{% trans "Description" %}:</strong> {{ check.description|default:"<em>No description</em>"}}
             </div>
+        </div> {# .texts #}
 
+    </header>
+
+    <div class="check-actions container">
+        <div class="button-group">
+            <a class="button" href="{{ check.edit_url }}?back_to=detail">
+                <i class="fa fa-pencil"></i> {% trans "Edit" %}
+            </a>
+
+            <a class="button" href="{{ check.delete_url }}?back_to=detail">
+                <i class="fa fa-times"></i> {% trans "Delete" %}
+            </a>
+
+            {% if not check.is_active %}
+                <a class="button" href="{{ check.enable_url }}">
+                    <i class="fa fa-power-off"></i> {% trans "Enable" %}
+                </a>
+            {% else %}
+                <a class="button" href="{{ check.disable_url }}">
+                    <i class="fa fa-power-off"></i> {% trans "Disable" %}
+                </a>
+            {% endif %}
+        </div>
+    </div> {# .check-actions #}
+
+    <div class="container tabs">
+        <header class="tabs-header cf">
+            <a href="#">
+                Last 24 hours
+            </a>
+
+            <a href="#">
+                Last week
+            </a>
         </header>
 
-        <div class="container block complex">
+        <div class="tabs-content">
 
             <div class="content">
                 <div class="graph graph_{{ check.unique_name }}"></div>
@@ -52,13 +85,17 @@
                     graphInfo[graphName] = [];
                     graphInfo[graphName]['is_single'] = true;
                     graphInfo[graphName]['data'] = [
-                        {% for log in check.logs.all %}
-                            {% if check.type_name == "pingcheck" %}
+
+                        {% if check.type_name == "pingcheck" %}
+                            {% for log in check.logs.last_24_hours %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
-                            {% else %}
+                            {% endfor %}
+                        {% else %}
+                            {% for log in check.logs.last_24_hours %}
                                 [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
-                            {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
                     ];
                     graphInfo[graphName]['status'] = {% if check.last_status and check.last_status.status == 0 %}0{% else %}1{% endif %};
                     graphInfo[graphName]['type'] = '{{ check.type_name }}';
@@ -67,88 +104,106 @@
 
         </div>
 
-        <div class="check-actions container">
-            <div class="button-group">
-                <a class="button" href="{{ check.edit_url }}?back_to=detail">
-                    <i class="fa fa-pencil"></i> {% trans "Edit" %}
-                </a>
+        {# Last week info #}
 
-                <a class="button" href="{{ check.delete_url }}?back_to=detail">
-                    <i class="fa fa-times"></i> {% trans "Delete" %}
-                </a>
+        <div class="tabs-content">
 
-                {% if not check.is_active %}
-                    <a class="button" href="{{ check.enable_url }}">
-                        <i class="fa fa-power-off"></i> {% trans "Enable" %}
-                    </a>
-                {% else %}
-                    <a class="button" href="{{ check.disable_url }}">
-                        <i class="fa fa-power-off"></i> {% trans "Disable" %}
-                    </a>
-                {% endif %}
+            <div class="content">
+                <div class="graph graph_{{ check.unique_name }}_week"></div>
             </div>
-        </div>
 
-        <div class="container block complex">
-            <header>
-                <h3>
-                    {% trans "Last events" %}
-                </h3>
-            </header>
+            <script>
+                if (typeof graphInfo == "undefined") {
+                    graphInfo = [];
+                }
+                (function(){
+                    var graphName = ".graph_{{ check.unique_name }}_week";
+                    graphInfo[graphName] = [];
+                    graphInfo[graphName]['is_single'] = true;
+                    graphInfo[graphName]['data'] = [
 
-            <div class="content padded">
-                <table class="status-table">
-                    <thead>
-                        <th></th>
-                        <th>{% trans "Status" %}</th>
-                        <th>{% trans "Duration" %}</th>
-                        <th>{% trans "Start date" %}</th>
-                        <th>{% trans "End date" %}</th>
-                        <th>{% trans "Extra" %}</th>
-                    </thead>
+                        {% if check.type_name == "pingcheck" %}
+                            {% for log in check.logs.all %}
+                                [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
+                            {% endfor %}
+                        {% else %}
+                            {% for log in check.logs.all %}
+                                [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
+                            {% endfor %}
+                        {% endif %}
 
-                    <tbody>
-                    {% for status in check.get_statuses  %}
-                        <tr class="single-status">
-                            <td>
-                            {% if status.status == 0 %}
-                                <i class="fa fa-arrow-up fa-lg"></i>
-                            {% else %}
-                                <i class="fa fa-arrow-down fa-lg"></i>
-                            {% endif %}
-                            </td>
+                    ];
+                    graphInfo[graphName]['status'] = {% if check.last_status and check.last_status.status == 0 %}0{% else %}1{% endif %};
+                    graphInfo[graphName]['type'] = '{{ check.type_name }}';
+                })();
+            </script>
 
-                            <td>
-                                {% if status.status == 0 %}
-                                    {% trans "Up" %}
-                                {% else %}
-                                    {% trans "Down" %}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if not status.date_end %}
-                                    <strong>[ {% trans "Current state" %} ] </strong>
-                                {% else %}
-                                    {{ status.get_duration }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {{ status.date_start | date:"Y/m/d - G:i" }}
-                            </td>
-                            <td>
-                                {{ status.date_end | date:"Y/m/d - G:i"  }}
-                            </td>
-                            <td>
-                                {{ status.status_extra }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-
-                    </tbody>
-                </table>
-            </div>
         </div>
 
     </div>
+
+
+
+    <div class="container block complex">
+        <header>
+            <h3>
+                {% trans "Last events" %}
+            </h3>
+        </header>
+
+        <div class="content padded">
+            <table class="status-table">
+                <thead>
+                    <th></th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Duration" %}</th>
+                    <th>{% trans "Start date" %}</th>
+                    <th>{% trans "End date" %}</th>
+                    <th>{% trans "Extra" %}</th>
+                </thead>
+
+                <tbody>
+                {% for status in check.get_statuses  %}
+                    <tr class="single-status">
+                        <td>
+                        {% if status.status == 0 %}
+                            <i class="fa fa-arrow-up fa-lg"></i>
+                        {% else %}
+                            <i class="fa fa-arrow-down fa-lg"></i>
+                        {% endif %}
+                        </td>
+
+                        <td>
+                            {% if status.status == 0 %}
+                                {% trans "Up" %}
+                            {% else %}
+                                {% trans "Down" %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not status.date_end %}
+                                <strong>[ {% trans "Current state" %} ] </strong>
+                            {% else %}
+                                {{ status.get_duration }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ status.date_start | date:"Y/m/d - G:i" }}
+                        </td>
+                        <td>
+                            {{ status.date_end | date:"Y/m/d - G:i"  }}
+                        </td>
+                        <td>
+                            {{ status.status_extra }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 {% endblock content %}
 

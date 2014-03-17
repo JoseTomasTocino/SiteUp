@@ -42,8 +42,6 @@ function buildGraph(graphName, graphData) {
         };//*/
     }
 
-    console.log(options['chartArea']);
-
     if (graphData['type'] == "pingcheck") {
         options['curveType'] = 'function';
     } else {
@@ -63,9 +61,43 @@ function buildGraph(graphName, graphData) {
     chart.draw(data, options);
 }
 
-if (typeof graphInfo != "undefined") {
-    for (var graphName in graphInfo) {
-        console.log("Plotting graph  " + graphName);
-        buildGraph(graphName, graphInfo[graphName]);
+function buildGraphs() {
+    if (typeof graphInfo != "undefined") {
+        for (var graphName in graphInfo) {
+            buildGraph(graphName, graphInfo[graphName]);
+        }
     }
 }
+
+buildGraphs();
+
+$(".tabs").each(function(){
+    $(".tabs-header a").on('click', function(e){
+
+        // Get the tab number
+        var tabNumber = $(this).index();
+
+        // Remove active class from current tab button
+        $(this).siblings('a').removeClass('active');
+
+        // Set current tab button to 'active'
+        $(this).addClass('active');
+
+        // Hide tab content
+        $(this).closest('.tabs').find('.tabs-content')
+            .hide()
+
+            // Show only the content linked to the current tab
+            .eq(tabNumber)
+            .show()
+        ;
+
+        // Redraw graphs
+        buildGraphs();
+
+        e.preventDefault();
+    });
+});
+
+// Force show first tab
+$(".tabs-header a").eq(0).click();

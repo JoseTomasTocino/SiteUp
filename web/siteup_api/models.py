@@ -63,6 +63,7 @@ class CheckLog(models.Model):
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey('content_type', 'object_id')
 
+    # This is using a custom Model Manager
     objects = managers.CheckLogManager()
 
     def save(self, update_check=True):
@@ -118,8 +119,10 @@ class CheckStatus(models.Model):
 
 
 class BaseCheck(models.Model):
-    """Base model for the checks. It groups the common fields and relations.
-    It's an abstract base class, so no actual table is created for this model."""
+    """
+    Base model for the checks. It groups the common fields and relations.
+    It's an abstract base class, so no actual table is created for this model.
+    """
 
     title = models.CharField(
         max_length=70,
@@ -155,7 +158,9 @@ class BaseCheck(models.Model):
     last_status = models.ForeignKey('CheckStatus', blank=True, null=True, on_delete=models.SET_NULL)
 
     def update_status(self, check_log):
-        """After a check log, this updates the CheckStatus accordingly"""
+        """
+        After a check log, this updates the CheckStatus accordingly.
+        """
 
         self.last_log_datetime = check_log.date
 
