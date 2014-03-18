@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="827" height="849" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="23" y="13" width="112" height="138" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="79" y="24">Juego</text>
+	<line stroke="black" stroke-opacity="1" x1="23" y1="33" x2="135" y2="33" />
+	<line stroke="black" stroke-opacity="1" x1="23" y1="41" x2="135" y2="41" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="52">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="52">Juego()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="70">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="70">update()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="88">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="88">draw()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="106">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="106">cambiarEstado()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="124">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="124">buttonDown()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="27" y="142">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="41" y="142">~Juego()</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="279" y="12" width="96" height="138" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="327" y="23">Estado</text>
+	<line stroke="black" stroke-opacity="1" x1="279" y1="32" x2="375" y2="32" />
+	<line stroke="black" stroke-opacity="1" x1="279" y1="40" x2="375" y2="40" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="51">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="297" y="51">Estado()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="69">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="297" y="69">lanzar()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="87">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-style="italic" x="297" y="87">update()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="105">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-style="italic" x="297" y="105">draw()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="123">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="297" y="123">buttonDown()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="283" y="141">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="297" y="141">~Estado()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="135" y1="51" x2="141" y2="57" />
+	<line stroke="black" stroke-opacity="1" x1="135" y1="51" x2="141" y2="45" />
+	<line stroke="black" stroke-opacity="1" x1="278" y1="51" x2="135" y2="51" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="278" y1="104" x2="272" y2="98" />
+	<line stroke="black" stroke-opacity="1" x1="278" y1="104" x2="272" y2="110" />
+	<line stroke="black" stroke-opacity="1" x1="135" y1="104" x2="278" y2="104" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="135,104 141,98 147,104 141,110" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="448" y="12" width="162" height="210" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="529" y="23">EstadoMenuLecciones</text>
+	<line stroke="black" stroke-opacity="1" x1="448" y1="32" x2="610" y2="32" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="40" x2="610" y2="40" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="51">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="51">EstadoMenuLecciones()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="69">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="69">update()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="87">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="87">draw()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="105">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="105">listarLecciones()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="123">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="123">buttonDown()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="141">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="141">anteriorLec()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="159">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="159">siguienteLec()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="177">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="177">cambiarLeccion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="195">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="195">lanzarLeccion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="452" y="213">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="466" y="213">~EstadoMenuLecciones()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="447" y1="81" x2="381" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="375" y1="81" x2="381" y2="87" />
+	<line stroke="black" stroke-opacity="1" x1="375" y1="81" x2="381" y2="75" />
+	<line stroke="black" stroke-opacity="1" x1="381" y1="87" x2="381" y2="75" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="539" y="295">leccionMostrada</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="764" y="439">pizarra</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="89" y="250">animacionFondo</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="145" y="39">padre</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="197" y="92">estadoActual</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="156" y="491">animacion</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="458" y="433">elementos</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="156" y="341">animaciones</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="664" y="607">textoDesc</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="278" y="214">elementosInterfaz</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="18" y="263" width="128" height="480" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="82" y="274">Animacion</text>
+	<line stroke="black" stroke-opacity="1" x1="18" y1="283" x2="146" y2="283" />
+	<line stroke="black" stroke-opacity="1" x1="18" y1="291" x2="146" y2="291" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="302">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="302">Animacion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="320">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="320">init()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="338">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="338">end()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="356">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="356">finished()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="374">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="374">get()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="392">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="392">set()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="410">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="410">setInicial()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="428">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="428">setFinal()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="446">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="446">reverse()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="464">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="464">setTipoAnimacion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="482">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="482">setDuracion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="500">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="500">setEspera()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="518">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="518">update()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="536">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="536">easeLinear()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="554">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="554">easeInQuad()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="572">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="572">easeOutQuad()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="590">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="590">easeInOutQuad()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="608">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="608">easeInCubic()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="626">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="626">easeOutCubic()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="644">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="644">easeInOutCubic()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="662">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="662">easeInQuart()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="680">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="680">easeOutQuart()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="698">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="698">easeInOutQuart()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="716">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" text-decoration="underline" x="36" y="716">easeOutBack()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="22" y="734">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="36" y="734">~Animacion()</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="494" y="308" width="72" height="66" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="530" y="319">Leccion</text>
+	<line stroke="black" stroke-opacity="1" x1="494" y1="328" x2="566" y2="328" />
+	<line stroke="black" stroke-opacity="1" x1="494" y1="336" x2="566" y2="336" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="498" y="347">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="512" y="347">Leccion()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="498" y="365">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="512" y="365">draw()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="529" y1="307" x2="535" y2="301" />
+	<line stroke="black" stroke-opacity="1" x1="529" y1="307" x2="523" y2="301" />
+	<line stroke="black" stroke-opacity="1" x1="529" y1="222" x2="529" y2="307" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="79" y1="262" x2="85" y2="256" />
+	<line stroke="black" stroke-opacity="1" x1="79" y1="262" x2="73" y2="256" />
+	<line stroke="black" stroke-opacity="1" x1="79" y1="151" x2="79" y2="262" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="79,151 85,157 79,163 73,157" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="146" y1="353" x2="152" y2="359" />
+	<line stroke="black" stroke-opacity="1" x1="146" y1="353" x2="152" y2="347" />
+	<line stroke="black" stroke-opacity="1" x1="493" y1="353" x2="146" y2="353" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="493,353 487,359 481,353 487,347" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="360" y="399" width="88" height="210" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="404" y="410">Elemento</text>
+	<line stroke="black" stroke-opacity="1" x1="360" y1="419" x2="448" y2="419" />
+	<line stroke="black" stroke-opacity="1" x1="360" y1="427" x2="448" y2="427" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="438">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="438">Elemento()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="456">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-style="italic" x="378" y="456">getWidth()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="474">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-style="italic" x="378" y="474">getHeight()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="492">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="492">currX()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="510">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="510">currY()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="528">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="528">setXY()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="546">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="546">clicked()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="564">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="564">draw()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="582">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-style="italic" x="378" y="582">drawEnd()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="364" y="600">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="378" y="600">~Elemento()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="530" y1="374" x2="530" y2="445" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="530,374 536,380 530,386 524,380" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="146" y1="503" x2="152" y2="509" />
+	<line stroke="black" stroke-opacity="1" x1="146" y1="503" x2="152" y2="497" />
+	<line stroke="black" stroke-opacity="1" x1="359" y1="503" x2="146" y2="503" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="448" y1="445" x2="454" y2="451" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="445" x2="454" y2="439" />
+	<line stroke="black" stroke-opacity="1" x1="530" y1="445" x2="448" y2="445" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="693" y="452" width="122" height="102" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="754" y="463">ElementoImagen</text>
+	<line stroke="black" stroke-opacity="1" x1="693" y1="472" x2="815" y2="472" />
+	<line stroke="black" stroke-opacity="1" x1="693" y1="480" x2="815" y2="480" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="697" y="491">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="711" y="491">ElementoImagen()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="697" y="509">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="711" y="509">drawEnd()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="697" y="527">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="711" y="527">getWidth()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="697" y="545">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="711" y="545">getHeight()</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="643" y="620" width="112" height="120" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="699" y="631">ElementoTexto</text>
+	<line stroke="black" stroke-opacity="1" x1="643" y1="640" x2="755" y2="640" />
+	<line stroke="black" stroke-opacity="1" x1="643" y1="648" x2="755" y2="648" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="647" y="659">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="661" y="659">ElementoTexto()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="647" y="677">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="661" y="677">drawEnd()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="647" y="695">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="661" y="695">setText()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="647" y="713">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="661" y="713">getWidth()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="647" y="731">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="661" y="731">getHeight()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="692" y1="503" x2="454" y2="503" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="503" x2="454" y2="509" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="503" x2="454" y2="497" />
+	<line stroke="black" stroke-opacity="1" x1="454" y1="509" x2="454" y2="497" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="610" y1="211" x2="654" y2="211" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="610,211 616,205 622,211 616,217" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="610" y1="157" x2="754" y2="157" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="610,157 616,151 622,157 616,163" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="642" y1="677" x2="612" y2="677" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="612" y1="677" x2="612" y2="525" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="754" y1="451" x2="760" y2="445" />
+	<line stroke="black" stroke-opacity="1" x1="754" y1="451" x2="748" y2="445" />
+	<line stroke="black" stroke-opacity="1" x1="754" y1="157" x2="754" y2="451" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="654" y1="619" x2="660" y2="613" />
+	<line stroke="black" stroke-opacity="1" x1="654" y1="619" x2="648" y2="613" />
+	<line stroke="black" stroke-opacity="1" x1="654" y1="211" x2="654" y2="619" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="612" y1="525" x2="454" y2="525" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="525" x2="454" y2="531" />
+	<line stroke="black" stroke-opacity="1" x1="448" y1="525" x2="454" y2="519" />
+	<line stroke="black" stroke-opacity="1" x1="454" y1="531" x2="454" y2="519" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="194" y="645" width="146" height="192" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="267" y="656">ElementoCombinado</text>
+	<line stroke="black" stroke-opacity="1" x1="194" y1="665" x2="340" y2="665" />
+	<line stroke="black" stroke-opacity="1" x1="194" y1="673" x2="340" y2="673" />
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="684">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="684">ElementoCombinado()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="702">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="702">setTexto()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="720">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="720">setTexto()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="738">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="738">setTextoXY()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="756">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="756">setImagen()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="774">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="774">setText()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="792">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="792">drawEnd()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="810">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="810">getWidth()</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" font-weight="bold" x="198" y="828">+</text>
+	<text font-family="Helvetica" font-size="9" fill="#000000" xml:space="preserve" x="212" y="828">getHeight()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="340" y1="678" x2="402" y2="678" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="447" y1="197" x2="266" y2="197" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="447,197 441,203 435,197 441,191" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="402" y1="678" x2="402" y2="615" />
+	<line stroke="black" stroke-opacity="1" x1="402" y1="609" x2="396" y2="615" />
+	<line stroke="black" stroke-opacity="1" x1="402" y1="609" x2="408" y2="615" />
+	<line stroke="black" stroke-opacity="1" x1="396" y1="615" x2="408" y2="615" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="266" y1="644" x2="272" y2="638" />
+	<line stroke="black" stroke-opacity="1" x1="266" y1="644" x2="260" y2="638" />
+	<line stroke="black" stroke-opacity="1" x1="266" y1="197" x2="266" y2="644" />
+</g>
+</svg>

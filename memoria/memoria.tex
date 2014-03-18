@@ -1,0 +1,153 @@
+%%
+%% memoria.tex
+%%
+\documentclass[a4paper,12pt]{scrbook}
+\pagestyle{headings}
+
+% Paquete para dibujos
+\usepackage{tikz}
+
+% Referencias externas
+\usepackage{xr-hyper}
+
+% Paquete para generar enlaces clickables
+\usepackage[pdftex, breaklinks=false, colorlinks=true, linkcolor=black, anchorcolor=black, urlcolor=blue, citecolor=red]{hyperref}
+
+% Encoding y tratamiento de fuentes
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+% Paquete para controlar el interlineado a nivel de entorno
+\usepackage{setspace}
+
+% Paquete para la fuente charter
+\usepackage{charter}
+
+% Paquete para la fuente helvética
+\usepackage[scaled=0.92]{helvet}
+
+% Paquete para GNUPlot
+\usepackage{gnuplottex}
+
+% Guiones de hyphenado
+\usepackage{hyphenat}
+
+% Extra ToC listings
+\usepackage{tocbibind}
+
+% Gráficos
+\usepackage{graphicx}
+
+% Para poner figuras una al lado de otra
+\usepackage[lofdepth,lotdepth]{subfig}
+
+% Paquete para figuras giradas
+\usepackage{rotating}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paquetes en local (directorio 'paquetes')
+
+% Fuente para códigos
+\usepackage{paquetes/inconsolata}
+
+% Automatiza el resaltado de sintaxis usando pygments
+\usepackage{paquetes/minted}
+
+% Soporte de acrónimos
+\usepackage[printonlyused]{paquetes/acronym-custom}
+
+% Cambia el nombre del apéndice de bibliografía
+\addto\captionsspanish{
+\renewcommand\bibname{Bibliografía y referencias}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% Órdenes LaTeX variadas
+\input{0_misc/ordenes.tex}
+
+% Portada
+\input{0_misc/portada.tex}
+\cleardoublepage
+
+% Segunda portada
+\input{0_misc/subportada.tex}
+\cleardoublepage
+
+% Texto de licencia (pequeño)
+\input{0_misc/fdl_short.tex}
+\cleardoublepage
+
+% Agradecimientos
+\input{0_misc/agradecimientos.tex}
+\cleardoublepage
+
+% Índices varios
+\tableofcontents
+\listoffigures
+%\listoftables
+
+\setlength{\parskip}{1.2ex plus 0.4ex minus 0.1ex}
+
+\chapter{Introducción}
+\label{chap:introduccion}
+\input{1_introduccion/texto_introduccion.tex}
+
+\chapter{Desarrollo del calendario}
+\label{chap:calendario}
+%\input{2_calendario/texto_calendario.tex}
+
+\chapter{Fundamentos}
+\label{chap:fundamentos}
+%\input{3_investigacion/texto_investigacion.tex}
+
+\chapter{Análisis}
+\label{chap:analisis}
+%\input{4_analisis/texto_analisis.tex}
+
+\chapter{Diseño}
+\label{chap:diseno}
+%\input{5_diseno/texto_diseno.tex}
+
+\chapter{Implementación}
+\label{chap:implementacion}
+%\input{6_implementacion/texto_implementacion.tex}
+
+\chapter{Pruebas}
+\label{chap:pruebas}
+%\input{7_pruebas/texto_pruebas.tex}
+
+\chapter{Conclusiones}
+\label{chap:conclusiones}
+%\input{8_conclusiones/texto_conclusiones.tex}
+
+\appendix
+
+\chapter{Herramientas utilizadas}
+\label{chap:herramientas}
+%\input{apendice_herramientas/texto_apendice_herramientas.tex}
+
+\chapter{Manual de instalación}
+\label{chap:manual_instalacion}
+%\input{apendice_manual_instalacion/texto_apendice_manual_instalacion.tex}
+
+\chapter{Manual de usuario}
+\label{chap:manual_usuario}
+%\input{apendice_manual_usuario/texto_apendice_manual_usuario.tex}
+
+\chapter{GNU Free Documentation License}
+\label{sec:fdl}
+%\input{0_misc/fdl.tex}
+
+\bibliographystyle{paquetes/hispa-annote}
+\bibliography{0_misc/bibliografia}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

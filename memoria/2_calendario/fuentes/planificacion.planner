@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<project name="oFlute" company="" manager="" phase="" project-start="20091201T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases>
+    <phase name="1a Iter"/>
+  </phases>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Jornada laboral" description="Un d&#xED;a de trabajo predeterminado"/>
+      <day-type id="1" name="Jornada de descanso" description="Un d&#xED;a de descanso predeterminado"/>
+      <day-type id="2" name="Usar base" description="Usar d&#xED;a del calendario base"/>
+    </day-types>
+    <calendar id="1" name="Predeterminado">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="Planificaci&#xF3;n" note="" work="144000" start="20091201T000000Z" end="20091207T170000Z" work-start="20091201T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="2" name="Investigaci&#xF3;n preeliminar" note="" work="2390400" start="20091207T170000Z" end="20100208T170000Z" work-start="20091208T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="1" type="FS"/>
+      </predecessors>
+      <task id="3" name="An&#xE1;lisis estado del arte" note="" work="374400" start="20091207T170000Z" end="20091224T170000Z" work-start="20091208T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="4" name="Bases te&#xF3;ricas" note="" work="1296000" start="20091207T170000Z" end="20100208T170000Z" work-start="20091208T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="5" name="Blibiotecas desarrollo" note="" work="720000" start="20091224T170000Z" end="20100128T170000Z" work-start="20091225T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="3" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="6" name="2a iter: analizador b&#xE1;sico" note="" work="1008000" start="20100128T170000Z" end="20100318T170000Z" work-start="20100129T080000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="5" type="FS"/>
+      </predecessors>
+      <task id="7" name="An&#xE1;lisis y dise&#xF1;o" note="" work="201600" start="20100128T170000Z" end="20100208T170000Z" work-start="20100129T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="8" name="Implementaci&#xF3;n" note="" work="720000" start="20100208T170000Z" end="20100315T170000Z" work-start="20100209T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="7" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="9" name="Pruebas" note="" work="86400" start="20100315T170000Z" end="20100318T170000Z" work-start="20100316T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="8" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="10" name="3a iter: interfaz gr&#xE1;fica" note="" work="1324800" start="20100318T170000Z" end="20100521T170000Z" work-start="20100319T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="9" type="FS"/>
+      </predecessors>
+      <task id="11" name="Dise&#xF1;o logotipo" note="" work="201600" start="20100318T170000Z" end="20100329T170000Z" work-start="20100319T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="12" name="Dise&#xF1;o men&#xFA; principal" note="" work="144000" start="20100329T170000Z" end="20100405T170000Z" work-start="20100330T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="11" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="13" name="Dise&#xF1;o gen&#xE9;rico secciones" note="" work="259200" start="20100405T170000Z" end="20100416T170000Z" work-start="20100406T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="12" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="14" name="Impl. animaciones din." note="" work="576000" start="20100416T170000Z" end="20100514T170000Z" work-start="20100419T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="13" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="15" name="Pruebas" note="" work="144000" start="20100514T170000Z" end="20100521T170000Z" work-start="20100517T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="16" name="4a iter: motor lecciones" note="" work="3168000" start="20100521T170000Z" end="20101022T170000Z" work-start="20100524T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="15" type="FS"/>
+      </predecessors>
+      <task id="17" name="An&#xE1;lisis" note="" work="720000" start="20100521T170000Z" end="20100625T170000Z" work-start="20100524T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="18" name="Dise&#xF1;o" note="" work="633600" start="20100625T170000Z" end="20100727T170000Z" work-start="20100628T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="17" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="19" name="Implementaci&#xF3;n" note="" work="1526400" start="20100727T170000Z" end="20101008T170000Z" work-start="20100728T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="18" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="20" name="Pruebas" note="" work="288000" start="20101008T170000Z" end="20101022T170000Z" work-start="20101011T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="19" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="21" name="5a iter: motor canciones" note="" work="3225600" start="20101022T170000Z" end="20110329T170000Z" work-start="20101025T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="20" type="FS"/>
+      </predecessors>
+      <task id="22" name="An&#xE1;lisis" note="" work="720000" start="20101022T170000Z" end="20101126T170000Z" work-start="20101025T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="23" name="Dise&#xF1;o" note="" work="518400" start="20101126T170000Z" end="20101222T170000Z" work-start="20101129T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="22" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="24" name="Implementaci&#xF3;n" note="" work="1728000" start="20101222T170000Z" end="20110316T170000Z" work-start="20101223T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="23" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="25" name="Pruebas" note="" work="259200" start="20110316T170000Z" end="20110329T170000Z" work-start="20110317T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="24" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="26" name="Memoria" note="" work="3038400" start="20110329T170000Z" end="20110824T120000Z" work-start="20110330T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="25" type="FS"/>
+      </predecessors>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources/>
+  <allocations/>
+</project>

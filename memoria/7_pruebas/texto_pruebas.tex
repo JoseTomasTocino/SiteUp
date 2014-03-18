@@ -1,0 +1,81 @@
+En este capítulo se detallan las pruebas a las que se ha sometido
+\textbf{oFlute}. Habitualmente, probar un videojuego o aplicación con gran
+interactividad suele ser un proceso complejo. Dada la gran cantidad de
+situaciones distintas que pueden tener lugar, es difícil recrear y probar todos
+los escenarios posibles. Tanto es así que, en los grandes equipos de desarrollo,
+hay empleados que se dedican al completo a probar los productos.
+
+En oFlute, las pruebas se han organizado al final de cada iteración, comprobando
+el correcto funcionamiento de cada nueva funcionalidad, por separado, y luego
+integrando el conjunto. Además, ciertos módulos no asociados a iteraciones (como
+el sistema de animaciones, sección \ref{sec:animaciones}) también fueron
+probados de manera independiente.
+
+\section{Pruebas unitarias}
+Las \textbf{pruebas unitarias} se encargan de comprobar el correcto
+funcionamiento de módulos y fragmentos por separado. En nuestro caso, todos los
+módulos fueron probados de forma independiente, utilizando a tal efecto ramas de
+desarrollo alternativas (\textit{branches}), antes de integrarlos en la rama de
+desarrollo principal.
+
+Mención especial merecen las pruebas unitarias relacionadas con el analizador
+básico de notas, en la segunda iteración del proyecto. Tal y como se comentó en
+la sección \ref{sec:implementacion_analizador}, al no tener experiencia previa
+se tuvieron que hacer bastantes pruebas con el código relacionado con el control
+del sonido para que el rendimiento fuera correcto y no apareciesen
+problemas. Las pruebas unitarias en este módulo dieron lugar a decisiones de
+cambios de bibliotecas en este módulo. Además, al ejecutarse en un hilo
+separado, el código del analizador era propenso a generar fugas de memoria si no
+se controlaban bien la vida y visibilidad de las variables utilizadas. 
+
+\section{Pruebas de integración}
+Según se comprobaban los módulos de manera individual, se iban integrando en la
+rama de desarrollo principal, pasando a formar parte de la aplicación. Esta
+integración también ha estado sujeta a pruebas, por un lado comprobando que los
+módulos no cambiaban su comportamiento al ser integrados con el resto, y por
+otro verificando que el funcionamiento general del sistema siguiera siendo
+correcto.
+
+Como se comentó en la sección \ref{sec:implementacion_estados}, uno de los
+errores que más dificultad mostró, asociado a la gestión de estados, fue también
+el más difícil de encontrar y reproducir. Gracias a las pruebas de integración y
+al uso de herramientas de depuración, su resolución fue un éxito y sentó las
+bases para un nuevo gestor de estados (sección
+\ref{sec:resolucion_problema_estados}).
+
+\section{Pruebas de jugabilidad}
+Las \textbf{pruebas de jugabilidad} permitieron encontrar y rellenar lagunas en
+el proyecto, haciendo que su uso fuera más sencillo para el usuario. En esta
+etapa del proyecto se contó con la ayuda de usuarios reales inicialmente ajenos
+al proyecto.
+
+Entre las mejoras que surgieron a raíz de las pruebas de jugabilidad se
+encuentra la implementación de la \textbf{barra de resaltado} (ver
+\textit{\nameref{chap:manual_usuario}}), que aparece durante la interpretación
+de las canciones para ayudar al usuario a conocer qué notas está tocando en cada
+momento. Esto mejoró en gran medida las puntuaciones de los jugadores en las
+partidas.
+
+\section{Pruebas de interfaz}
+Por último, una vez ajustada la jugabilidad y verificado que los módulos
+funcionan bien de forma independiente y en integración, se dedicó un tiempo a
+comprobar que la interfaz gráfica de usuario cumplía los requisitios mínimos que
+se esperaban.
+
+En particular, se hizo mucho hincapié en la duración de cada una de las
+animaciones de cada sección. Animaciones largas podían llegar a ser tediosas,
+mientras que unas animaciones cortas darían una desagradable sensación de
+premura que no interesaba. Una vez ajustadas, se implementó la opción de poder
+omitir las animaciones en pantalla, en cualquier sección y momento, mediante la
+pulsación de la tecla \texttt{escape}. Esto permitiría que jugadores avanzados
+pudieran llegar rápidamente a la sección de su interés de forma rápida.
+
+Otra de las adiciones que surgieron tras las pruebas de interfaz fueron los
+atajos de teclado. Se añadieron atajos para las opciones del menú principal, así
+como el menú de selección de canciones y el de selección de lecciones. También
+se habilitó la tecla \texttt{escape} para volver atrás en cualquier momento.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

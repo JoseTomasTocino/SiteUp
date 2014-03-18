@@ -1,0 +1,128 @@
+% http://www.tex.ac.uk/cgi-bin/texfaq2html?label=chngmargonfly
+
+\newenvironment{changemargin}[2]{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{#1}%
+    \setlength{\rightmargin}{#2}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]}{\end{list}}
+
+\newenvironment{nota}{
+  \begin{changemargin}{2em}{2em}
+    \textbf{\textsc{Nota: }}
+}{
+  \end{changemargin}
+}
+
+\newcommand{\nombreProyecto}{SiteUp: plataforma para la vigilancia de la disponibilidad de servicios de internet}
+\newcommand{\jugador}{\textit{Jugador}}
+\newcommand{\sistema}{\textit{Sistema}}
+
+
+% %% PRODUCTOS
+% \newcommand{\nombrepostprocesador}{ACL2:\colonhyp{}Procesador}
+% \newcommand{\nombrevisor}{XMLEye}
+% \newcommand{\nombreyaxml}{YAXML:\colonhyp{}Reverse}
+% \newcommand{\postprocesador}{\texttt{\nombrepostprocesador}\xspace}
+% \newcommand{\visor}{\nombrevisor\xspace}
+% \newcommand{\yaxml}{\texttt{\nombreyaxml}\xspace}
+
+% \newcommand{\biblioteca}[1]{\index{#1}\texttt{#1}}
+
+% % YAML/YAXML
+% \newcommand{\etiqueta}[1]{{\bfseries \ttfamily #1}}
+
+% % ACL2
+
+% \newcommand{\orden}[1]{\texttt{#1}}   % Nombre de orden ACL2
+% \newcommand{\fichero}[1]{\texttt{#1}} % Nombre de fichero
+% \newcommand{\evento}[1]{\texttt{#1}}  % Nombre de un evento
+% \newcommand{\libro}[1]{\textsc{#1}}   % Libro ACL2
+
+% % PERL
+
+% \newcommand{\modulo}[1]{\index{módulo Perl!#1}\index{#1|see{módulo Perl!#1}}\texttt{#1}}
+% \newcommand{\funcion}[1]{\textit{#1}}
+
+% % JAVA
+
+% \newcommand{\clase}[1]{\textit{#1}}   % Clase Java
+% \newcommand{\metodo}[1]{\texttt{#1}}  % Método (también Perl)
+% \newcommand{\paquete}[1]{\texttt{#1}}
+
+% %% MANUALES
+
+% \newcommand{\accesoteclado}[1]{\textsc{#1}} % Acceso de teclado
+
+% %% OTROS
+
+% \newcommand{\patron}[1]{\emph{#1}}
+
+% \newcolumntype{,}{>{$}r<{$}}
+% \newcommand{\Index}[1]{#1\emph{\index{#1}}}
+
+% \newcounter{pasoacept}
+
+% \newenvironment{pruebaaceptacion}{
+%   \setcounter{pasoacept}{0}
+%   \begin{center}
+%   \begin{tabular}{| >{\stepcounter{pasoacept}\arabic{pasoacept}. }p{.4\linewidth} | p{.5\linewidth}|}
+%     \hline
+%     \multicolumn{1}{| c |}{\textbf{Paso seguido}} & \multicolumn{1}{c|}{\textbf{Resultado esperado}} \\
+%     \hline
+%     \hline
+% }{
+%   \hline
+%   \end{tabular}
+%   \end{center}
+% }
+
+% \renewcommand{\lstlistlistingname}{Listados}
+% \renewcommand{\lstlistingname}{Listado}
+
+% \newcommand{\CPP}
+% {\mbox{C\hspace{-.1em}\raise.2ex\hbox{+\hspace{-.1em}+}}\xspace}
+
+% \setlength{\extrarowheight}{4pt}
+
+% \lstset{
+%   extendedchars,
+%   flexiblecolumns,
+%   stringstyle=\ttfamily,
+%   showstringspaces=false,
+%   frame=tb
+% }
+
+% %% PARTE DE DOCBOOK
+
+% \newcommand{\application}[1]{\index{#1}\emph{#1}}
+% \newcommand{\cmdsynopsis}[1]{\nohyphens{\texttt{#1}}}
+% \newcommand*{\command}[1]{\nohyphens{\textbf{\texttt{#1}}}}
+% \newcommand{\constant}[1]{\texttt{#1}}
+% \newcommand{\computeroutput}[1]{#1}
+% \newcommand*{\email}[1]{\nohyphens{\texttt{#1}}}
+% \newcommand*{\envar}[1]{\nohyphens{\texttt{#1}}}
+% \newcommand*{\filename}[1]{\texttt{#1}}
+% \newcommand*{\guibutton}[2][]{\emph{#2}}
+% \newcommand*{\guilabel}[2][]{\emph{#2}}
+% \newcommand*{\guimenuitem}[2][]{\emph{#2}}
+% \newcommand*{\guimenu}[2][]{\emph{#2}}
+% \newcommand*{\keycombo}[1]{\textsc{#1}}
+% \newcommand*{\keysym}[1]{\textsc{#1}}
+% \newcommand*{\option}[1]{\nohyphens{\texttt{#1}}}
+% \newcommand{\prompt}[1]{#1}
+% \newcommand{\varname}[1]{\nohyphens{\texttt{#1}}}
+
+% \newcommand{\note}[1]{\vskip 1em
+%     \fbox{\parbox{\textwidth}{\textsc{Nota}
+%     \vskip 1em #1}} \vskip 1em}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "memoria"
+%%% End:
