@@ -25,13 +25,23 @@ from siteup_api import models
 # MY MIXINS
 
 class DeleteMessageMixin(object):
+    """
+    Displays a flash message after an object has been deleted in a DeleteView.
+    """
+
     deletion_message = None
 
     def delete(self, request, *args, **kwargs):
+
+        # Delete the object
         self.object = self.get_object()
         self.object.delete()
+
+        # If there's a deletion_message set, show it
         if self.deletion_message:
             messages.success(request, self.deletion_message)
+
+        # Redirect to the success page
         return HttpResponseRedirect(self.get_success_url())
 
 ############################################################################
@@ -49,10 +59,9 @@ class HomeView(TemplateView):
 
 class LoginView(FormView):
     """
-    View for the login page.
-
-    On GET, it shows the form. On POST, tries to login the user.
+    View for the login page. On GET, it shows the form. On POST, tries to login the user.
     """
+
     template_name = "generic_form.html"
     form_class = LoginForm
 

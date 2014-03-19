@@ -17,15 +17,27 @@ from django.conf import settings
 
 @app.task
 def run_check(x):
+    """
+    Triggers the x check.
+    """
+
     x.run_check()
 
 def enqueue_check(x):
+    """
+    Proxy to enqueue checks.
+    """
+
     run_check.delay(x)
 
 
 # this will run every minute, see http://celeryproject.org/docs/reference/celery.task.schedules.html#celery.task.schedules.crontab
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
 def enqueue_checks():
+    """
+    Fetches all active checks and enqueues them to be triggered.
+    """
+
     active_checks = []
 
     # Fetch active checks
@@ -41,6 +53,9 @@ def enqueue_checks():
 
 @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
 def remove_old_logs():
+    """
+    Removes old CheckLog and CheckStatus objects
+    """
 
     # Calculate the limit date from which the checks will be deleted
     date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_EXPIRATION_TIME)
@@ -68,6 +83,9 @@ def remove_old_logs():
 
 @periodic_task(run_every=crontab(hour="*", minute="*/10", day_of_week="*"))
 def collapse_logs():
+    """
+    Collapses (averages) old enough logs.
+    """
 
     logger.info(u"Issued COLLAPSE_LOGS task")
 
@@ -147,7 +165,7 @@ def collapse_logs():
                 # Delete the rest of CheckLogs in the interval
                 [x.delete() for x in current_interval_logs[1:]]
 
-                #Reset the counter
+                # Reset the counter
                 current_interval_start = i
 
 
