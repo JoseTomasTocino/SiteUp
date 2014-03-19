@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    {% load frontend_extras %}
+</head>
+<body>
+
+<p>Hello.</p>
+
+<p>This is a daily report of the checks you've registered in SiteUp.</p>
+
+
+<ul>
+{% for group in check_groups %}
+    <li>
+        Group: <strong>{{group.title}}</strong>
+        <ul>
+            {% for check in group.checks %}
+                <li>
+                    Check: <strong>{{check.title}}</strong>
+                    <ul>
+                        <li>Type: <strong>{{ check | verbose_name | title }} - {{ check.target }}</strong></li>
+                        <li>Status: <strong>
+
+                            {% if not check.is_active %}
+                                INACTIVE
+                            {% elif not check.last_status%}
+                                NO DATA
+                            {% elif check.last_status.status != 0%}
+                                DOWN
+                            {% else %}
+                                UP
+                            {% endif %}
+                            </strong>
+
+                            {% if check.last_status %}
+                                since {{ check.last_status.date_start|date:"H:i d/m/Y"}}
+                            {% endif %}</li>
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>
+
+
+<p>Regards.<br>
+The SiteUp team</p>
+
+</body>
+</html>

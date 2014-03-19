@@ -171,7 +171,6 @@ def collapse_logs():
 
 
 
-
 """
 
 Launch celery beat using:
