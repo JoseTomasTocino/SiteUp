@@ -46,7 +46,7 @@ def send_notification_email(check, check_status):
     message_html = render_to_string('email_status_report.html', {
         "check_name": check.title,
         "new_status": "DOWN" if check_status.status != 0 else "UP",
-        "status_date": check_status.date_start.isoformat(),
+        "status_date": check_status.date_start,
         "check_details": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
     })
 
