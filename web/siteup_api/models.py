@@ -328,7 +328,7 @@ class PortCheck(BaseCheck):
     )
 
     target_port = models.PositiveSmallIntegerField(
-        help_text=_("Remote network port to check"),
+        help_text=_("Remote network port to check.<br><div class='more-help'><a href='#'>Click to see common ports</a> <div>21 - FTP<br>22 - SSH<br>25 - SMTP<br>80 - HTTP<br>161 - SNMP<br>443 - HTTPS</div></div>"),
         validators=[validators.MinValueValidator(1),
                     validators.MaxValueValidator(65535)]
     )

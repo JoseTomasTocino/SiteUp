@@ -29,7 +29,7 @@
                             {% if field.field.required %}
                                 <strong>{% trans "Required" %}.</strong>
                             {% endif %}
-                            {{ field.help_text }}
+                            {{ field.help_text|safe }}
                         </div>
                     {% endif %}
                 </div>

@@ -71,6 +71,8 @@ function buildGraphs() {
 
 buildGraphs();
 
+// TABBED detail page
+
 $(".tabs").each(function(){
     $(".tabs-header a").on('click', function(e){
 
@@ -101,3 +103,9 @@ $(".tabs").each(function(){
 
 // Force show first tab
 $(".tabs-header a").eq(0).click();
+
+// Enhanced help text for fields
+$(".more-help a").on('click', function(e){
+    e.preventDefault();
+    $(this).parent().find('div').slideToggle();
+});
