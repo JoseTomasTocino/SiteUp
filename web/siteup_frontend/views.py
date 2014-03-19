@@ -18,7 +18,7 @@ from django.views.generic.edit import FormView
 
 from braces.views import LoginRequiredMixin
 
-from .forms import LoginForm, SignupForm, ChangePasswordForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm
+from .forms import LoginForm, SignupForm, ChangePasswordForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm, ProfileForm
 from siteup_api import models
 
 ############################################################################
@@ -95,15 +95,27 @@ class SignupView(FormView):
     template_name = "generic_form.html"
 
     def form_valid(self, form):
+
+        # Create the user
         user = User.objects.create_user(
             username=form.cleaned_data['username'],
             email=form.cleaned_data['email'],
             password=form.cleaned_data['password']
         )
 
+        # Log the creation
         oplogger.info(u"USER_SIGNUP: User '{}' was created".format(user.username))
 
+        # Create the extra info model
+        user_extra = models.UserExtra.objects.create(
+            user=user,
+            send_report=True
+        )
+
+        # Display the success message
         messages.info(self.request, _('User was created successfully. You can now login.'))
+
+        # Redirect to the homepage
         return redirect('home')
 
     def get_context_data(self, **kwargs):
@@ -119,9 +131,11 @@ class ProfileView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     View for the user profile panel.
     """
-    model = User
+    # model = User
+    # fields = ['username', 'email']
+    form_class = ProfileForm
+
     template_name = "generic_form.html"
-    fields = ['username', 'email']
     success_url = reverse_lazy("dashboard")
     success_message = _("Your profile was changed successfully")
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import logging
+logger = logging.getLogger(__name__)
+oplogger = logging.getLogger("operations")
+
 from django import forms
 
 from django.contrib.auth import authenticate
@@ -42,7 +46,9 @@ class BaseModelForm(forms.ModelForm):
 
 
 class LoginForm(BaseForm):
-    """Form for the login process. Tries to login with both the username and email."""
+    """
+    Form for the login process. Tries to login with both the username and email.
+    """
 
     username = forms.CharField(label=_("Username"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
@@ -70,7 +76,9 @@ class LoginForm(BaseForm):
 
 
 class SignupForm(BaseForm):
-    """Form for the signup process. Checks if the username already exists."""
+    """
+    Form for the signup process. Checks if the username already exists.
+    """
 
     username = forms.CharField(label=_("Username"), max_length=254)
     email = forms.EmailField(label=_("Email"))
@@ -86,8 +94,61 @@ class SignupForm(BaseForm):
         return self.cleaned_data
 
 
+class ProfileForm(BaseModelForm):
+    """
+    Form for the user profile page.
+    """
+
+    send_report = forms.BooleanField(
+        label=_("Send daily report"),
+        help_text=_("Check if you want to receive a daily report with information of all your checks"),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        """
+        Fills the 'send_report' initial value.
+        """
+
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['send_report'].initial = self.get_extra().send_report
+
+    def get_extra(self):
+        """
+        Returns (or creates) the UserExtra model related to the user.
+        """
+
+        try:
+            extra = self.instance.userextra
+        except:
+            extra = models.UserExtra()
+            extra.user = self.instance
+            extra.send_report = True
+            extra.save()
+
+        return extra
+
+    def save(self, *args, **kwargs):
+        """
+        Saves the user and the extra information.
+        """
+
+        extra = self.get_extra()
+        extra.send_report = self.cleaned_data['send_report']
+        extra.save()
+        self.instance.save()
+
+        return super(ProfileForm, self).save(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "send_report"]
+
+
 class ChangePasswordForm(BaseForm):
-    """Form for the password change process."""
+    """
+    Form for the password change process.
+    """
     password = forms.CharField(label=_("New password"), widget=forms.PasswordInput)
 
 

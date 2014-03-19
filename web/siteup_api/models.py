@@ -24,7 +24,18 @@ from .validators import ValidateAnyOf, validate_ip_or_hostname, validate_hostnam
 from .utils import timedelta_to_string
 import managers
 
-logger.info(u"Test log message")
+
+####################################################################################
+# User model extension as per the docs
+
+class UserExtra(models.Model):
+    user = models.OneToOneField(User)
+
+    send_report = models.BooleanField(
+        help_text=_("Receive daily report about all your checks")
+    )
+
+
 
 ####################################################################################
 # Log related models
