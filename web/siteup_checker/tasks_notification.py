@@ -1,4 +1,5 @@
 import logging
+logger = logging.getLogger(__name__)
 oplogger = logging.getLogger("operations")
 
 from siteup.celery import app
@@ -20,7 +21,7 @@ def enqueue_notification(check, check_status):
     Enqueues a generic notification task
     """
 
-    send_notification.delay(check, check_status)
+    return send_notification.delay(check, check_status)
 
 
 @app.task
@@ -39,6 +40,8 @@ def send_notification_email(check, check_status):
     """
     Sends an email notifying of a change in the status of a check.
     """
+
+    logger.info("Sending notification mail...")
 
     from_email = "siteup.pfc@gmail.com"
     recipient_list = [check.group.owner.email]

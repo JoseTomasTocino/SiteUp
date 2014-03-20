@@ -2,10 +2,12 @@ from datetime import datetime
 
 from django.core import mail
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from siteup_api.models import *
 from siteup_checker.tasks_notification import send_notification_email
 
+@override_settings(TEST_RUNNER='djcelery.contrib.test_runner.CeleryTestSuiteRunner')
 class TestEmailNotification(TestCase):
     def setUp(self):
 
@@ -36,8 +38,12 @@ class TestEmailNotification(TestCase):
         self.h1.save()
 
     def test_email_sent(self):
-        self.h1.run_check()
+        for i in range(settings.CONSECUTIVE_LOGS_FOR_FAILURE):
+            self.h1.run_check(force=True)
+
         self.assertNotEqual(PingCheck.objects.get().last_status.pk, self.ls.pk)
+
+        # Force notification because celery is not running when tests are triggered
         send_notification_email(self.h1, self.h1.last_status)
 
         self.assertEqual(len(mail.outbox), 1)

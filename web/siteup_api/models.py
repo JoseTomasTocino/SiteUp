@@ -7,6 +7,7 @@ import re
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -26,9 +27,13 @@ import managers
 
 
 ####################################################################################
-# User model extension as per the docs
+# User related models
 
 class UserExtra(models.Model):
+    """
+    Extension model to add extra information to the User model.
+    """
+
     user = models.OneToOneField(User)
 
     send_report = models.BooleanField(
@@ -41,7 +46,9 @@ class UserExtra(models.Model):
 # Log related models
 
 class CheckLog(models.Model):
-    """Stores the result of the check."""
+    """
+    Stores the result of the check.
+    """
 
     date = models.DateTimeField(
         auto_now_add=True
@@ -137,23 +144,28 @@ class BaseCheck(models.Model):
 
     title = models.CharField(
         max_length=70,
-        help_text=_("Short title for the check"))
+        help_text=_("Short title for the check")
+    )
 
     description = models.TextField(
         blank=True,
-        help_text=_("Larger description, you can include notes."))
+        help_text=_("Larger description, you can include notes.")
+    )
 
     is_active = models.BooleanField(
         default=True,
-        help_text=_("Enables or disables the check"))
+        help_text=_("Enables or disables the check")
+    )
 
     check_interval = models.PositiveSmallIntegerField(
         default=1,
-        help_text=_("In minutes. How often the check should be triggered."))
+        help_text=_("In minutes. How often the check should be triggered.")
+    )
 
     notify_email = models.BooleanField(
         default=True,
-        help_text=_("Notify changes of the status of this check via email."))
+        help_text=_("Notify changes of the status of this check via email.")
+    )
 
     last_log_datetime = models.DateTimeField(
         blank=True,
@@ -178,24 +190,35 @@ class BaseCheck(models.Model):
         # If status has changed since last time (or there's no previous status)
         if not self.last_status or self.last_status.status != check_log.status:
 
-            oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
-            s = CheckStatus()
-            s.status = check_log.status
-            s.status_extra = check_log.status_extra
-            s.date_start = check_log.date
-            s.check = self
-            s.save()
+            # We'll only trigger the new status if there have been some consecutive logs with the same status
+            last_n_logs = self.logs.all().order_by('-date')[:settings.CONSECUTIVE_LOGS_FOR_FAILURE]
+            last_n_logs_statuses = (x.status for x in last_n_logs)
 
-            # If there was a previous status, update its date_end and close it
-            if self.last_status and self.last_status.status != check_log.status:
-                self.last_status.date_end = check_log.date
-                self.last_status.save()
+            # If the N last logs share the same status
+            if len(last_n_logs) == settings.CONSECUTIVE_LOGS_FOR_FAILURE and len(set(last_n_logs_statuses)) == 1:
 
-                # Also send notification
-                enqueue_notification(self, s)
+                oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
-            self.last_status = s
+                # Save the new CheckStatus
+                s = CheckStatus()
+                s.status = check_log.status
+                s.status_extra = check_log.status_extra
+                s.date_start = check_log.date
+                s.check = self
+                s.save()
+
+                # If there was a previous status, update its date_end and close it
+                if self.last_status and self.last_status.status != check_log.status:
+                    self.last_status.date_end = check_log.date
+                    self.last_status.save()
+
+                    oplogger.info(u"ENQUEUED_NOTIFICATION: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
+
+                    # Also send notification
+                    enqueue_notification(self, s)
+
+                self.last_status = s
 
         self.save()
 
@@ -271,8 +294,8 @@ class PingCheck(BaseCheck):
         validators=[ValidateAnyOf([validators.MaxValueValidator(1000), validators.MinValueValidator(50)])],
         help_text=_("Maximum timeout for the ping. Only works if previous option is active."))
 
-    def run_check(self):
-        if not self.should_run_check():
+    def run_check(self, force=False):
+        if not self.should_run_check() and not force:
             return
 
         # Initialize the log instance
@@ -319,6 +342,7 @@ class PingCheck(BaseCheck):
         verbose_name = _("ping check")
         verbose_name_plural = _("ping checks")
 
+
 class PortCheck(BaseCheck):
 
     target = models.CharField(
@@ -338,8 +362,8 @@ class PortCheck(BaseCheck):
         help_text=_("Optionally, you can check if the response contains a certain string.")
     )
 
-    def run_check(self):
-        if not self.should_run_check():
+    def run_check(self, force=False):
+        if not self.should_run_check() and not force:
             return
 
         log = CheckLog(check=self)
@@ -382,8 +406,8 @@ class HttpCheck(BaseCheck):
         help_text=_("Optionally, you can check if the response contains a certain string"))
 
 
-    def run_check(self):
-        if not self.should_run_check():
+    def run_check(self, force=False):
+        if not self.should_run_check() and not force:
             return
 
         # Initialize the log instance
@@ -450,8 +474,8 @@ class DnsCheck(BaseCheck):
         default='A',
         help_text=_("Type of dns resource record"))
 
-    def run_check(self):
-        if not self.should_run_check():
+    def run_check(self, force=False):
+        if not self.should_run_check() and not force:
             return
 
         check_result = monitoring.check_dns(target=self.target,

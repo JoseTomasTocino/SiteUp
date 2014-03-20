@@ -165,6 +165,9 @@ CHECKSTATUS_EXPIRATION_TIME = 24 * 2
 # In hours. Logs older than this will get first level collapsing (1 min -> 30 min)
 CHECKLOG_COLLAPSE_TIME_1 = 24
 
+# Number of consecutive logs to consider to mark a Check as DOWN
+CONSECUTIVE_LOGS_FOR_FAILURE = 3
+
 # CELERY Settings
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TASK_SERIALIZER = 'pickle'
