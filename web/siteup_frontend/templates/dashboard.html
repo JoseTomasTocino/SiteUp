@@ -80,15 +80,15 @@
         </header>
 
         <div class="content check-group-content">
-            {% if not check_group.checks %}
+            {% if not check_group.template_data.checks %}
                 <div class="message-no-checks">
                     {% trans "This group has no checks. Add one using the <em>add check</em> button." %}
                 </div>
             {% else %}
 
-            {% for check in check_group.checks %}
+            {% for check in check_group.template_data.checks %}
 
-                <div class="check-in-list cf {% if not check.is_active %}inactive{% endif %} {% if check.last_status and check.last_status.status != 0 %}check-down{% endif %}">
+                <div class="check-in-list cf {{ check.template_data.status_class }} {{ check.template_data.active_class ">
 
                     <div class="check-status">
                         {% if not check.is_active %}
@@ -121,19 +121,9 @@
                             }
                             (function(){
                                 var graphName = ".graph_{{ check.unique_name }}";
-                                graphInfo[graphName] = [];
-                                graphInfo[graphName]['data'] = [
-                                    {% if check.type_name == "pingcheck" %}
-                                        {% for log in check.logs.last_24_hours %}
-                                            [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
-                                        {% endfor %}
-                                    {% else %}
-                                        {% for log in check.logs.last_24_hours %}
-                                            [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
-                                        {% endfor %}
-                                    {% endif %}
-                                ];
-                                graphInfo[graphName]['status'] = {% if check.last_status and check.last_status.status == 0 %}0{% else %}1{% endif %};
+                                graphInfo[graphName] = {};
+                                graphInfo[graphName]['data'] = [ {{ check.template_data.logs|safe }} ];
+                                graphInfo[graphName]['status'] = {{ check.template_data.status }};
                                 graphInfo[graphName]['type'] = '{{ check.type_name }}';
                             })();
                         </script>

@@ -18,6 +18,8 @@ from django.views.generic.edit import FormView
 
 from braces.views import LoginRequiredMixin
 
+from bunch import Bunch
+
 from .forms import LoginForm, SignupForm, ChangePasswordForm, PingCheckForm, DnsCheckForm, HttpCheckForm, PortCheckForm, ProfileForm
 from siteup_api import models
 
@@ -240,15 +242,28 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['check_groups'] = self.request.user.checkgroup_set \
-            .prefetch_related('dnscheck_set', 'pingcheck_set', 'httpcheck_set', 'portcheck_set', 'dnscheck_set__logs', 'pingcheck_set__logs', 'httpcheck_set__logs', 'portcheck_set__logs',)
+        # Fetch user's CheckGroups
+        context['check_groups'] = self.request.user.checkgroup_set.all();
 
+        # For each check group
         for check_group in context['check_groups']:
-            check_group.checks = []
-            check_group.checks.extend(check_group.dnscheck_set.all())
-            check_group.checks.extend(check_group.pingcheck_set.all())
-            check_group.checks.extend(check_group.httpcheck_set.all())
-            check_group.checks.extend(check_group.portcheck_set.all())
+            check_group.template_data = Bunch()
+
+            # Fetch group's checks
+            check_group.template_data.checks = check_group.checks()
+
+            # For each check
+            for check in check_group.template_data.checks:
+
+                check.template_data = Bunch()
+                check.template_data.status = 0 if check.last_status and check.last_status.status == 0 else 1
+                check.template_data.status_class = 'check-down' if check.template_data.status != 0 else ''
+                check.template_data.active_class = 'inactive' if not check.is_active else ''
+
+                if check.type_name() == "pingcheck":
+                    check.template_data.logs = ','.join(['[ new Date("{date}"), {value}]'.format(**{'date': log.date.isoformat(), 'value': log.response_time }) for log in check.logs.last_24_hours()])
+                else:
+                    check.template_data.logs = ','.join(['[ new Date("{date}"), {value}]'.format(**{'date': log.date.isoformat(), 'value': log.get_status() }) for log in check.logs.last_24_hours()])
 
         return context
 
