@@ -165,23 +165,23 @@ class CheckForm(BaseModelForm):
 class PingCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PingCheck
-        fields = ['target', 'title', 'description', 'check_interval', 'notify_email', 'should_check_timeout', 'timeout_value']
+        fields = ['target', 'title', 'description', 'check_interval', 'notify_email', 'notify_android', 'should_check_timeout', 'timeout_value']
 
 class DnsCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.DnsCheck
-        fields = ['title', 'description', 'target', 'record_type', 'resolved_address', 'check_interval', 'notify_email']
+        fields = ['title', 'description', 'target', 'record_type', 'resolved_address', 'check_interval', 'notify_email', 'notify_android']
 
 
 class PortCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PortCheck
-        fields = ['title', 'description', 'target', 'target_port', 'response_check_string', 'check_interval', 'notify_email']
+        fields = ['title', 'description', 'target', 'target_port', 'response_check_string', 'check_interval', 'notify_email', 'notify_android']
 
 
 class HttpCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.HttpCheck
-        fields = ['title', 'description', 'target', 'status_code', 'content_check_string', 'check_interval', 'notify_email']
+        fields = ['title', 'description', 'target', 'status_code', 'content_check_string', 'check_interval', 'notify_email', 'notify_android']
 
 

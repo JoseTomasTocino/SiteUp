@@ -172,6 +172,11 @@ class BaseCheck(models.Model):
         help_text=_("Notify changes of the status of this check via email.")
     )
 
+    notify_android = models.BooleanField(
+        default=True,
+        help_text=_("Notify changes of the status of this check through the Android app (if available).")
+    )
+
     last_log_datetime = models.DateTimeField(
         blank=True,
         null=True

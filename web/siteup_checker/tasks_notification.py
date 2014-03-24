@@ -33,8 +33,8 @@ def send_notification(check, check_status):
     if check.notify_email:
         send_notification_email(check, check_status)
 
-    # if check.notify_android:
-    #     send_notification_android(check, check_status)
+    if check.notify_android:
+        send_notification_android(check, check_status)
 
 def send_notification_email(check, check_status):
     """
@@ -58,6 +58,10 @@ def send_notification_email(check, check_status):
     mail = EmailMultiAlternatives(subject, message_text, from_email, recipient_list)
     mail.attach_alternative(message_html, "text/html")
     mail.send()
+
+
+def send_notification_android(check, check_status):
+    pass
 
 
 
