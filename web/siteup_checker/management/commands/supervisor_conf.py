@@ -12,7 +12,8 @@ class Command(BaseCommand):
             'VIRTUAL_ENV_DIR': os.environ['VIRTUAL_ENV'],
             'PROJECT_DIR': settings.BASE_DIR,
             'PROJECT_LOG_DIR': os.path.abspath(os.path.join(settings.BASE_DIR, '..', 'logs')),
-            'GMAIL_PASS': raw_input('Type the gmail account password: ')
+            'GMAIL_PASS': raw_input('Type the gmail account password: '),
+            'GCM_API_KEY': raw_input('Type your GCM API key: ')
         }
 
         conf_file_content = base.format(**template_fields)

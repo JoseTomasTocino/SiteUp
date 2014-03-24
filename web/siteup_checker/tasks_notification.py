@@ -61,6 +61,10 @@ def send_notification_email(check, check_status):
 
 
 def send_notification_android(check, check_status):
+    """
+    Sends a PUSH notification through GCM to the check owner's Android app.
+    """
+
     pass
 
 
