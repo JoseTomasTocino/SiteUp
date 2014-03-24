@@ -23,9 +23,9 @@ def install():
 def deploy():
     with cd(code_dir):
         with prefix('workon siteup'):
-            run("pip install -r web/requirements.txt")
             run("git checkout .")
             run("git pull")
+            run("pip install -r web/requirements.txt")
             run("web/manage.py collectstatic --noinput")
             run("web/manage.py syncdb")
             run("web/manage.py migrate siteup_api")

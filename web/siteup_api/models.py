@@ -40,6 +40,11 @@ class UserExtra(models.Model):
         help_text=_("Receive daily report about all your checks")
     )
 
+    # Device's GCM registration ID
+    regid = models.TextField(
+        blank=True,
+        null=True
+    )
 
 
 ####################################################################################

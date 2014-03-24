@@ -4,11 +4,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 from siteup_frontend import views as fe_views
+from siteup_api import views as api_views
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'siteup.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+
+    url(r'^api/login$', api_views.LoginView.as_view(), name='api_login'),
 
     url(r'^$', fe_views.HomeView.as_view(), name='home'),
     url(r'^login/', fe_views.LoginView.as_view(), name="login"),
