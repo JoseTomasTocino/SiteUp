@@ -13,6 +13,11 @@ class CheckLogManager(models.Manager):
     @staticmethod
     def _with_extra (q):
         q_len = float(len(q))
+
+        # Avoid division by zero
+        if q_len == 0:
+            q_len = 1.0
+
         resp_times = [int(x.response_time) for x in q]
         avg_response_time = sum(resp_times) / q_len
         avg_status = int(sum((int(x.status == 0) for x in q)) / q_len * 100)

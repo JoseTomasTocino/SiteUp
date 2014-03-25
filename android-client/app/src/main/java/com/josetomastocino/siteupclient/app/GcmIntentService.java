@@ -88,7 +88,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_stat_gcm)
+                        .setSmallIcon(R.drawable.ic_stat_siteup)
                         .setContentTitle("SiteUp Notification")
                         .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(msg))
