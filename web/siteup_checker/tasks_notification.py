@@ -1,6 +1,10 @@
+import os
+
 import logging
 logger = logging.getLogger(__name__)
 oplogger = logging.getLogger("operations")
+
+import requests, json
 
 from siteup.celery import app
 
@@ -14,7 +18,8 @@ from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-
+from django.template.defaultfilters import truncatechars
+from django.core.urlresolvers import reverse
 
 def enqueue_notification(check, check_status):
     """
@@ -35,6 +40,7 @@ def send_notification(check, check_status):
 
     if check.notify_android:
         send_notification_android(check, check_status)
+
 
 def send_notification_email(check, check_status):
     """
@@ -60,13 +66,39 @@ def send_notification_email(check, check_status):
     mail.send()
 
 
-def send_notification_android(check, check_status):
+def send_notification_android(check, check_status=None):
     """
     Sends a PUSH notification through GCM to the check owner's Android app.
     """
 
-    pass
+    device_id = check.group.owner.userextra.regid
 
+    # If the user has not registered any Android device, quit
+    if not device_id:
+        return
+
+    GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send'
+    API_KEY = os.environ['GCM_API_KEY']
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=%s' % API_KEY
+    }
+
+    message = u"Status of '{}' changed to {}".format(
+        truncatechars(check.title, 15),
+        "DOWN" if check_status and check_status.status != 0 else "UP"
+    )
+
+    data = {
+        "registration_ids": [device_id],
+        "data": {
+            "message": message,
+            "url": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
+        }
+    }
+
+    r = requests.post(GCM_ENDPOINT, data=json.dumps(data), headers=headers)
 
 
 @periodic_task(run_every=crontab(hour="0", minute="0", day_of_week="*"))
@@ -99,7 +131,7 @@ def send_daily_reports():
             check_group.checks.extend(check_group.httpcheck_set.all())
             check_group.checks.extend(check_group.portcheck_set.all())
 
-
+        # Build the email
         from_email = "siteup.pfc@gmail.com"
         recipient_list = [user.email]
         subject = _('[SiteUp] Daily status report')

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#46596a"
-    tools:context="com.josetomastocino.siteupclient.app.SplashScreen">
+    tools:context="com.josetomastocino.siteupclient.app.SplashScreenActivity">
 
     <TextView
         android:id="@+id/splash_logo_text"

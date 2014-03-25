@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class SplashScreen extends Activity {
+public class SplashScreenActivity extends Activity {
 
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
@@ -143,7 +143,7 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
                 // Launch Login activity
-                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 intent.putExtra("regid", regid);
                 startActivity(intent);
 

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -222,6 +223,7 @@ public class LoginActivity extends Activity {
         private final String mUsername;
         private final String mPassword;
         private final String mRegid;
+        private String mReceivedData;
 
         UserLoginTask(String username, String password, String regid) {
             mUsername = username;
@@ -261,10 +263,12 @@ public class LoginActivity extends Activity {
                 }
 
                 Log.i(TAG, "JSON:" + total.toString());
+                mReceivedData = total.toString();
 
                 // Convert result to JSON
-                JSONObject result = new JSONObject(total.toString());
+                JSONObject result = new JSONObject(mReceivedData);
 
+                // If there was a problem, return false
                 if (result.getInt("valid") != 1) {
                     return false;
                 }
@@ -296,6 +300,10 @@ public class LoginActivity extends Activity {
             Log.i("SiteUp:LoginActivity", success.toString());
 
             if (success) {
+                Intent intent = new Intent(LoginActivity.this, CheckListActivity.class);
+                intent.putExtra("received_data", mReceivedData);
+                startActivity(intent);
+
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

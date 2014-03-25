@@ -8,5 +8,6 @@
     <string name="send">Send</string>
     <string name="clear">Clear</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_check_list">CheckListActivity</string>
 
 </resources>
