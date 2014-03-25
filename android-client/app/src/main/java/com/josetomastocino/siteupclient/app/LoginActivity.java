@@ -79,16 +79,17 @@ public class LoginActivity extends Activity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        Log.i(TAG, "Saved username: " + sharedPreferences.getString("username", ""));
-        Log.i(TAG, "Saved password: " + sharedPreferences.getString("password", ""));
 
-        // Fill the form if there's saved data
-        if (sharedPreferences.getString("username", "") != "") {
-            mUsernameView.setText(sharedPreferences.getString("username", ""));
-        }
+        // Try to fetch saved login credentials
+        String storedUsername = sharedPreferences.getString("username", "");
+        String storedPassword = sharedPreferences.getString("password", "");
 
-        if (sharedPreferences.getString("password", "") != "") {
-            mPasswordView.setText(sharedPreferences.getString("password", ""));
+        mUsernameView.setText(storedUsername);
+        mPasswordView.setText(storedPassword);
+
+        // If there were both an username and password previously stored, try to login
+        if (!storedUsername.isEmpty() && !storedPassword.isEmpty()) {
+            attemptLogin();
         }
 
         // Set callback for the user pressing ENTER on the form
