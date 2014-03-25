@@ -1,12 +1,19 @@
 .jumbo {
     overflow: hidden;
+    text-align: center;
+
+    .main-logo {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        width: 15rem;
+    }
 
     h2 {
         color: $color2;
         text-align: center;
         font-size: 2.5rem;
         font-weight: 700;
-        margin: 1.5rem 0;
+        margin: 0 0 1.5rem;
 
         @include text-shadow(rgba(white, 1) 0px 1px 0);
     }

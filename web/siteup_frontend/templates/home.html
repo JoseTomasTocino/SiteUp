@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
 <div class="jumbo container">
+
+    <img class="main-logo" src="{% static "images/logo.png" %}" alt="">
+
     <h2>
         Website monitoring, made easy
     </h2>

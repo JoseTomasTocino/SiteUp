@@ -1,6 +1,12 @@
 header.main {
     overflow: hidden;
 
+    a img {
+        width: 2.3rem;
+        vertical-align: text-top;
+        margin-right: 0.3rem;
+    }
+
     a:hover {
         color: lighten($color3, 80%);
     }
