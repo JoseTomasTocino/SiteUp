@@ -1,24 +1,39 @@
 package com.josetomastocino.siteupclient.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class CheckListActivity extends ActionBarActivity {
 
     private JSONObject mCheckData;
+    private ArrayList<CheckInList> mChecks;
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_list);
+
+        mListView = (ListView) findViewById(R.id.listView);
+
+        // Initialise list of checks
+        mChecks = new ArrayList<CheckInList>();
 
         String receivedData = getIntent().getExtras().getString("received_data");
 
@@ -27,12 +42,40 @@ public class CheckListActivity extends ActionBarActivity {
 
             JSONArray array = mCheckData.getJSONArray("groups");
 
+            // Loop over the user groups
             for (int i = 0; i < array.length(); i++) {
-                Log.i("WAT", array.getJSONObject(i).getString("title"));
+                JSONObject currentGroup = array.getJSONObject(i);
+                Log.i("WAT", currentGroup.getString("title"));
+
+                // Loop over the group's checks
+                JSONArray checksArray = currentGroup.getJSONArray("checks");
+                for (int j = 0; j < checksArray.length(); j++) {
+                    JSONObject currentCheckJson = checksArray.getJSONObject(j);
+
+                    CheckInList currentCheck = new CheckInList();
+                    currentCheck.setTitle(currentCheckJson.getString("title"));
+                    currentCheck.setDescription(currentCheckJson.getString("description"));
+                    currentCheck.setURL(currentCheckJson.getString("detail_url"));
+                    currentCheck.setStatus(currentCheckJson.getInt("status"));
+
+                    mChecks.add(currentCheck);
+                }
             }
         } catch (JSONException e) {
             // no-op nigga
         }
+
+        CheckListArrayAdapter adapter = new CheckListArrayAdapter(this, mChecks);
+        mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Uri uri = Uri.parse(mChecks.get(i).getURL());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 
 

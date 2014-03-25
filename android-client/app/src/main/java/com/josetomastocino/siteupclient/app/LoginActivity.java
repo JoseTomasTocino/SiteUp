@@ -38,13 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * A login screen that offers login via username/password.
-
- */
 public class LoginActivity extends Activity {
 
     private static final String SHARED_PREFERENCES_KEY = "SiteUpSharedPreferences";
+    private static final String SITEUP_LOGIN_ENDPOINT = "http://siteup.josetomastocino.com/api/login";
 
     private UserLoginTask mAuthTask = null;
 
@@ -237,7 +234,7 @@ public class LoginActivity extends Activity {
 
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://192.168.1.100:8000/api/login");
+            HttpPost httppost = new HttpPost(SITEUP_LOGIN_ENDPOINT);
 
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
