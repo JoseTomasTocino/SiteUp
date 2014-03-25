@@ -2,9 +2,11 @@ package com.josetomastocino.siteupclient.app;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,10 +24,15 @@ public class CheckListActivity extends ActionBarActivity {
 
         try {
             mCheckData = new JSONObject(receivedData);
+
+            JSONArray array = mCheckData.getJSONArray("groups");
+
+            for (int i = 0; i < array.length(); i++) {
+                Log.i("WAT", array.getJSONObject(i).getString("title"));
+            }
         } catch (JSONException e) {
             // no-op nigga
         }
-
     }
 
 
