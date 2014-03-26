@@ -205,8 +205,8 @@ class BaseCheck(models.Model):
             last_n_logs = self.logs.all().order_by('-date')[:settings.CONSECUTIVE_LOGS_FOR_FAILURE]
             last_n_logs_statuses = (x.status for x in last_n_logs)
 
-            # If the N last logs share the same status
-            if len(last_n_logs) == settings.CONSECUTIVE_LOGS_FOR_FAILURE and len(set(last_n_logs_statuses)) == 1:
+            # If the N last logs share the same status OR there was no previous status
+            if not self.last_status or (len(last_n_logs) == settings.CONSECUTIVE_LOGS_FOR_FAILURE and len(set(last_n_logs_statuses)) == 1):
 
                 oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
