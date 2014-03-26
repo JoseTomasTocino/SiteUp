@@ -76,16 +76,16 @@ public class LoginActivity extends Activity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-
         // Try to fetch saved login credentials
         String storedUsername = sharedPreferences.getString("username", "");
         String storedPassword = sharedPreferences.getString("password", "");
+        Boolean shouldAutoLogin = sharedPreferences.getBoolean("auto_login", true);
 
         mUsernameView.setText(storedUsername);
         mPasswordView.setText(storedPassword);
 
         // If there were both an username and password previously stored, try to login
-        if (!storedUsername.isEmpty() && !storedPassword.isEmpty()) {
+        if (shouldAutoLogin && !storedUsername.isEmpty() && !storedPassword.isEmpty()) {
             attemptLogin();
         }
 
@@ -274,6 +274,7 @@ public class LoginActivity extends Activity {
                 // Login OK, save login data in SharedPreferences
                 prefEditor.putString("username", mUsername);
                 prefEditor.putString("password", mPassword);
+                prefEditor.putBoolean("auto_login", true);
                 prefEditor.commit();
 
                 return true;

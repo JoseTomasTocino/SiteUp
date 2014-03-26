@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.josetomastocino.siteupclient.app.CheckListActivity" >
     
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_log_out"
+        android:title="@string/action_log_out"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

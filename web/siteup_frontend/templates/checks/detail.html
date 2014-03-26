@@ -76,24 +76,24 @@
 
             <div class="content summary">
                 <div>
-                     <span>{{ logs.avg_status }}%</span>
+                     <span>{{ logs.avg_status|default:"- " }}%</span>
                     uptime
                 </div>
 
                 {% if check.type_name == "pingcheck" %}
                 <div>
-                    <span>{{ logs.avg_response_time|floatformat:"0" }}ms</span>
+                    <span>{{ logs.avg_response_time|floatformat:"0"|default:"- " }}ms</span>
                     avg. response
                 </div>
 
                 <div>
-                    <span>{{ logs.max_response_time|floatformat }}ms</span>
-                    max response
+                    <span>{{ logs.max_response_time|floatformat|default:"- " }}ms</span>
+                    max. response
                 </div>
 
                 <div>
-                    <span>{{ logs.min_response_time|floatformat }}ms</span>
-                    min response
+                    <span>{{ logs.min_response_time|floatformat|default:"- " }}ms</span>
+                    min. response
                 </div>
 
                 {% endif %}
@@ -137,23 +137,23 @@
 
             <div class="content summary">
                 <div>
-                     <span>{{ logs.avg_status }}%</span>
+                     <span>{{ logs.avg_status|default:"- " }}%</span>
                     uptime
                 </div>
 
                 {% if check.type_name == "pingcheck" %}
                 <div>
-                    <span>{{ logs.avg_response_time|floatformat:"0" }}ms</span>
+                    <span>{{ logs.avg_response_time|floatformat:"0"|default:"- " }}ms</span>
                     avg. response
                 </div>
 
                 <div>
-                    <span>{{ logs.max_response_time|floatformat }}ms</span>
+                    <span>{{ logs.max_response_time|floatformat|default:"- " }}ms</span>
                     max. response
                 </div>
 
                 <div>
-                    <span>{{ logs.min_response_time|floatformat }}ms</span>
+                    <span>{{ logs.min_response_time|floatformat|default:"- " }}ms</span>
                     min. response
                 </div>
 

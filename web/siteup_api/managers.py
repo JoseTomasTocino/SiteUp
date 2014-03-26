@@ -16,7 +16,13 @@ class CheckLogManager(models.Manager):
 
         # Avoid division by zero
         if q_len == 0:
-            q_len = 1.0
+            return {
+                'objs' : q,
+                'avg_response_time': '',
+                'avg_status': '',
+                'max_response_time': '',
+                'min_response_time': ''
+            }
 
         resp_times = [int(x.response_time) for x in q]
         avg_response_time = sum(resp_times) / q_len
