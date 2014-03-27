@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.db.models import Q
 
 class CheckLogManager(models.Manager):
 
@@ -12,7 +13,12 @@ class CheckLogManager(models.Manager):
 
     @staticmethod
     def _with_extra (q):
-        q_len = float(len(q))
+
+        # Just use the logs with valid status OR those with a response_time > 0
+        # thus avoiding having a min. response time of 0 when pings could not be completed
+
+        q_ok = q.filter(Q(status=0) | Q(response_time__gt=0))
+        q_len = float(len(q_ok))
 
         # Avoid division by zero
         if q_len == 0:
@@ -24,7 +30,7 @@ class CheckLogManager(models.Manager):
                 'min_response_time': ''
             }
 
-        resp_times = [int(x.response_time) for x in q]
+        resp_times = [int(x.response_time) for x in q_ok]
         avg_response_time = sum(resp_times) / q_len
         avg_status = int(sum((int(x.status == 0) for x in q)) / q_len * 100)
 
