@@ -19,6 +19,7 @@ package com.josetomastocino.siteupclient.app;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -92,6 +93,7 @@ public class GcmIntentService extends IntentService {
                         .setContentTitle("SiteUp Notification")
                         .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(msg))
+                        .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);

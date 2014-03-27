@@ -39,7 +39,7 @@ def send_notification(check, check_status):
         send_notification_email(check, check_status)
 
     if check.notify_android:
-        send_notification_android(check, check_status)
+        prepare_notification_android(check, check_status)
 
 
 def send_notification_email(check, check_status):
@@ -66,9 +66,9 @@ def send_notification_email(check, check_status):
     mail.send()
 
 
-def send_notification_android(check, check_status=None):
+def prepare_notification_android(check, check_status=None):
     """
-    Sends a PUSH notification through GCM to the check owner's Android app.
+    Prepares the data to be sent using Android's GCM push notification system
     """
 
     device_id = check.group.owner.userextra.regid
@@ -76,6 +76,24 @@ def send_notification_android(check, check_status=None):
     # If the user has not registered any Android device, quit
     if not device_id:
         return
+
+    message = u"Status of '{}' changed to {}".format(
+        truncatechars(check.title, 15),
+        "DOWN" if check_status and check_status.status != 0 else "UP"
+    )
+
+    content = {
+        "message": message,
+        "url": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
+    }
+
+    send_notification_android(device_id, content)
+
+
+def send_notification_android(device_id, content):
+    """
+    Sends a PUSH notification through GCM to the device with the specified device_id
+    """
 
     GCM_ENDPOINT = 'https://android.googleapis.com/gcm/send'
     API_KEY = os.environ['GCM_API_KEY']
@@ -85,21 +103,12 @@ def send_notification_android(check, check_status=None):
         'Authorization': 'key=%s' % API_KEY
     }
 
-    message = u"Status of '{}' changed to {}".format(
-        truncatechars(check.title, 15),
-        "DOWN" if check_status and check_status.status != 0 else "UP"
-    )
-
     data = {
         "registration_ids": [device_id],
-        "data": {
-            "message": message,
-            "url": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
-        }
+        "data": content
     }
 
     r = requests.post(GCM_ENDPOINT, data=json.dumps(data), headers=headers)
-
 
 @periodic_task(run_every=crontab(hour="0", minute="0", day_of_week="*"))
 def send_daily_reports():
