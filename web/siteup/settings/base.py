@@ -81,6 +81,10 @@ LOGGING = {
             'format': '%(levelname)s - %(filename)s:%(lineno)d - %(message)s'   # %(asctime)s -
         },
 
+        'medium': {
+            'format': '%(filename)s:%(lineno)d - %(message)s'   # %(asctime)s -
+        },
+
         'simple': {
             'format': '%(asctime)s - %(message)s'
         }
@@ -93,17 +97,29 @@ LOGGING = {
             'formatter': 'standard',
         },
 
-        'file': {
+        'operations_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, '..', 'logs', 'siteup.log'),
+            'filename': os.path.join(BASE_DIR, '..', 'logs', 'siteup_operations.log'),
             'formatter': 'simple',
+        },
+
+        'debug_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '..', 'logs', 'siteup_debug.log'),
+            'formatter': 'medium'
         }
     },
 
     'loggers': {
         'operations': {
-            'handlers': ['file'],
+            'handlers': ['operations_file'],
+            'level': 'DEBUG'
+        },
+
+        'debugging': {
+            'handlers': ['debug_file'],
             'level': 'DEBUG'
         },
 
@@ -118,7 +134,6 @@ LOGGING = {
             'propagate': True,
             'level':'WARN',
         },
-
 
         'django.db.backends': {
             'handlers': ['console'],

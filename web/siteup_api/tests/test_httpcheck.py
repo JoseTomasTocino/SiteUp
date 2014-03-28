@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -56,12 +56,14 @@ class HttpTestCase(TestCase):
         self.h2.run_check()
         check_log = self.h2.logs.get()
         self.assertEqual(check_log.status, 0)
+        self.assertEqual(check_log.status_extra, 'Received status 200. String found.')
+
 
     def test_http_404(self):
         self.h3.run_check()
         check_log = self.h3.logs.get()
         self.assertEqual(check_log.status, 1)
-        self.assertEqual(check_log.status_extra, '404')
+        self.assertEqual(check_log.status_extra, 'Received status 404.')
 
     def test_http_bad_host(self):
         self.h4.run_check()

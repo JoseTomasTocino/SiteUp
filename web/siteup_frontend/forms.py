@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
 from django import forms

@@ -1,7 +1,7 @@
 import os
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
 import requests, json

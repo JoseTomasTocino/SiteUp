@@ -1,5 +1,5 @@
 import json, logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
 from django.contrib.auth import authenticate

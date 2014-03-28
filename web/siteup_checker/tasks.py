@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task

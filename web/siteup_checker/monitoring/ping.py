@@ -2,7 +2,7 @@ import subprocess
 import re
 import os
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 DEVNULL = open(os.devnull, 'wb')
 

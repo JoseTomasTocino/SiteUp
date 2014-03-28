@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 import requests
 
@@ -11,9 +11,9 @@ def check_http_header(target, status_code=200):
     try:
         # Don't follow redirections if status_code is in the 30x family
         if status_code / 10 == 30:
-            r = requests.head(target)
+            r = requests.head(target, timeout=10)
         else:
-            r = requests.head(target, allow_redirects=True)
+            r = requests.head(target, allow_redirects=True, timeout=10)
 
         return_obj['valid'] = True
         return_obj['status_code'] = r.status_code
@@ -31,7 +31,7 @@ def check_http_content(target, content_string=''):
     return_obj = {}
 
     try:
-        r = requests.get(target)
+        r = requests.get(target, timeout=10)
         return_obj['valid'] = True
         return_obj['status_ok'] = content_string.lower() in r.text.lower()
     except Exception as e:

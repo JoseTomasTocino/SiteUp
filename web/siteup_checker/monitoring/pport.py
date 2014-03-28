@@ -1,6 +1,6 @@
 import socket
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 def check_port(host, port_number, content = None):
     logger.info(u"Port check, host: %s, port: %s, content: '%s'" % (host, port_number, content))

@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 
 import dns.exception, dns.resolver
 

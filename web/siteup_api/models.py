@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
 from itertools import chain
@@ -453,6 +453,7 @@ class HttpCheck(BaseCheck):
         else:
             log.status = 2
 
+        log.status_extra = ' '.join(status_extra)
         log.save()
 
     def __unicode__(self):
