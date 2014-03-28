@@ -13,14 +13,14 @@ class CheckStatusTestCase(TestCase):
     def setUp(self):
 
         u = User.objects.create_user(
-          username='TestUser',
-          email='test@user.com',
-          password='1234'
+            username='TestUser',
+            email='test@user.com',
+            password='1234'
         )
 
         g = CheckGroup.objects.create(
-          title="Test Group",
-          owner = u
+            title="Test Group",
+            owner = u
         )
 
         self.h1 = HttpCheck.objects.create(
@@ -30,10 +30,32 @@ class CheckStatusTestCase(TestCase):
         )
 
     def test_check_status_created(self):
-        for i in range(settings.CONSECUTIVE_LOGS_FOR_FAILURE - 1):
-            self.h1.run_check(force=True)
-            self.assertFalse(CheckStatus.objects.all())
-            self.assertEqual(len(self.h1.logs.all()), i + 1)
-
+        # Run check for first time
         self.h1.run_check(force=True)
+
+        # Refresh the pointer
+        self.h1 = HttpCheck.objects.get()
+
+        # There should 1 CheckLog and 1 CheckStatus associated to the Check
         self.assertEqual(len(CheckStatus.objects.all()), 1)
+        self.assertEqual(len(CheckLog.objects.all()), 1)
+        self.assertIsNotNone(self.h1.last_status)
+        self.assertEqual(len(self.h1.statuses.all()), 1)
+        self.assertEqual(len(self.h1.logs.all()), 1)
+
+        # Change the target so now it fails
+        self.h1.target='http://josetomastocinoasd.com'
+        self.h1.save()
+
+        # Trigger the check enough times to raise a new CheckStatus
+        for i in range(settings.CONSECUTIVE_LOGS_FOR_FAILURE):
+            self.assertEqual(len(CheckStatus.objects.all()), 1)
+            self.h1.run_check(force=True)
+            self.assertEqual(len(self.h1.logs.all()), i + 2)
+
+        # Now there should be TWO CheckStatus objects
+        self.h1 = HttpCheck.objects.get()
+        self.assertEqual(len(self.h1.statuses.all()), 2)
+        self.assertEqual(len(CheckStatus.objects.all()), 2)
+
+

@@ -249,7 +249,7 @@ class BaseCheck(models.Model):
         # Subtract some seconds from the difference to handle timing deviations
         elapsed_seconds = (datetime.now() - self.last_log_datetime).seconds
         if elapsed_seconds < self.check_interval * 60 - 6:
-            logger.info(u"Check %s will not run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
+            logger.info(u"Check %s should not run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
             return False
 
         logger.info(u"Check %s will run (elapsed time: %i seconds)" % (self.title, elapsed_seconds))
@@ -315,7 +315,7 @@ class PingCheck(BaseCheck):
         # Fire the ping
         check_result = monitoring.check_ping(self.target)
 
-        # Ping properly finished
+        # Ping finished
         if check_result['valid']:
 
             # Save ping average response time
@@ -337,7 +337,12 @@ class PingCheck(BaseCheck):
         # Ping could not be launched
         else:
             log.status = 2
-            log.status_extra = 'Incorrect host'
+
+            # Check for most common type of error
+            if 'error' in check_result and check_result['error'] == 'unknown host':
+                log.status_extra = 'Incorrect host'
+            else:
+                log.status_extra = 'Problem launching Ping'
 
         logger.info('Save CheckLog, status %i, response_time %i, status_extra "%s"' % (log.status, log.response_time, log.status_extra))
         log.save()
