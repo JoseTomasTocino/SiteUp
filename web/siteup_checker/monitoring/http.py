@@ -18,9 +18,21 @@ def check_http_header(target, status_code=200):
         return_obj['valid'] = True
         return_obj['status_code'] = r.status_code
         return_obj['status_ok'] = r.status_code == status_code
-    except Exception as e: # TODO: add the proper exception type
+
+    except ValueError as e:
         logger.error(e)
         return_obj['valid'] = False
+        return_obj['error'] = 'Error in the target'
+
+    except requests.exceptions.RequestException as e:
+        logger.error(e)
+        return_obj['valid'] = False
+        return_obj['error'] = 'Error in the request'
+
+    except Exception as e:
+        logger.error(e)
+        return_obj['valid'] = False
+        return_obj['error'] = 'Unknown error'
 
     return return_obj
 
@@ -34,8 +46,20 @@ def check_http_content(target, content_string=''):
         r = requests.get(target, timeout=10)
         return_obj['valid'] = True
         return_obj['status_ok'] = content_string.lower() in r.text.lower()
+
+    except ValueError as e:
+        logger.error(e)
+        return_obj['valid'] = False
+        return_obj['error'] = 'Error in the target'
+
+    except requests.exceptions.RequestException as e:
+        logger.error(e)
+        return_obj['valid'] = False
+        return_obj['error'] = 'Error in the request'
+
     except Exception as e:
         logger.error(e)
         return_obj['valid'] = False
+        return_obj['error'] = 'Unknown error'
 
     return return_obj

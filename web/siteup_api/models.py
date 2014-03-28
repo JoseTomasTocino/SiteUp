@@ -451,6 +451,7 @@ class HttpCheck(BaseCheck):
             else:
                 log.status = 1
         else:
+            status_extra.append(check_result['error'])
             log.status = 2
 
         log.status_extra = ' '.join(status_extra)
