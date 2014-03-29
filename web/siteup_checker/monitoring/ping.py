@@ -37,9 +37,9 @@ def check_ping(target):
 
 (?P<transmitted>\d+) \s+ packets       .*?       # Packets transmitted
 (?P<received>\d+) \s+ received         .*?       # Packets received
-
-(?:                                  # Non-capturing group for the numerical statistics (that may not appear)
-rtt min/avg/max/mdev = \s+           # Separator
+ms                                     \s*       # Ending of the statistics line
+(                                    # Non-capturing group for the numerical statistics (that may not appear)
+rtt .* = \s+                         # Separator
 (?P<min>[^/]*)/                      # Min time
 (?P<avg>[^/]*)/                      # Avg time
 (?P<max>[^/]*)/                      # Max time
@@ -49,7 +49,7 @@ rtt min/avg/max/mdev = \s+           # Separator
 """, re.DOTALL | re.IGNORECASE | re.MULTILINE | re.VERBOSE)
 
     # Run the regular expression to parse ping's output
-    results = matcher.search(ping_raw_response)
+    results = matcher.match(ping_raw_response)
 
     # If it doesn't match (due to an error)
     if not results:
@@ -67,6 +67,7 @@ rtt min/avg/max/mdev = \s+           # Separator
 
     # Cast the numeric fields to float
     for field in ('min', 'avg', 'max', 'mdev', 'transmitted', 'received'):
+
         if field in results and results[field] is not None:
             results[field] = float(results[field])
         else:

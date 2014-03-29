@@ -119,7 +119,7 @@ LOGGING = {
         },
 
         'debugging': {
-            'handlers': ['debug_file'],
+            'handlers': ['debug_file', 'console'],
             'level': 'DEBUG'
         },
 
