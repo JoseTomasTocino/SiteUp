@@ -113,7 +113,9 @@
                                 {% trans "No data yet" %}
                             </div>
                         {% else %}
-                        <div class="check-graph-container graph_{{ check.unique_name }}"></div>
+                        <div class="check-graph-container graph_{{ check.unique_name }}">
+                            <div class="placeholder">Fetching graph data...</div>
+                        </div>
 
                         <script>
                             if (typeof graphInfo == "undefined") {
@@ -125,6 +127,7 @@
                                 graphInfo[graphName]['data'] = [ {{ check.template_data.logs|safe }} ];
                                 graphInfo[graphName]['status'] = {{ check.template_data.status }};
                                 graphInfo[graphName]['type'] = '{{ check.type_name }}';
+                                graphInfo[graphName]['id'] = '{{ check.id }}';
                             })();
                         </script>
 

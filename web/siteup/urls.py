@@ -26,6 +26,8 @@ urlpatterns = patterns('',
 
     url(r'^profile', fe_views.ProfileView.as_view(), name="profile"),
     url(r'^dashboard', fe_views.DashboardView.as_view(), name="dashboard"),
+    url(r'^get_dashboard_graph_data/(?P<check_type>\w{1,})/(?P<check_id>\d{1,})$', fe_views.get_dashboard_graph_data, name="get_dashboard_graph_data"),
+
     url(r'^admin/', include(admin.site.urls)),
     url(r'^groups/new', fe_views.GroupCreateView.as_view(), name="new_group"),
     url(r'^groups/edit/(?P<pk>\d{1,})', fe_views.GroupUpdateView.as_view(), name="edit_group"),

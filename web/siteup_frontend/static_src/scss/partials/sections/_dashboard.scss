@@ -154,6 +154,13 @@ nav.controls {
     .check-graph-container {
         height: 140px;
     }
+
+    .placeholder {
+        text-align: center;
+        font-style: italic;
+        font-size: 0.6rem;
+        line-height: 140px;
+    }
 }
 
 .check-no-graph {
@@ -162,6 +169,8 @@ nav.controls {
     font-style: italic;
     font-size: 14px;
 }
+
+
 
 
 #graphs{

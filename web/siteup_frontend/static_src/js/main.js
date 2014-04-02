@@ -1,11 +1,34 @@
+function fetchGraphData(graphName, graphData) {
+    // buildGraph(graphName, graphInfo[graphName]);
+
+    var ajaxUrl = base_url + '/get_dashboard_graph_data/' + graphData['type'] + '/' + graphData['id'];
+
+    $.getJSON(ajaxUrl, function(data) {
+        graphData['data'] = [];
+
+        data.map(function(current, index, array) {
+            graphData['data'].push([new Date(current[0]), current[1]]);
+        });
+
+        buildGraph(graphName, graphData);
+    });
+}
+
 function buildGraph(graphName, graphData) {
+    // Create the Data Table
     var data = new google.visualization.DataTable();
+
+    // Add the X axis
     data.addColumn('datetime', 'Date');
+
+    // Add the Y axis
     if (graphData['type'] == "pingcheck") {
         data.addColumn('number', 'Resp. time');
     } else {
         data.addColumn('number', 'Status');
     }
+
+    // Add the information
     data.addRows(graphData['data']);
 
     var options = {
@@ -58,13 +81,15 @@ function buildGraph(graphName, graphData) {
 
     var container = document.querySelector(graphName);
     var chart = new google.visualization.LineChart(container);
-    chart.draw(data, options);
+    $(container).find('.placeholder').fadeOut(function(){
+        chart.draw(data, options);
+    });
 }
 
 function buildGraphs() {
     if (typeof graphInfo != "undefined") {
         for (var graphName in graphInfo) {
-            buildGraph(graphName, graphInfo[graphName]);
+            fetchGraphData(graphName, graphInfo[graphName]);
         }
     }
 }

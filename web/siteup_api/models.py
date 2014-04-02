@@ -74,7 +74,7 @@ class CheckLog(models.Model):
         max_length=255
     )
 
-    response_time = models.IntegerField(
+    response_time = models.FloatField(
         default=0
     )
 

@@ -2,15 +2,18 @@ import logging
 logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.generic import View, TemplateView, RedirectView, CreateView, UpdateView, DeleteView, RedirectView, DetailView
@@ -260,12 +263,31 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 check.template_data.status_class = 'check-down' if check.template_data.status != 0 else ''
                 check.template_data.active_class = 'inactive' if not check.is_active else ''
 
-                if check.type_name() == "pingcheck":
-                    check.template_data.logs = ','.join(['[ new Date("{date}"), {value}]'.format(**{'date': log.date.isoformat(), 'value': log.response_time }) for log in check.logs.last_24_hours()])
-                else:
-                    check.template_data.logs = ','.join(['[ new Date("{date}"), {value}]'.format(**{'date': log.date.isoformat(), 'value': log.get_status() }) for log in check.logs.last_24_hours()])
-
         return context
+
+@login_required
+def get_dashboard_graph_data(request, check_type, check_id):
+
+    if check_type == "httpcheck":
+        check_class = models.HttpCheck
+    elif check_type == "dnscheck":
+        check_class = models.DnsCheck
+    elif check_type == "portcheck":
+        check_class = models.PortCheck
+    else:
+        check_class = models.PingCheck
+
+    try:
+        check = check_class.objects.get(id=check_id)
+    except check_class.DoesNotExist:
+        return HttpResponse('{}', content_type="application/json")
+
+    if check_type == "pingcheck":
+        response_value = [(log.date.isoformat(), log.response_time) for log in check.logs.last_24_hours()]
+    else:
+        response_value = [(log.date.isoformat(), log.get_status()) for log in check.logs.last_24_hours()]
+
+    return HttpResponse(json.dumps(response_value), content_type="application/json")
 
 
 ###################################################################################
