@@ -2,13 +2,6 @@
 {% load i18n %}
 {% load frontend_extras %}
 
-{% block head_extra %}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script>
-        google.load("visualization", "1", {packages:["corechart", "timeline"]});
-    </script>
-{% endblock head_extra %}
-
 {% block content %}
 <div class="single-check">
 
@@ -99,7 +92,9 @@
                 {% endif %}
             </div>
 
-            <div class="graph graph_{{ check.unique_name }}"></div>
+            <div class="detail-graph graph_{{ check.unique_name }}" data-uniquename=".graph_{{ check.unique_name }}">
+                <div class="placeholder">Fetching graph data...</div>
+            </div>
 
             <script>
                 if (typeof graphInfo == "undefined") {
@@ -113,11 +108,11 @@
 
                         {% if check.type_name == "pingcheck" %}
                             {% for log in logs.objs %}
-                                [ new Date("{{ log.date.isoformat }}"), {{ log.response_time }}],
+                                [ "{{ log.date.isoformat }}", {{ log.response_time }}],
                             {% endfor %}
                         {% else %}
                             {% for log in logs.objs %}
-                                [ new Date("{{ log.date.isoformat }}"), {{ log.get_status }}],
+                                [ "{{ log.date.isoformat }}", {{ log.get_status }}],
                             {% endfor %}
                         {% endif %}
 
@@ -160,7 +155,9 @@
                 {% endif %}
             </div>
 
-            <div class="graph graph_{{ check.unique_name }}_week"></div>
+            <div class="detail-graph graph_{{ check.unique_name }}_week" data-uniquename=".graph_{{ check.unique_name }}_week">
+                <div class="placeholder">Fetching graph data...</div>
+            </div>
 
             <script>
                 if (typeof graphInfo == "undefined") {
@@ -170,6 +167,7 @@
                     var graphName = ".graph_{{ check.unique_name }}_week";
                     graphInfo[graphName] = [];
                     graphInfo[graphName]['is_single'] = true;
+                    graphInfo[graphName]['is_week'] = true;
                     graphInfo[graphName]['data'] = [
 
                         {% if check.type_name == "pingcheck" %}

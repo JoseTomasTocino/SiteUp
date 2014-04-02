@@ -170,6 +170,35 @@ nav.controls {
     font-size: 14px;
 }
 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis, .y.axis {
+    font-size: 0.5rem;
+}
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: $color2;
+  stroke-width: 1.5px;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.6;
+    shape-rendering: crispEdges;
+}
+.grid path {
+    stroke-width: 0.5px;
+    shape-rendering: crispEdges;
+}
 
 
 

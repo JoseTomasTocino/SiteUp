@@ -2,12 +2,7 @@
 {% load i18n %}
 {% load frontend_extras %}
 
-{% block head_extra %}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script>
-        google.load("visualization", "1", {packages:["corechart", "timeline"]});
-    </script>
-{% endblock head_extra %}
+{% block body_class %}section-dashboard{% endblock body_class %}
 
 {% block content %}
 
@@ -124,7 +119,6 @@
                             (function(){
                                 var graphName = ".graph_{{ check.unique_name }}";
                                 graphInfo[graphName] = {};
-                                graphInfo[graphName]['data'] = [ {{ check.template_data.logs|safe }} ];
                                 graphInfo[graphName]['status'] = {{ check.template_data.status }};
                                 graphInfo[graphName]['type'] = '{{ check.type_name }}';
                                 graphInfo[graphName]['id'] = '{{ check.id }}';
