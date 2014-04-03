@@ -72,6 +72,10 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Make sure log folder exists
+if not os.path.isdir(os.path.join(BASE_DIR, '..', 'logs')):
+    os.mkdir(os.path.join(BASE_DIR, '..', 'logs'))
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
