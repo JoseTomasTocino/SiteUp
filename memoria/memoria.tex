@@ -18,6 +18,12 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 
+% Paquete con el entorno tabularx, que define un tipo de celda X que hace word-wrapping
+\usepackage{tabularx}
+
+% Paquete que provee el comando \FloatBarrier para poner una barrera para floats
+\usepackage{placeins}
+
 % Paquete para controlar el interlineado a nivel de entorno
 \usepackage{setspace}
 
@@ -96,13 +102,13 @@
 \label{chap:introduccion}
 \input{1_introduccion/texto_introduccion.tex}
 
-\chapter{Desarrollo del calendario}
+\chapter{Planificación}
 \label{chap:calendario}
-%\input{2_calendario/texto_calendario.tex}
+\input{2_calendario/texto_calendario.tex}
 
-\chapter{Fundamentos}
+\chapter{Requisitos del sistema}
 \label{chap:fundamentos}
-%\input{3_investigacion/texto_investigacion.tex}
+\input{3_requisitos/texto.tex}
 
 \chapter{Análisis}
 \label{chap:analisis}

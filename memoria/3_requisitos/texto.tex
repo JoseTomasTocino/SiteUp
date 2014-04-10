@@ -1,0 +1,190 @@
+\section{Estado del arte}
+
+En la actualidad existen bastantes servicios web que ofrecen algunas
+características similares a las que se desean en SiteUp, pero no todas. Se
+presentan a continuación algunos de estos servicios, junto a los problemas que
+se han detectado.
+
+\begin{description}
+\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
+  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
+  ofrece chequeo de registros DNS.
+\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
+  días. No ofrece chequeo de registros DNS.
+\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
+  minutos. No ofrece chequeo de DNS.
+\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
+  cuenta gratuita. No tienen chequeo de DNS.
+\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
+  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
+
+\end{description}
+
+Una carencia importante que no se ha mencionado por ser generalizada es la falta
+de aplicaciones nativas para móviles. Así pues, queda patente la dificultad de
+encontrar un servicio que aúne el mayor número de características posibles a la
+vez que mantiene un servicio gratuito y de calidad.
+
+\subsection{Motivación personal}
+
+En lo personal, la idea de desarrollar este proyecto surgió a raíz de una
+necesidad personal. Durante un importante proceso de selección que estaba
+gestionando por correo electrónico, la empresa que gestionaba el dominio de mi
+web personal (y, por extensión, mi correo electrónico) tuvo un problema y
+reemplazó los registros DNS personalizados por unos por defecto. Las alertas que
+tenía puestas para verificar que mi web estaba operativa no dieron la alarma, ya
+que el dominio ahora apuntaba a un espacio de párking genérico que no generaba
+ningún código de error, pero los correos electrónicos no se estaban enrutando
+correctamente. Esta situación se prolongó durante varios días, en los cuales
+perdí varios correos importantes
+
+Esto se podría haber detectado rápidamente si hubiera tenido un chequeo que
+verificase que los registros DNS apuntaban a las IP correctas. A partir de ahí,
+se hizo un estudio de mercado, cuyas conclusiones se han reflejado en la sección
+anterior, y dadas las obvias limitaciones de las alternativas existentes se
+decidió elaborar un proyecto nuevo.
+
+\section{Objetivos del sistema}
+
+Los objetivos principales de SiteUp son:
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Crear chequeos de múltiples tipos sobre servicios de internet \\
+
+    \hline
+
+    Descripción & SiteUp permitirá crear chequeos de diversas clases para la comprobación
+    de servicios de internet, utilizando varias tecnologías de chequeo y múltiples vectores de verificación: ping, puertos, hipertexto y registros DNS. \\    
+
+    \hline
+  \end{tabularx}
+  \caption{OBJ-1}
+\end{table}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Notificación a los usuarios \\
+
+    \hline
+
+    Descripción & SiteUp deberá notificar a sus usuarios cuando el estado de sus chequeos cambie. Estas notificaciones se harán tanto por móvil como a través de una aplicación Android. \\
+
+    \hline
+  \end{tabularx}
+  \caption{OBJ-2}
+\end{table}
+
+\section{Catálogo de requisitos}
+
+Se presentan a continuación los requisitos del sistema, tanto a nivel funcional como de información y no funcionales.
+
+\subsection{Requisitos funcionales}
+
+\subsubsection{Gestión de usuarios}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Creación de cuenta de usuario \\
+
+    \hline
+
+    Descripción & El usuario de SiteUp deberá ser capaz de crear una cuenta de usuario para acceder a las funciones de SiteUp, proporcionando su nombre de usuario,
+                  dirección de correo electrónico y contraseña. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-1}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Edición de cuenta de usuario \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de editar sus datos personales y preferencias de usuario. En particular, deberá ser capaz de editar su nombre de usuario,
+dirección de correo electrónico y contraseña, además de opciones como la posibilidad de recibir un resumen diario del estado de sus chequeos. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-2}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Gestión de chequeos}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Creación de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de dar de alta chequeos
+    de cuatro tipos distintos: \textit{Ping check}, \textit{Port check},
+    \textit{DNS Check} y \textit{HTTP Check}. Según el tipo de chequeo a dar de
+    alta, el usuario deberá introducir una serie de detalles, siendo común a
+    todos ellos el incluir un título que identifique el chequeo, el objetivo del
+    chequeo, la periodicidad y las opciones de notificar mediante e-mail y
+    Android.  Los detalles particulares de cada chequeo se definen en los
+    requisitos de información. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-3}
+\end{table}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Actualización de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de actualizar un
+    determinado chequeo, modificando cualquiera de los detalles que lo definen
+    (a excepción del tipo de chequeo, que es fijo). \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-4}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Eliminación de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de eliminar un
+    determinado chequeo, evitando así que el sistema lo tenga en cuenta a la
+    hora de lanzar las monitorizaciones. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-5}
+\end{table}
+
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 
