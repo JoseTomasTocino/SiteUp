@@ -56,8 +56,10 @@ Los objetivos principales de SiteUp son:
 
     \hline
 
-    Descripción & SiteUp permitirá crear chequeos de diversas clases para la comprobación
-    de servicios de internet, utilizando varias tecnologías de chequeo y múltiples vectores de verificación: ping, puertos, hipertexto y registros DNS. \\    
+    Descripción & SiteUp permitirá crear chequeos de diversas clases para la
+    comprobación de servicios de internet, utilizando varias tecnologías de
+    chequeo y múltiples vectores de verificación: ping, puertos, hipertexto y
+    registros DNS. \\    
 
     \hline
   \end{tabularx}
@@ -73,7 +75,9 @@ Los objetivos principales de SiteUp son:
 
     \hline
 
-    Descripción & SiteUp deberá notificar a sus usuarios cuando el estado de sus chequeos cambie. Estas notificaciones se harán tanto por móvil como a través de una aplicación Android. \\
+    Descripción & SiteUp deberá notificar a sus usuarios cuando el estado de sus
+    chequeos cambie. Estas notificaciones se harán tanto por móvil como a través
+    de una aplicación Android. \\
 
     \hline
   \end{tabularx}
@@ -96,8 +100,9 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
 
-    Descripción & El usuario de SiteUp deberá ser capaz de crear una cuenta de usuario para acceder a las funciones de SiteUp, proporcionando su nombre de usuario,
-                  dirección de correo electrónico y contraseña. \\
+    Descripción & El usuario de SiteUp deberá ser capaz de crear una cuenta de
+    usuario para acceder a las funciones de SiteUp, proporcionando su nombre de
+    usuario, dirección de correo electrónico y contraseña.\\
 
     \hline
   \end{tabularx}
@@ -112,12 +117,87 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
 
-    Descripción & Un usuario logueado deberá ser capaz de editar sus datos personales y preferencias de usuario. En particular, deberá ser capaz de editar su nombre de usuario,
-dirección de correo electrónico y contraseña, además de opciones como la posibilidad de recibir un resumen diario del estado de sus chequeos. \\
+    Descripción & Un usuario logueado deberá ser capaz de editar sus datos
+    personales y preferencias de usuario. En particular, deberá ser capaz de
+    editar su nombre de usuario, dirección de correo electrónico y contraseña,
+    además de opciones como la posibilidad de recibir un resumen diario del
+    estado de sus chequeos.\\
 
     \hline
   \end{tabularx}
   \caption{RQF-2}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Gestión de grupos de chequeos}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Creación de grupos de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de crear un grupo de
+    chequeos, indicando el título que identifique al grupo.\\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-3}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Edición de grupos de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de editar un grupo de
+    chequeos que previamente haya creado. En particular, deberá ser capaz de
+    modificar el título del grupo.
+
+    \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-4}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Eliminación de grupos de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de eliminar un grupo de
+    chequeos, eliminando en el proceso tanto el grupo en sí como los chequeos
+    que pertenezcan a ese grupo. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-5}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Activación y desactivación de grupos de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de activar y desactivar
+    un grupo de chequeos. En la práctica, esto activará o desactivará cada uno
+    de los chequeos que pertenezcan al grupo de forma individual. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-6}
 \end{table}
 
 \FloatBarrier
@@ -131,18 +211,19 @@ dirección de correo electrónico y contraseña, además de opciones como la pos
 
     \hline
 
-    Descripción & Un usuario logueado deberá ser capaz de dar de alta chequeos
-    de cuatro tipos distintos: \textit{Ping check}, \textit{Port check},
-    \textit{DNS Check} y \textit{HTTP Check}. Según el tipo de chequeo a dar de
-    alta, el usuario deberá introducir una serie de detalles, siendo común a
-    todos ellos el incluir un título que identifique el chequeo, el objetivo del
-    chequeo, la periodicidad y las opciones de notificar mediante e-mail y
-    Android.  Los detalles particulares de cada chequeo se definen en los
+    Descripción & Un usuario logueado deberá ser capaz de añadir a un grupo un
+    chequeo que puede ser de cuatro tipos distintos: \textit{Ping check},
+    \textit{Port check}, \textit{DNS Check} y \textit{HTTP Check}. Según el tipo
+    de chequeo a dar de alta, el usuario deberá introducir una serie de
+    detalles, siendo común a todos ellos el incluir un título que identifique el
+    chequeo, el objetivo del chequeo, la periodicidad y las opciones de
+    notificar mediante e-mail y Android.  Los detalles particulares de cada
+    chequeo se definen en los
     requisitos de información. \\
 
     \hline
   \end{tabularx}
-  \caption{RQF-3}
+  \caption{RQF-7}
 \end{table}
 
 
@@ -160,7 +241,7 @@ dirección de correo electrónico y contraseña, además de opciones como la pos
 
     \hline
   \end{tabularx}
-  \caption{RQF-4}
+  \caption{RQF-8}
 \end{table}
 
 \begin{table}[h!]
@@ -177,12 +258,501 @@ dirección de correo electrónico y contraseña, además de opciones como la pos
 
     \hline
   \end{tabularx}
-  \caption{RQF-5}
+  \caption{RQF-9}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Activación y desactivación de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de activar o desactivar
+    un chequeo, de forma que mientras esté activado, el chequeo será lanzado
+    periódicamente por el motor de chequeos, y cuando esté desactivado el
+    chequeo será ignorado por el sistema hasta que el usuario lo active de
+    nuevo. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-11}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Revisión de chequeos \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de revisar los datos de
+    monitorización que se hayan generado para un chequeo que previamente haya
+    dado de alta, pudiendo ver una gráfica con el estado del chequeo a lo largo
+    del tiempo. Además debe ser capaz de elegir el período de tiempo en el que
+    revisar los datos (últimas 24 horas, última semana, etcétera). \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-11}
 \end{table}
 
 
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Recepción de notificaciones por correo electrónico \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de recibir notificaciones
+    a través del correo electrónico cuando el estado de un chequeo cambie,
+    siempre que el usuario haya activado las notificaciones por correo para ese
+    chequeo. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-12}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Aplicación Android}
 
 
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Listado de chequeos en la aplicación Android \\
+
+    \hline
+
+    Descripción & Un usuario deberá ser capaz de ejecutar la aplicación de
+    Android, loguearse con su cuenta de usuario y ver un listado de los chequeos
+    que ha dado de alta en el sistema, así como un resumen de su estado.
+    \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-13}
+\end{table}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Recepción de notificaciones por la aplicación Android \\
+
+    \hline
+
+    Descripción & Un usuario logueado deberá ser capaz de recibir notificaciones
+    a través de la aplicación Android cuando el estado de un chequeo cambie,
+    siempre que el usuario haya activado las notificaciones para ese
+    chequeo. \\
+
+    \hline
+  \end{tabularx}
+  \caption{RQF-14}
+\end{table}
+
+\FloatBarrier
+\subsection{Requisitos de información}
+\label{sec:requisitos-informacion}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Usuario del sistema\\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+    \item Nombre de usuario
+    \item Dirección de correo electrónico
+    \item Contraseña
+    \item (\textit{Opcional}) Identificador de dispositivo Android
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-1}
+\end{table}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Chequeo tipo DNS \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+      \item Título 
+      \item Descripción
+      \item Objetivo -- Debe ser una IP o un hostname
+      \item Frecuencia de chequeo en minutos
+      \item Notificar por correo
+      \item Notificar por Android
+      \item Si se debe chequear el tiempo de respuesta
+      \item Tiempo máximo de respuesta en milisegundos
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-2}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Chequeo tipo Ping \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+      \item Título 
+      \item Descripción
+      \item Objetivo -- Debe ser un hostname
+      \item Tipo de registro DNS (A, AAAA, CNAME, MX, TXT)
+      \item Contenido esperado del registro DNS
+      \item Frecuencia de chequeo en minutos
+      \item Notificar por correo
+      \item Notificar por Android
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-3}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Chequeo tipo Port \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+      \item Título 
+      \item Descripción
+      \item Objetivo -- Debe ser una IP o un hostname
+      \item Puerto objetivo
+      \item \textit{Opcional} - Cadena de caracteres que debe aparecer en la respuesta
+      \item Frecuencia de chequeo en minutos
+      \item Notificar por correo
+      \item Notificar por Android
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-4}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Chequeo tipo HTTP \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+      \item Título 
+      \item Descripción
+      \item Objetivo -- Debe ser una \ac{URL} \ac{HTTP}
+      \item Código de estado HTTP
+      \item \textit{Opcional} - Cadena de caracteres que debe aparecer en la respuesta
+      \item Frecuencia de chequeo en minutos
+      \item Notificar por correo
+      \item Notificar por Android
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-5}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Registro de un chequeo \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+    \item Fecha y hora de registro
+    \item Estado (Up, Down, Error)
+    \item Tiempo de respuesta (solo para chequeos tipo Ping).
+    \item Información adicional
+    \item Chequeo asociado
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-6}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Estado de un chequeo \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+    \item Fecha y hora de inicio del estado
+    \item Fecha y hora de fin del estado
+    \item Estado (Up, Down, Error)
+    \item Información adicional
+    \item Chequeo asociado
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-7}
+\end{table}
+
+
+\FloatBarrier
+\subsection{Requisitos no funcionales}
+
+\subsubsection{Requisitos de seguridad}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Cifrado de contraseñas de usuario \\
+
+    \hline
+
+    Descripción & Las contraseñas de los usuarios se almacenarán cifradas con un
+    algoritmo de un solo sentido, de acuerdo a lo establecido en la vigente \ac{LOPD}. \\
+
+
+    \hline
+  \end{tabularx}
+  \caption{NRQ-1}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Restricciones de acceso a usuarios \\
+
+    \hline
+
+    Descripción & Los datos de los chequeos dados de alta sólo serán accesibles
+    por los usuarios que los hayan creado y los administradores de la plataforma. \\
+
+
+    \hline
+  \end{tabularx}
+  \caption{NRQ-2}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Requisitos de fiabilidad}
+
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Ejecución de chequeos \\
+
+    \hline
+
+    Descripción & Los retrasos en la periodicidad de los chequeos no puede
+    superar el 200\% del tiempo entre chequeos. Esto es, si un chequeo tiene una
+    periodicidad de 1 minuto, en caso de sobrecarga del sistema el tiempo máximo
+    entre chequeos será de 3 minutos (un retraso del 200\%). \\
+
+    \hline
+  \end{tabularx}
+  \caption{NRQ-3}
+\end{table}
+
+
+\FloatBarrier
+\subsubsection{Requisitos de accesibilidad y usabilidad}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Adaptación a dispositivos \\
+
+    \hline
+
+    Descripción & La plataforma web deberá ser accesible desde cualquier clase
+    de dispositivo móvil con acceso a internet: móviles, tablets, etcétera,
+    manteniendo siempre la accesibilidad y el grueso del contenido. \\
+
+    \hline
+  \end{tabularx}
+  \caption{NRQ-4}
+\end{table}
+
+
+\FloatBarrier
+\subsubsection{Requisitos de eficiencia}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+    Título & Monitorización de peticiones de demasiada duración \\
+
+    \hline
+
+    Descripción & En aras de mantener el sistema fluyendo, el motor de chequeos
+    deberá ser capaz de identificar y abortar los chequeos que, por causas
+    propias o ajenas al sistema, estén tardando más de lo previsto e incidiendo
+    negativamente en la eficiencia del sistema. \\
+
+    \hline
+  \end{tabularx}
+  \caption{NRQ-5}
+\end{table}
+
+\subsection{Alternativas de solución}
+
+En esta subsección se presentan las diferentes alternativas existentes para
+cubrir las necesidades del proyecto SiteUp.
+
+\subsubsection{Frameworks para el desarrollo de la plataforma web}
+
+Dada la mayor familiaridad del desarrollador con el lenguaje, solo se barajaron
+frameworks de desarrollo basados en el lenguaje Python.
+
+\begin{itemize}
+\item \textbf{Django}: popular framework para el desarrollo rápido de
+  aplicaciones web. Consta de una arquitectura similar al popular patrón
+  \ac{MVC}, y cuenta con una basta comunidad de usuarios. Los proyectos Django
+  se organizan en \textit{apps}, que permiten modularizar la
+  funcionalidad. Integra un \ac{ORM}, un sistema de plantillas y una sección de
+  administración adaptable a cualquier sitio web.
+
+\item \textbf{Flask}: se trata de un minimalista framework para Python que
+  provee las funcionalidades más básicas, dejando al desarrollador elegir el
+  resto de componentes. En los últimos meses, Flask ha ganado gran popularidad
+  frente a Django al dar más libertad al programador.
+
+\item \textbf{Bottle}: similar a Flask, Bottle es otro micro-framework para
+  Python, siendo tan minimalista que está encapsulado en un solo fichero fuente
+  y no necesita de dependencias externas. Se encuentra en etapas tempranas de su desarrollo.
+
+\end{itemize}
+
+Se tomó la decisión de optar por \textbf{Django} por ser el framework más
+robusto y con mayor número de utilidades. Su uso por grandes proyectos, como
+Instagram, afianzó aún más la decisión de usarlo.
+
+\subsubsection{Sistemas de gestión de bases de datos}
+
+\begin{itemize}
+\item \textbf{MySQL}, uno de los sistemas de bases de datos más populares. Se
+  usa en multitud de proyectos de gran envergadura y su utilidad y fiabilidad
+  están más que demostradas. Cuenta con una arquitectura cliente-servidor, y
+  suele necesitar bastantes recursos.
+
+\item \textbf{SQLite}: potente pero ligero, SQLite se aleja de la arquitectura
+  cliente-servidor y se integra directamente en la aplicación cliente pasando a
+  ser parte integral del mismo. Esto reduce la latencia en las comunicaciones de
+  datos. Es el SGBD que Django usa por defecto.
+
+\end{itemize}
+
+En este aspecto, se ha tomado la decisión de utilizar SQLite por varias
+razones. En primer lugar, es la opción que usa Django por defecto. En segundo
+lugar, los datos se guardan en un fichero, por lo que resulta trivial mover el
+sistema de un servidor a otro, lo cual es un gran ahorro de tiempo durante el
+desarrollo. Finalmente, SQLite provee el rendimiento necesario para las etapas
+tempranas del proyecto.
+
+De cualquier modo, en un futuro no se descarta pasar a un SGBD basado en la
+arquitectura cliente-servidor, como MySQL.
+
+\subsubsection{Sistemas para la ejecución asíncrona de tareas}
+
+\begin{itemize}
+\item \textbf{Cron} es un demonio~\footnote{Entiéndase \textit{demonio} en el
+    sentido de un servicio que se ejecuta en segundo plano.} encargado de lanzar
+  procesos de forma periódica utilizado en sistemas operativos basados en
+  Unix. Cada usuario en un sistema cuenta con un fichero \textit{crontab}, en el
+  que puede definir qué tareas ejecutar y con qué periodicidad deben ejecutarse. 
+
+\item \textbf{Celery} es una cola de tareas asíncronas desarrollado en
+  Python. Una instalación de celery cuenta con una serie de \textit{workers} que
+  leen tareas de una cola de mensajes (basada en el estándar \ac{AMQP}) y las
+  ejecutan de forma síncrona o asíncrona, opcionalmente guardando su resultado
+  en alguna clase de estructura. 
+
+\end{itemize}
+
+De las opciones presentadas finalmente se decidió usar \textbf{Celery} por
+varias razones:
+
+\begin{itemize}
+\item Facilidad al dar de alta nuevas tareas. En el caso de cron, es necesario
+  gestionar manualmente las tareas a ejecutar y añadirm también de forma manual,
+  el proceso que lance esas tareas al fichero \textit{crontab}. En el caso de
+  celery, contamos con unas bibliotecas con las que simplemente damos de alta
+  una tarea y el sistema se encarga de ponerla en cola y ejecutarla en el
+  momento adecuado.
+
+\item Monitorización. Una de las mayores dificultades que presenta cron es la
+  monitorización de su ejecución. No existe una certeza absoluta de que se estén
+  lanzando los procesos, al menos que se elabore un sistema de verificación
+  externo. En cambio, celery cuenta con sistemas de monitorización de la
+  ejecución y \textit{logs} en los que se registra el progreso de cada tarea.
+
+\item Integración. Al estar escrito en Python, celery se integra perfectamente
+  con cualquier proyecto Django. Sin embargo, cron no ofrece de forma nativa
+  ninguna opción de integración.
+
+\end{itemize}
 
 %%% Local Variables: 
 %%% mode: latex
