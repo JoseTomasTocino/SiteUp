@@ -98,7 +98,7 @@ class CheckLog(models.Model):
             self.check.update_status(self)
 
     def get_status(self):
-        return 1 - self.status
+        return 1 if self.status == 0 else 0
 
 
 class CheckStatus(models.Model):
