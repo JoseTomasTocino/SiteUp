@@ -21,7 +21,14 @@
 % Paquete con el entorno tabularx, que define un tipo de celda X que hace word-wrapping
 \usepackage{tabularx}
 
+% Paquete con el entorno longtable y longtabu para tablas de varias páginas
+\usepackage{longtable}
+
+% Provee la flag H para forzar los floats en el sitio donde los pongas
 \usepackage{float}
+
+% Provee el comando \captionof para dar etiquetas a elementos no flotados
+\usepackage{caption}
 
 % Paquete que provee el comando \FloatBarrier para poner una barrera para floats
 \usepackage{placeins}
@@ -148,7 +155,7 @@
 
 \chapter{GNU Free Documentation License}
 \label{sec:fdl}
-%\input{0_misc/fdl.tex}
+\input{0_misc/fdl.tex}
 
 \bibliographystyle{paquetes/hispa-annote}
 \bibliography{0_misc/bibliografia}

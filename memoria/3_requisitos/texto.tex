@@ -1,42 +1,15 @@
-\section{Estado del arte}
+\section{Situación actual}
 
-En la actualidad existen bastantes servicios web que ofrecen algunas
-características similares a las que se desean en SiteUp, pero no todas. Se
-presentan a continuación algunos de estos servicios, junto a los problemas que
-se han detectado.
-
-\begin{description}
-\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
-  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
-  ofrece chequeo de registros DNS.
-\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
-  días. No ofrece chequeo de registros DNS.
-\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
-  minutos. No ofrece chequeo de DNS.
-\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
-  cuenta gratuita. No tienen chequeo de DNS.
-\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
-  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
-
-\end{description}
-
-Una carencia importante que no se ha mencionado por ser generalizada es la falta
-de aplicaciones nativas para móviles. Así pues, queda patente la dificultad de
-encontrar un servicio que aúne el mayor número de características posibles a la
-vez que mantiene un servicio gratuito y de calidad.
-
-\subsection{Motivación personal}
-
-En lo personal, la idea de desarrollar este proyecto surgió a raíz de una
-necesidad personal. Durante un importante proceso de selección que estaba
-gestionando por correo electrónico, la empresa que gestionaba el dominio de mi
-web personal (y, por extensión, mi correo electrónico) tuvo un problema y
-reemplazó los registros DNS personalizados por unos por defecto. Las alertas que
-tenía puestas para verificar que mi web estaba operativa no dieron la alarma, ya
-que el dominio ahora apuntaba a un espacio de párking genérico que no generaba
-ningún código de error, pero los correos electrónicos no se estaban enrutando
-correctamente. Esta situación se prolongó durante varios días, en los cuales
-perdí varios correos importantes
+La idea de desarrollar este proyecto surgió a raíz de una necesidad
+personal. Durante un importante proceso de selección llevado a cabo a través de
+correo electrónico, la empresa que gestionaba el dominio de mi web personal (y,
+por extensión, mi correo electrónico) tuvo un problema y reemplazó los registros
+DNS personalizados por unos por defecto. Las alertas que tenía puestas para
+verificar que mi web estaba operativa no dieron la alarma, ya que el dominio
+ahora apuntaba a un espacio de párking genérico que no generaba ningún código de
+error, pero los correos electrónicos no se estaban enrutando correctamente. Esta
+situación se prolongó durante varios días, en los cuales perdí varios correos
+importantes
 
 Esto se podría haber detectado rápidamente si hubiera tenido un chequeo que
 verificase que los registros DNS apuntaban a las IP correctas. A partir de ahí,
@@ -394,7 +367,7 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
-    & Chequeo tipo DNS \\
+    & Chequeo tipo Ping \\
 
     \hline
     Datos específicos &
@@ -422,7 +395,7 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
-    & Chequeo tipo Ping \\
+    & Chequeo tipo DNS \\
 
     \hline
     Datos específicos &
@@ -551,6 +524,27 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
   \caption{IRQ-7}
 \end{table}
 
+\begin{table}[h!]
+  \centering
+  \begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+
+    & Grupo de chequeos \\
+
+    \hline
+    Datos específicos &
+
+    \begin{itemize}
+      \item Título
+      \item Dueño
+    \end{itemize}
+    \\
+    
+    \hline
+    
+  \end{tabularx}
+  \caption{IRQ-8}
+\end{table}
 
 \FloatBarrier
 \subsection{Requisitos no funcionales}
@@ -658,8 +652,32 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
 \subsection{Alternativas de solución}
 
-En esta subsección se presentan las diferentes alternativas existentes para
-cubrir las necesidades del proyecto SiteUp.
+\subsubsection{Estado del arte}
+
+En la actualidad existen bastantes servicios web que ofrecen algunas
+características similares a las que se desean en SiteUp, pero no todas. Se
+presentan a continuación algunos de estos servicios, junto a los problemas que
+se han detectado.
+
+\begin{description}
+\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
+  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
+  ofrece chequeo de registros DNS.
+\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
+  días. No ofrece chequeo de registros DNS.
+\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
+  minutos. No ofrece chequeo de DNS.
+\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
+  cuenta gratuita. No tienen chequeo de DNS.
+\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
+  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
+
+\end{description}
+
+Una carencia importante que no se ha mencionado por ser generalizada es la falta
+de aplicaciones nativas para móviles. Así pues, queda patente la dificultad de
+encontrar un servicio que aúne el mayor número de características posibles a la
+vez que mantiene un servicio gratuito y de calidad.
 
 \subsubsection{Frameworks para el desarrollo de la plataforma web}
 

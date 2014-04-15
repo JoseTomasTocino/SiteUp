@@ -12,10 +12,498 @@ consigue una documentación más concisa y cercana al producto final.
 \section{Modelo conceptual}
 
 De acuerdo a lo reflejado en el apartado~\ref{sec:requisitos-informacion} se
-presenta un diagrama en el que se identifican las clases, sus atributos y las
-relaciones entre ellas.
+presenta el diagrama~\ref{fig:modelo-conceptual} en el que se identifican las
+clases, sus atributos y las relaciones entre ellas.
+
+\begin{figure}[hp]
+  \centering
+  \includegraphics[width=\textwidth]{4_analisis/diagrama_clases_conceptuales}
+  \caption{Modelo conceptual}
+  \label{fig:modelo-conceptual}
+\end{figure}
 
 
+\subsection{Usuario}
+
+\begin{description}
+\item[Nombre] Nombre elegido por el usuario.
+\item[Correo electrónico] Dirección de correo electrónico.
+\item[Contraseña] Contraseña para el login del usuario.
+\item[Identificador Android] Identificador único del dispositivo Android del usuario.
+\end{description}
+
+\subsection{Grupo de chequeos}
+
+\begin{description}
+\item[Título] Título para identificar al grupo de chequeos.
+\end{description}
+
+\subsection{Chequeo}
+
+\begin{description}
+\item[Título] Título para identificar al chequeo.
+\item[Descripción] Información adicional en forma textual sobre el chequeo.
+\item[Frecuencia de chequeo] Frecuencia temporal del chequeo, expresada en minutos.
+\item[Notificar por correo] Indica si los cambios de estado del chequeo deben notificarse por correo electrónico.
+\item[Notificar por Android] Indica si los cambios de estado del chequeo deben notificarse por la aplicación Android.
+\end{description}
+
+\subsection{Registro de chequeo}
+
+\begin{description}
+\item[Fecha] Fecha y hora en la que se obtuvo este registro.
+\item[Estado] Resultado del lanzamiento del chequeo. El estado puede ser
+  \textit{Up}, que indica que el objetivo está funcionando; \textit{Down}, que
+  indica que el objetivo no está funcionando correctamente; y \textit{Error},
+  que indica que hubo un problema lanzando el chequeo.
+\item[Tiempo de respuesta] \textit{(solo para chequeos tipo Ping)} indica el
+  tiempo de respuesta medio obtenido al lanzar el chequeo.
+\item[Información adicional] Datos extra en caso de que el estado no sea \textit{Up}.
+\end{description}
+
+\subsection{Chequeo - Ping}
+
+\begin{description}
+\item[Objetivo] Identificador de la máquina a la que enviar el ping. Debe ser un
+  \textit{hostname} o una IP.
+\item[Chequear tiempo?] Indica si además de chequear que la máquina responde al
+  ping, también se debe chequear que el tiempo de respuesta sea menor que el indicado.
+\item[Tiempo máximo] Tiempo de respuesta máximo permitido.
+\end{description}
+
+\subsection{Chequeo - Port}
+
+\begin{description}
+\item[Objetivo] Identificador de la máquina a chequear.
+\item[Puerto objetivo] Puerto remoto en la máquina que se chequeará.
+\item[Contenido de respuesta] \textit{(opcional)} Cadena de caracteres que
+  deberá estar presente en la respuesta obtenida de la máquina remota.
+\end{description}
+
+\subsection{Chequeo - DNS}
+
+\begin{description}
+\item[Objetivo] Dominio sobre el que realizar el chequeo de DNS.
+\item[Tipo de registro] Tipo de registro DNS a verificar. Puede ser A, AAAA, CNAME, MX y TXT.
+\item[Contenido de registro] El contenido que debe tener el registro a consultar.
+\end{description}
+
+\subsection{Chequeo - HTTP}
+
+\begin{description}
+\item[Objetivo] URL a verificar.
+\item[Código de estado] Código que debe devolver la petición a la URL indicada.
+\item[Cadena de respuesta] \textit{(opcional)} Cadena que debe encontrarse en la
+  respuesta obtenida.
+\end{description}
+
+
+
+\section{Modelo de casos de uso}
+
+\subsection{Actores}
+
+En este apartado se describen los diversos roles que juegan los usuarios del
+sistema. Se reflejan todos ellos en el diagrama \ref{fig:actores}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{4_analisis/diagrama_actores}
+  \caption{Diagrama de actores}
+  \label{fig:actores}
+\end{figure}
+
+\subsubsection{Usuario}
+
+\begin{center}
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+     & Usuario \\
+
+    \hline
+
+    Descripción & Usuario libre de la aplicación, que puede haber hecho login previamente o no. \\
+
+    \hline
+  \end{tabularx}
+
+\end{center}
+
+
+\subsubsection{Usuario logueado}
+
+\begin{center}
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+     & Usuario logueado \\
+
+    \hline
+
+    Descripción & Usuario que previamente se ha registrado y ha hecho login en el sistema. \\
+
+    \hline
+  \end{tabularx}
+\end{center}
+
+\subsubsection{Servidor de tareas}
+
+\begin{center}
+  \centering
+  \begin{tabularx}{\textwidth}{|c|X|}
+    \hline
+     & Servidor de tareas \\
+
+    \hline
+
+    Descripción & Servidor de tareas asíncronas que periódicamente lanza tareas que previamente se hayan dado de alta. \\
+
+    \hline
+  \end{tabularx}
+\end{center}
+
+\subsection{Subsistema de gestión de usuarios}
+
+Los casos de uso pertenecientes a este subsistema pueden verse en la
+figura~\ref{fig:subsistema-usuarios}
+
+\begin{figure}[hp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{4_analisis/diagrama_subsistema_gestion_usuarios}
+  \caption{Casos de uso del subsistema de gestión de usuarios}
+  \label{fig:subsistema-usuarios}
+\end{figure}
+
+\subsubsection{Caso de uso: registro de usuario}
+
+\begin{description}
+\item[Descripción] Un usuario no logueado se registra en la aplicación para poder dar de alta chequeos.
+\item[Actores] \textit{Usuario}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item Un usuario decide registrarse en el sistema y accede al panel de registro.
+  \item El \textit{usuario} introduce su nombre de usuario, dirección de correo electrónico y contraseña.
+  \item El \textit{sistema} comprueba que los datos introducidos son correctos.
+  \item El \textit{sistema} registra al usuario.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[3a] Alguno de los datos introducidos es incompleto o no es correcto. El
+    sistema informa al usuario del error.
+  \item[3b] El nombre de usuario o dirección de correo electrónico ya han sido
+    usados por otro usuario previamente. El sistema informa al usuario del error.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: login de usuario}
+
+
+\begin{description}
+\item[Descripción] Un usuario no logueado pero previamente registrado quiere hacer login en la aplicación.
+\item[Actores] \textit{Usuario}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item Un usuario decide hacer login en el sistema.
+  \item El \textit{usuario} accede al panel de login e introduce su nombre de usuario y contraseña.
+  \item El \textit{sistema} comprueba que los datos introducidos son correctos.
+  \item El \textit{sistema} loguea al usuario
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[3a] Alguno de los datos introducidos no tiene el formato correcto o está
+    en blanco. El sistema informa al usuario del error.
+  \item[3b] Los datos introducidos no corresponden a ningún usuario
+    registrado. El sistema informa al usuario del error.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: edición de usuario}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide editar alguno de sus datos personales.
+\item[Actores] \textit{Usuario logueado}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} accede a su perfil de usuario a través del enlace \textit{Your profile}.
+  \item El \textit{sistema} muestra los datos actuales.
+  \item El \textit{usuario} edita los datos que quiera y envía el formulario.
+  \item El \textit{sistema} comprueba los nuevos datos y guarda los cambios.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[3a] Alguno de los nuevos datos no son válidos. El sistema informa del error al usuario.
+  \end{description}
+\end{description}
+
+\subsection{Subsistema de gestión de grupos de chequeos}
+
+Los casos de uso pertenecientes a este subsistema pueden verse en la figura~\ref{fig:subsistema-grupos}
+
+\begin{figure}[hp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{4_analisis/diagrama_subsistema_gestion_grupos}
+  \caption{Casos de uso del subsistema de gestión de grupos de chequeos}
+  \label{fig:subsistema-grupos}
+\end{figure}
+
+\subsubsection{Caso de uso: creación de grupo de chequeos}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide crear un grupo de chequeos.
+\item[Actores] \textit{Usuario logueado}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide crear un nuevo grupo de chequeos.
+  \item El \textit{usuario} pulsa en el botón de \textit{Añadir grupo}.
+  \item El \textit{sistema} muestra el formulario para añadir nuevo grupo.
+  \item El \textit{usuario} escribre el título del grupo.
+  \item El \textit{sistema} valida el título introducido.
+  \item El \textit{sistema} crea el nuevo grupo.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+
+  \begin{description}
+  \item[5a] El título introducido está en blanco o es inválido. El sistema
+    informa al usuario del error.
+  \end{description}
+\end{description}
+
+
+\subsubsection{Caso de uso: edición de grupo de chequeos}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide editar un grupo de chequeos.
+\item[Actores] \textit{Usuario logueado}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide editar un nuevo grupo de chequeos.
+  \item El \textit{usuario} pulsa en el botón de \textit{Editar grupo} del grupo que quiera editar..
+  \item El \textit{sistema} muestra el formulario para editar el grupo.
+  \item El \textit{usuario} modifica el título del grupo.
+  \item El \textit{sistema} valida el título introducido.
+  \item El \textit{sistema} actualiza los datos del grupo.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+
+  \begin{description}
+  \item[5a] El título introducido está en blanco o es inválido. El sistema
+    informa al usuario del error.
+  \end{description}
+\end{description}
+
+
+\subsubsection{Caso de uso: eliminación de grupo de chequeos}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide eliminar un grupo de chequeos.
+\item[Actores] \textit{Usuario logueado}.
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide eliminar uno de sus grupos de chequeos.
+  \item El \textit{usuario} pulsa en el botón de eliminar grupo.
+  \item El \textit{sistema} muestra el formulario para confirmar la eliminación.
+  \item El \textit{usuario} confirma la eliminación.
+  \item El \textit{sistema} elimina los chequeos asociados al grupo.
+  \item El \textit{sistema} elimina el grupo de chequeos.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[3a] El \textit{usuario} no confirma la eliminación. El \textit{sistema}
+    muestra la pantalla inicial.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: activación de grupo de chequeos}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide activar un grupo de chequeos.
+\item[Actores] \textit{Usuario logueado}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide activar un grupo de chequeos.
+  \item El \textit{usuario} pulsa en el botón de \textit{Activar grupo}.
+  \item El \textit{sistema} itera por todos los chequeos pertenecientes al
+    grupo, activando cada uno de ellos.
+  \item El \textit{sistema} informa al usuario de que todos los chequeos han
+    sido activados.
+  \end{enumerate}
+
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[3a] El grupo no cuenta con chequeos. El \textit{sistema} no activa
+    ningún chequeo.
+  \end{description}
+\end{description}
+
+\subsection{Subsistema de gestión de chequeos}
+
+Los casos pertenecientes a este subsistema pueden verse en la figura~\ref{fig:subsistema-chequeos}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{4_analisis/diagrama_subsistema_gestion_chequeos}
+  \caption{Casos de uso del subsistema de gestión de chequeos}
+  \label{fig:subsistema-chequeos}
+\end{figure}
+
+\subsubsection{Caso de uso: creación de chequeo}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide crear un un chequeo dentro de un grupo.
+\item[Actores] \textit{Usuario logueado}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide crear un chequeo dentro de un grupo de chequeos.
+  \item El \textit{usuario} pulsa el botón de \textit{Añadir chequeo} de un grupo.
+  \item El \textit{sistema} muestra el formulario de elección del tipo de chequeo.
+  \item El \textit{usuario} elige el tipo de chequeo a añadir.
+  \item El \textit{sistema} muestra el formulario con los campos según el tipo de chequeo elegido.
+  \item El \textit{usuario} introduce los detalles del chequeo y envía el formulario.
+  \item El \textit{sistema} recibe y comprueba que los datos son correctos.
+  \item El \textit{sistema} da de alta el nuevo chequeo.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[7a] Alguno de los datos introducidos no es correcto. El \textit{sistema}
+    informa del error al usuario y muestra el formulario de nuevo.
+  \end{description}
+\end{description}
+
+
+\subsubsection{Caso de uso: actualización de chequeo}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide editar un chequeo previamente creado..
+\item[Actores] \textit{Usuario logueado}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide editar un chequeo dentro de un grupo de chequeos.
+  \item El \textit{usuario} pulsa el botón de \textit{Editar chequeo}.
+  \item El \textit{sistema} muestra el formulario con los campos rellenos con la información del chequeo elegido..
+  \item El \textit{usuario} modifica los detalles del chequeo y envía el formulario.
+  \item El \textit{sistema} recibe y comprueba que los datos son correctos.
+  \item El \textit{sistema} actualiza el chequeo.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[5a] Alguno de los datos introducidos no es correcto. El \textit{sistema}
+    informa del error al usuario y muestra el formulario de nuevo.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: eliminación de chequeo}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide eliminar un chequeo previamente creado..
+\item[Actores] \textit{Usuario logueado}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide eliminar un chequeo dentro de un grupo de chequeos.
+  \item El \textit{usuario} pulsa el botón de \textit{Eliminar chequeo}.
+  \item El \textit{sistema} muestra el formulario de confirmación de eliminación
+  \item El \textit{usuario} confirma la eliminación del chequeo.
+  \item El \textit{sistema} elimina el chequeo.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[4a] El \textit{usuario} no confirma la eliminación del chequeo. El
+    \textit{sistema} vuelve a la pantalla inicial.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: activación de chequeo}
+
+\begin{description}
+\item[Descripción] Un usuario logueado decide activar un chequeo.
+\item[Actores] \textit{Usuario logueado}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{usuario} decide activar un chequeo dentro de un grupo de chequeos.
+  \item El \textit{usuario} pulsa el botón de \textit{activar chequeo}.
+  \item El \textit{sistema} activa el chequeo.
+  \end{enumerate}
+\end{description}
+
+\subsubsection{Caso de uso: ejecución de chequeo}
+
+\begin{description}
+\item[Descripción] El servidor de tareas tiene que lanzar un chequeo periódico.
+\item[Actores] \textit{Servidor de tareas}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{servidor de tareas} pide los chequeos activos.
+  \item El \textit{sistema} devuelve los chequeos activos.
+  \item El \textit{servidor de tareas} elige un chequeo activo.
+  \item El \textit{servidor de tareas} ejecuta el chequeo.
+  \item El \textit{sistema} devuelve el resultado del chequeo.
+  \item El \textit{servidor de tareas} comprueba el resultado del chequeo,
+    guardándolo en la base de datos y, si difere del estado anterior del
+    chequeo, lanzando el \textit{Caso de uso: notificación de estado de chequeo}.
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[2a] No hay chequeos activos. El \textit{sistema} devuelve una lista
+    vacía. El \textit{servidor de tareas} permanece en reposo.
+  \end{description}
+\end{description}
+
+\subsubsection{Caso de uso: noitificación de estado de chequeo}
+
+\begin{description}
+\item[Descripción] El servidor de tareas detecta un cambio de estado y lanza notificación.
+\item[Actores] \textit{Servidor de tareas}
+\item[Escenario principal] $\quad$
+  \begin{enumerate}
+  \item El \textit{servidor de tareas} detecta un cambio de estado de un chequeo.
+  \item El \textit{servidor de tareas} comprueba el campo
+    \textit{Notificar\_correo} del chequeo.
+  \item El \textit{servidor de tareas} lanza una notificación por correo electrónico.
+  \item El \textit{sistema} envía la notificación al usuario dueño del chequeo.
+
+  \item El \textit{servidor de tareas} comprueba el campo
+    \textit{Notificar\_android} del chequeo.
+  \item El \textit{servidor de tareas} lanza una notificación Android.
+  \item El \textit{sistema} envía la notificación al usuario dueño del chequeo.
+
+  \end{enumerate}
+\item[Flujo alternativo] $\quad$
+  \begin{description}
+  \item[2a] El chequeo no tiene activa la opción \textit{Notificar\_correo}. El
+    \textit{servidor de tareas} no envía la notificación por correo.
+  \item[5a] El chequeo no tiene activa la opción \textit{Notificar\_android}. El
+    \textit{servidor de tareas} no envía la notificación por Android.
+  \item[5b] El usuario no tiene dispositivo Android dado de alta. El
+    \textit{servidor de tareas} no envía la notificación por Android.
+  \end{description}
+\end{description}
+
+\section{Modelo de comportamiento}
+
+Basándonos en los casos de uso anteriores se crea el modelo de comportamiento,
+compuesto de diagramas de secuencia, en los que se identificarán las operaciones
+del sistema, y de lo contratos de estas operaciones.
+
+\section{Modelo de interfaz de usuario}
+
+\subsection{Modelo de navegación}
+
+El modelo de navegación de la aplicación web se presenta en la
+figura~\ref{fig:modelo-navegacion-web}. El modelo de navegación de la aplicación
+Android se presenta en la figura~\ref{fig:modelo-navegacion-android}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{4_analisis/diagrama_navegacion}
+  \caption{Modelo de navegación de la aplicación web}
+  \label{fig:modelo-navegacion-web}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{4_analisis/diagrama_navegacion_android}
+  \caption{Modelo de navegación de la aplicación Android}
+  \label{fig:modelo-navegacion-android}
+\end{figure}
 
 % \section{Especificación de requisitos del sistema}
 
