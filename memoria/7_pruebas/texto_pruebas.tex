@@ -1,79 +1,128 @@
-En este capítulo se detallan las pruebas a las que se ha sometido
-\textbf{oFlute}. Habitualmente, probar un videojuego o aplicación con gran
-interactividad suele ser un proceso complejo. Dada la gran cantidad de
-situaciones distintas que pueden tener lugar, es difícil recrear y probar todos
-los escenarios posibles. Tanto es así que, en los grandes equipos de desarrollo,
-hay empleados que se dedican al completo a probar los productos.
+En este capítulo se detallan las baterías de pruebas a las que se ha sometido
+\textbf{SiteUp}, ya sean de carácter manual o automatizadas mediante software
+específico.
 
-En oFlute, las pruebas se han organizado al final de cada iteración, comprobando
-el correcto funcionamiento de cada nueva funcionalidad, por separado, y luego
-integrando el conjunto. Además, ciertos módulos no asociados a iteraciones (como
-el sistema de animaciones, sección \ref{sec:animaciones}) también fueron
-probados de manera independiente.
+\section{Estrategia}
 
-\section{Pruebas unitarias}
-Las \textbf{pruebas unitarias} se encargan de comprobar el correcto
-funcionamiento de módulos y fragmentos por separado. En nuestro caso, todos los
-módulos fueron probados de forma independiente, utilizando a tal efecto ramas de
-desarrollo alternativas (\textit{branches}), antes de integrarlos en la rama de
-desarrollo principal.
+La estrategia de pruebas seguida en SiteUp es híbrida. Por un lado, se cuenta
+con una batería de pruebas automatizada, basadas en el motor de pruebas que
+incluye el framework de desarrollo, que verifican las funcionaldiades más
+críticas del sistema.
 
-Mención especial merecen las pruebas unitarias relacionadas con el analizador
-básico de notas, en la segunda iteración del proyecto. Tal y como se comentó en
-la sección \ref{sec:implementacion_analizador}, al no tener experiencia previa
-se tuvieron que hacer bastantes pruebas con el código relacionado con el control
-del sonido para que el rendimiento fuera correcto y no apareciesen
-problemas. Las pruebas unitarias en este módulo dieron lugar a decisiones de
-cambios de bibliotecas en este módulo. Además, al ejecutarse en un hilo
-separado, el código del analizador era propenso a generar fugas de memoria si no
-se controlaban bien la vida y visibilidad de las variables utilizadas. 
+Por otro lado, se cuenta con pruebas manuales realizadas de forma periódica. A
+corto plazo y de forma frecuente se revisaban las funcionalidades más inmediatas
+de las aplicaciones. A largo plazo, se han dado de alta numerosos chequeos y se
+han verificado a lo largo del tiempo.
 
-\section{Pruebas de integración}
-Según se comprobaban los módulos de manera individual, se iban integrando en la
-rama de desarrollo principal, pasando a formar parte de la aplicación. Esta
-integración también ha estado sujeta a pruebas, por un lado comprobando que los
-módulos no cambiaban su comportamiento al ser integrados con el resto, y por
-otro verificando que el funcionamiento general del sistema siguiera siendo
-correcto.
+\section{Entorno de pruebas}
 
-Como se comentó en la sección \ref{sec:implementacion_estados}, uno de los
-errores que más dificultad mostró, asociado a la gestión de estados, fue también
-el más difícil de encontrar y reproducir. Gracias a las pruebas de integración y
-al uso de herramientas de depuración, su resolución fue un éxito y sentó las
-bases para un nuevo gestor de estados (sección
-\ref{sec:resolucion_problema_estados}).
+Para las pruebas automáticas, el entorno de pruebas es una copia virtual del
+entorno de producción real, creado automáticamente por el software de testeo, de
+forma que no se modifiquen los valiosos datos de la base de datos de
+producción. En cada ejecución de los tests se crea una base de datos y un
+entorno nuevos, vacíos, en los que se llevan a cabo las pruebas.
 
-\section{Pruebas de jugabilidad}
-Las \textbf{pruebas de jugabilidad} permitieron encontrar y rellenar lagunas en
-el proyecto, haciendo que su uso fuera más sencillo para el usuario. En esta
-etapa del proyecto se contó con la ayuda de usuarios reales inicialmente ajenos
-al proyecto.
+Para las pruebas manuales, dado que se realizan directamente sobre el sistema en
+producción, el entorno coincide con lo dispuesto en la
+sección~\ref{subsec:entorno-produccion}.
 
-Entre las mejoras que surgieron a raíz de las pruebas de jugabilidad se
-encuentra la implementación de la \textbf{barra de resaltado} (ver
-\textit{\nameref{chap:manual_usuario}}), que aparece durante la interpretación
-de las canciones para ayudar al usuario a conocer qué notas está tocando en cada
-momento. Esto mejoró en gran medida las puntuaciones de los jugadores en las
-partidas.
+\section{Roles}
 
-\section{Pruebas de interfaz}
-Por último, una vez ajustada la jugabilidad y verificado que los módulos
-funcionan bien de forma independiente y en integración, se dedicó un tiempo a
-comprobar que la interfaz gráfica de usuario cumplía los requisitios mínimos que
-se esperaban.
+Se presentan dos roles principales necesarios para la ejecución de las pruebas.
 
-En particular, se hizo mucho hincapié en la duración de cada una de las
-animaciones de cada sección. Animaciones largas podían llegar a ser tediosas,
-mientras que unas animaciones cortas darían una desagradable sensación de
-premura que no interesaba. Una vez ajustadas, se implementó la opción de poder
-omitir las animaciones en pantalla, en cualquier sección y momento, mediante la
-pulsación de la tecla \texttt{escape}. Esto permitiría que jugadores avanzados
-pudieran llegar rápidamente a la sección de su interés de forma rápida.
+\subsection{Desarrollador principal}
 
-Otra de las adiciones que surgieron tras las pruebas de interfaz fueron los
-atajos de teclado. Se añadieron atajos para las opciones del menú principal, así
-como el menú de selección de canciones y el de selección de lecciones. También
-se habilitó la tecla \texttt{escape} para volver atrás en cualquier momento.
+En primer lugar, el desarrollador del producto es el principal probador del
+software. Por un lado, es el encargado del desarrollo y ejecución de las
+baterías de pruebas automatizadas, teniendo la obligación de interpretar los
+resultados y actuando en consecuencia.
+
+Por otro lado, también ha de probar el producto manualmente como un usuario más,
+sobre todo a tenor de lo expuesto en la sección~\ref{sec:situacion-actual}, en
+la que se refleja que la motivación principal del proyecto es una necesidad
+personal del desarrollador.
+
+\subsection{Probadores externos}
+
+Además del desarrollador principal fue conveniente contar con la ayuda de varios
+probadores externos que dieran su punto de vista sobre el software, como
+usuarios. Así, realizaron pruebas de caracter manual a corto plazo, opinando
+sobre la interfaz de usuario, la usabilidad y la responsividad del proyecto, así
+como a largo plazo, dando de alta diversos chequeos y probando su funcionalidad.
+
+En todas las etapas, el desarrollador obtenía feedback de los probadores,
+integrando en la medida de lo posible los consejos y apreciaciones que se obtenían.
+
+
+\section{Niveles de pruebas}
+
+\subsection{Pruebas unitarias}
+Las \textbf{pruebas unitarias} tuvieron por objetivo localizar errores en los
+elementos software antes de ser integrados con el resto de elementos del sistema.
+
+En SiteUp, el grueso de las pruebas unitarias se centró principalmente en el
+módulo de chequeo, organizado dentro de la aplicación
+\texttt{siteup\_checker}. Los diversos casos de test comprobaron de forma
+individual que los procedimientos que llevan a cabo los chequeos devuelvan el
+resultado correcto, asegurando la ausencia de falsos positivos y resultados
+erróneos.
+
+Por ejemplo, para la verificación del procedimiento de \textbf{chequeo HTTP} se
+hizo uso del sitio web \textbf{HttpBin}~\cite{httpbin}, una web especialmente
+pensada para facilitar el testeo de conexiones HTTP.
+
+\subsection{Pruebas de integración}
+
+Las \textbf{pruebas de integración} tuvieron por objetivo localizar errores en
+módulos completos, analizando la interacción entre varios artefactos software.
+
+Como ejemplo, tras realizar las pruebas unitarias en los módulos de chequeo, se
+pasó a hacer pruebas de integración entre los procedimientos de chequeo y las
+instancias de los modelos de chequeo dadas de alta por los usuarios, de forma
+que se asegurase que la creación de un chequeo por parte de un usuario era
+reflejada en la base de datos y daba lugar a la correcta ejecución del
+procedimento de chequeo.
+
+\subsection{Pruebas de sistema}
+
+Las pruebas de sistema, que buscan asegurar que el sistema cumple con todos los
+requisitos establecidos, se desarrollaron de forma continua a medida que iba
+avanzando el proyecto. 
+
+En cada iteración, las pruebas se llevaron a cabo utilizando un entorno virtual
+y el servidor de pruebas que integra el propio framework Django, y se utilizó
+software de \textit{throttling} de red para simular condiciones de red adversas
+que se asemejasen a las condiciones reales.
+
+\subsection{Pruebas de aceptación}
+
+Para verificar que el producto estaba listo para el paso a producción se hizo un
+despliegue en un servidor real, ubicado en Alemania, y se dio de alta una decena
+de chequeos de todos los tipos. El servidor ha permanecido online desde mediados
+del mes de febrero hasta la fecha.
+
+En este tiempo, además de recibir las actualizaciones del software a medida que
+el desarrollo avanzaba, el proyecto ha detectado de forma eficiente las caídas
+en el servicio de los chequeos dados de alta, notificando de manera correcta
+tanto por correo electrónico como a través de la aplicación de Android.
+
+En particular se puede poner de ejemplo la web oficial de la Universidad de
+Cádiz, que se ha utilizado como objetivo de los chequeos. En el tiempo que ha
+estado el chequeo activo se han detectado caídas en la web unas 15 veces, la
+última el 16 de abril de 2014, día en el que durante la mañana la web ha pasado
+a estar inaccesible más de 7 veces durante periodos de entre 10 y 30 minutos.
+
+\section{Implementación de pruebas}
+
+Como se ha comentado, la implementación de las pruebas automáticas se ha hecho
+utilizando las capacidades de testing que provee el framework Django. Una vez
+instalado el sistema es posible lanzar las pruebas utilizando el siguiente comando:
+
+\begin{minted}{python}
+def foo(bar):
+    return [a * 3 for a in x]
+
+\end{minted}
 
 %%% Local Variables: 
 %%% mode: latex
