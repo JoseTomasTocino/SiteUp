@@ -1,11 +1,14 @@
 %%
 %% memoria.tex
 %%
-\documentclass[a4paper,12pt]{scrbook}
+\documentclass[a4paper, 12pt]{book}
 \pagestyle{headings}
 
 % Paquete para dibujos
 \usepackage{tikz}
+
+% Márgenes, hace que los márgenes laterales sean iguales
+%\usepackage[hmarginratio=1:1]{geometry}
 
 % Referencias externas
 \usepackage{xr-hyper}
@@ -39,6 +42,9 @@
 % Paquete para la fuente charter
 \usepackage{charter}
 
+% Paquete para la fuente para códigos
+\usepackage{inconsolata}
+
 % Paquete para la fuente helvética
 \usepackage[scaled=0.92]{helvet}
 
@@ -60,14 +66,15 @@
 % Paquete para figuras giradas
 \usepackage{rotating}
 
+\usepackage{parskip}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Paquetes en local (directorio 'paquetes')
 
-% Fuente para códigos
-\usepackage{inconsolata}
-
 % Automatiza el resaltado de sintaxis usando pygments
 \usepackage{paquetes/minted}
+
+\newminted{bash}{}
 
 % Soporte de acrónimos
 \usepackage[printonlyused]{paquetes/acronym-custom}
@@ -103,37 +110,37 @@
 % Índices varios
 \tableofcontents
 \listoffigures
-%\listoftables
+\listoftables
 
-\setlength{\parskip}{1.2ex plus 0.4ex minus 0.1ex}
+%\setlength{\parskip}{1.2ex plus 0.4ex minus 0.1ex}
 
 \chapter{Introducción}
 \label{chap:introduccion}
-\input{1_introduccion/texto_introduccion.tex}
+\input{1_introduccion/texto.tex}
 
 \chapter{Planificación}
 \label{chap:calendario}
-\input{2_calendario/texto_calendario.tex}
+\input{2_calendario/texto.tex}
 
 \chapter{Requisitos del sistema}
-\label{chap:fundamentos}
+\label{chap:requisitos}
 \input{3_requisitos/texto.tex}
 
 \chapter{Análisis}
 \label{chap:analisis}
-\input{4_analisis/texto_analisis.tex}
+\input{4_analisis/texto.tex}
 
 \chapter{Diseño}
 \label{chap:diseno}
-\input{5_diseno/texto_diseno.tex}
+\input{5_diseno/texto.tex}
 
 \chapter{Implementación}
 \label{chap:implementacion}
-\input{6_implementacion/texto_implementacion.tex}
+\input{6_implementacion/texto.tex}
 
 \chapter{Pruebas}
 \label{chap:pruebas}
-\input{7_pruebas/texto_pruebas.tex}
+\input{7_pruebas/texto.tex}
 
 \chapter{Conclusiones}
 \label{chap:conclusiones}
@@ -145,9 +152,9 @@
 %\label{chap:herramientas}
 %\input{apendice_herramientas/texto_apendice_herramientas.tex}
 
-\chapter{Manual de instalación}
+\chapter{Manual de instalación de la plataforma web}
 \label{chap:manual_instalacion}
-%\input{apendice_manual_instalacion/texto_apendice_manual_instalacion.tex}
+\input{apendice_manual_instalacion/texto.tex}
 
 \chapter{Manual de usuario}
 \label{chap:manual_usuario}

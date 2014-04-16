@@ -1,30 +1,36 @@
-\section{Situación actual}
-\label{sec:situacion-actual}
 
-La idea de desarrollar este proyecto surgió a raíz de una necesidad
-personal. Durante un importante proceso de selección llevado a cabo a través de
-correo electrónico, la empresa que gestionaba el dominio de mi web personal (y,
-por extensión, mi correo electrónico) tuvo un problema y reemplazó los registros
-DNS personalizados por unos por defecto. 
+En este capítulo procederemos a describir de manera formal los objetivos que se
+presentaron de manera genérica en el apartado~\ref{sec:objetivos},
+\textit{\nameref{sec:objetivos}}. 
 
-Las alertas que tenía puestas para verificar que mi web estaba operativa no
-dieron la alarma, ya que el dominio ahora apuntaba a un espacio de párking
-genérico que no generaba ningún código de error, pero los correos electrónicos
-no se estaban enrutando correctamente. Esta situación se prolongó durante varios
-días, en los cuales perdí varios correos importantes
+En particular, se detallan:
 
-Esto se podría haber detectado rápidamente si hubiera tenido un chequeo que
-verificase que los registros DNS apuntaban a las IP correctas. A partir de ahí,
-se hizo un estudio de mercado, cuyas conclusiones se han reflejado en la sección
-anterior, y dadas las obvias limitaciones de las alternativas existentes se
-decidió elaborar un proyecto nuevo.
+\begin{itemize}
+\item Los \textbf{objetivos del sistema}, que resumen a muy grandes rasgos la
+  funcionalidad del proyecto.
+\item Los \textbf{requisitos funcionales}, que definen las funciones del sistema
+  software y sus componentes.
+\item Los \textbf{requisitos de información}, que detallan los datos que el
+  sistema usará durante el desarrollo y ejecución para llevar a cabo de forma
+  adecuada su funcionalidad.
+\item Los \textbf{requisitos no funcionales}, que, en general, especifican
+  criterios de diversas categorías que el software debe cumplir para garantizar
+  un buen nivel de calidad más allá de su funcionamiento.
+\end{itemize}
+
+Para terminar el capítulo se presentan diversas alternativas tecnológicas para
+cubrir las necesidades surgidas en los requerimientos del sistema, detallando
+las decisiones tomadas.
+
 
 \section{Objetivos del sistema}
 
-Los objetivos principales de SiteUp son:
+\renewcommand{\arraystretch}{1.5}
 
-\begin{table}[h!]
-  \centering
+Los objetivos principales de SiteUp, definidos a alto nivel son los dos siguientes:
+
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Crear chequeos de varios tipos sobre servicios de internet \\
@@ -38,12 +44,12 @@ Los objetivos principales de SiteUp son:
 
     \hline
   \end{tabularx}
-  \caption{OBJ-1}
-\end{table}
+  \captionof{table}{OBJ-1}
+\end{center}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Notificación a los usuarios \\
@@ -56,8 +62,8 @@ Los objetivos principales de SiteUp son:
 
     \hline
   \end{tabularx}
-  \caption{OBJ-2}
-\end{table}
+  \captionof{table}{OBJ-2}
+\end{center}
 
 \section{Catálogo de requisitos}
 
@@ -67,8 +73,8 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
 \subsubsection{Gestión de usuarios}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Creación de cuenta de usuario \\
@@ -81,11 +87,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-1}
-\end{table}
+  \captionof{table}{RQF-1}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Edición de cuenta de usuario \\
@@ -100,14 +106,14 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-2}
-\end{table}
+  \captionof{table}{RQF-2}
+\end{center}
 
 \FloatBarrier
 \subsubsection{Gestión de grupos de chequeos}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Creación de grupos de chequeos \\
@@ -119,11 +125,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-3}
-\end{table}
+  \captionof{table}{RQF-3}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Edición de grupos de chequeos \\
@@ -138,11 +144,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-4}
-\end{table}
+  \captionof{table}{RQF-4}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Eliminación de grupos de chequeos \\
@@ -155,11 +161,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-5}
-\end{table}
+  \captionof{table}{RQF-5}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Activación y desactivación de grupos de chequeos \\
@@ -172,14 +178,14 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-6}
-\end{table}
+  \captionof{table}{RQF-6}
+\end{center}
 
 \FloatBarrier
 \subsubsection{Gestión de chequeos}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Creación de chequeos \\
@@ -198,12 +204,12 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-7}
-\end{table}
+  \captionof{table}{RQF-7}
+\end{center}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Actualización de chequeos \\
@@ -216,11 +222,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-8}
-\end{table}
+  \captionof{table}{RQF-8}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Eliminación de chequeos \\
@@ -233,11 +239,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-9}
-\end{table}
+  \captionof{table}{RQF-9}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Activación y desactivación de chequeos \\
@@ -252,11 +258,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-11}
-\end{table}
+  \captionof{table}{RQF-11}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Revisión de chequeos \\
@@ -271,12 +277,12 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-11}
-\end{table}
+  \captionof{table}{RQF-11}
+\end{center}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Recepción de notificaciones por correo electrónico \\
@@ -290,15 +296,15 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-12}
-\end{table}
+  \captionof{table}{RQF-12}
+\end{center}
 
 \FloatBarrier
 \subsubsection{Aplicación Android}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Listado de chequeos en la aplicación Android \\
@@ -312,12 +318,12 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-13}
-\end{table}
+  \captionof{table}{RQF-13}
+\end{center}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Recepción de notificaciones por la aplicación Android \\
@@ -331,16 +337,16 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{RQF-14}
-\end{table}
+  \captionof{table}{RQF-14}
+\end{center}
 
 \FloatBarrier
 \subsection{Requisitos de información}
 \label{sec:requisitos-informacion}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -360,12 +366,12 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-1}
-\end{table}
+  \captionof{table}{IRQ-1}
+\end{center}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -389,11 +395,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-2}
-\end{table}
+  \captionof{table}{IRQ-2}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -417,11 +423,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-3}
-\end{table}
+  \captionof{table}{IRQ-3}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -445,11 +451,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-4}
-\end{table}
+  \captionof{table}{IRQ-4}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -473,11 +479,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-5}
-\end{table}
+  \captionof{table}{IRQ-5}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -498,11 +504,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-6}
-\end{table}
+  \captionof{table}{IRQ-6}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -523,11 +529,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-7}
-\end{table}
+  \captionof{table}{IRQ-7}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|l|X|}
     \hline
 
@@ -545,16 +551,16 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
     
   \end{tabularx}
-  \caption{IRQ-8}
-\end{table}
+  \captionof{table}{IRQ-8}
+\end{center}
 
 \FloatBarrier
 \subsection{Requisitos no funcionales}
 
 \subsubsection{Requisitos de seguridad}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Cifrado de contraseñas de usuario \\
@@ -567,11 +573,11 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{NRQ-1}
-\end{table}
+  \captionof{table}{NRQ-1}
+\end{center}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Restricciones de acceso a usuarios \\
@@ -584,15 +590,15 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{NRQ-2}
-\end{table}
+  \captionof{table}{NRQ-2}
+\end{center}
 
 \FloatBarrier
 \subsubsection{Requisitos de fiabilidad}
 
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Ejecución de chequeos \\
@@ -606,15 +612,15 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{NRQ-3}
-\end{table}
+  \captionof{table}{NRQ-3}
+\end{center}
 
 
 \FloatBarrier
 \subsubsection{Requisitos de accesibilidad y usabilidad}
 
-\begin{table}[h!]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Adaptación a dispositivos \\
@@ -628,15 +634,15 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
     \hline
   \end{tabularx}
   \label{tab:accesibilidad}
-  \caption{NRQ-4}
-\end{table}
+  \captionof{table}{NRQ-4}
+\end{center}
 
 
 \FloatBarrier
 \subsubsection{Requisitos de eficiencia}
 
-\begin{table}[H]
-  \centering
+\begin{center}
+  
   \begin{tabularx}{\textwidth}{|c|X|}
     \hline
     Título & Monitorización de peticiones de demasiada duración \\
@@ -650,40 +656,18 @@ Se presentan a continuación los requisitos del sistema, tanto a nivel funcional
 
     \hline
   \end{tabularx}
-  \caption{NRQ-5}
-\end{table}
+  \captionof{table}{NRQ-5}
+\end{center}
 
-\subsection{Alternativas de solución}
+\section{Alternativas de solución}
 \label{sec:alternativas-solucion}
 
-\subsubsection{Estado del arte}
+En esta sección, se presentan diferentes alternativas tecnológicas que permiten
+satisfacer los requerimientos del sistema, presentando las alternativas elegidas
+y detallando las razones de esta decisión.
 
-En la actualidad existen bastantes servicios web que ofrecen algunas
-características similares a las que se desean en SiteUp, pero no todas. Se
-presentan a continuación algunos de estos servicios, junto a los problemas que
-se han detectado.
 
-\begin{description}
-\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
-  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
-  ofrece chequeo de registros DNS.
-\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
-  días. No ofrece chequeo de registros DNS.
-\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
-  minutos. No ofrece chequeo de DNS.
-\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
-  cuenta gratuita. No tienen chequeo de DNS.
-\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
-  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
-
-\end{description}
-
-Una carencia importante que no se ha mencionado por ser generalizada es la falta
-de aplicaciones nativas para móviles. Así pues, queda patente la dificultad de
-encontrar un servicio que aúne el mayor número de características posibles a la
-vez que mantiene un servicio gratuito y de calidad.
-
-\subsubsection{Frameworks para el desarrollo de la plataforma web}
+\subsection{Frameworks para el desarrollo de la plataforma web}
 
 Dada la mayor familiaridad del desarrollador con el lenguaje, solo se barajaron
 frameworks de desarrollo basados en el lenguaje Python.
@@ -711,7 +695,7 @@ Se tomó la decisión de optar por \textbf{Django} por ser el framework más
 robusto y con mayor número de utilidades. Su uso por grandes proyectos, como
 Instagram, afianzó aún más la decisión de usarlo.
 
-\subsubsection{Sistemas de gestión de bases de datos}
+\subsection{Sistemas de gestión de bases de datos}
 
 \begin{itemize}
 \item \textbf{MySQL}, uno de los sistemas de bases de datos más populares. Se
@@ -736,7 +720,7 @@ tempranas del proyecto.
 De cualquier modo, en un futuro no se descarta pasar a un SGBD basado en la
 arquitectura cliente-servidor, como MySQL.
 
-\subsubsection{Sistemas para la ejecución asíncrona de tareas}
+\subsection{Sistemas para la ejecución asíncrona de tareas}
 
 \begin{itemize}
 \item \textbf{Cron} es un demonio~\footnote{Entiéndase \textit{demonio} en el

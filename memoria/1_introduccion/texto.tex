@@ -1,4 +1,5 @@
-\section{Contexto y motivación}
+\section{Contexto social}
+
 Las tecnologías de la información en general e Internet en particular son ya
 parte integral de la sociedad. Casi todos los ámbitos de la vida,
 desde las interacciones sociales hasta la búsqueda de empleo, cuentan ya con
@@ -10,7 +11,7 @@ redes, también han surgido nuevos modelos empresariales propios de Internet que
 han crecido de manera importante y se han situado a niveles comparables a los de
 las empresas tradicionales. Empresas puramente digitales como Facebook o Twitter
 ya cotizan en bolsa y realizan operaciones bursátiles del orden de miles de
-millones de dólares.
+millones de dólares~\cite{facebook-acquires-whatsapp}.
 
 Se pone pues de manifiesto la importancia de la fiablidad de los servicios e
 infraestructuras de los que dependen estos nuevos modelos de negocio. El
@@ -24,6 +25,41 @@ inaccesible su web durante 40 minutos~\cite{amazon}.
 De todo lo expuesto se extrae la necesidad de contar con sistemas para
 monitorizar la disponibilidad de estos servicios y, en caso necesario, actuar de
 manera que puedan subsanarse las causas de los problemas.
+
+\section{Motivación}
+\label{sec:situacion-actual}
+
+La idea de desarrollar este proyecto surge a raíz de una necesidad
+personal del desarrollador del proyecto. 
+
+En octubre de 2013 tomé parte en un un importante proceso de selección en el que
+las comunicaciones se estaban llevando a cabo a través de correo electrónico. En
+particular, la cuenta de correo electrónico que estaba usando
+(\texttt{info@josetomastocino.com}) tenía un dominio personalizado y estaba
+gestionada a través de Google Apps~\cite{google-apps}. Esto era posible gracias
+a que en el dominio se dieron de alta unos registros de tipo MX y TXT que hacían
+que el correo se redirigiese a los servidores de Google.
+
+A mitad del proceso de selección, la empresa que gestionaba el dominio de mi web
+personal (y, por extensión, mi correo electrónico) tuvo un problema y reemplazó
+los registros DNS personalizados por unos por defecto. En particular, los
+registros MX y TXT quedaron en blanco, y los registros A apuntaron a una página
+de párking\footnote{Una página de \textit{párking de dominio} sirve como página
+  temporal mientras un servicio web no es lanzado, de forma que el dominio no esté
+  en blanco.}, de forma que los chequeos de tipo ping que tenía puestos no
+dieron error, ya que efectivamente la web devolvía el ping, pero el contenido de
+los registros no era el correcto, ni los correos se estaban direccionando bien.
+
+Esta situación se prolongó durante varios días, en los cuales perdí varios
+mensajes importantes. Esto podría haberse detectado rápidamente si hubiera tenido
+alguna clase de vigilancia que verificase que los registros DNS tenían el
+contenido correcto. 
+
+De ahí nace la necesidad de realizar un estudio de las alternativas existentes
+para este tipo de vigilancia y, al concluir que no existía ninguna alternativa
+libre, se decide iniciar el proyecto SiteUp para la vigilancia de servicios de
+internet.
+
 
 \section{Objetivos}
 \label{sec:objetivos}
@@ -73,6 +109,35 @@ final de la aplicación y sobre la experiencia de desarrollo de la misma.
   las veces de sistema de copias de seguridad.
 \end{itemize}
 
+\section{Estado del arte}
+
+En la actualidad existen bastantes servicios web que ofrecen algunas
+características similares a las que se desean en SiteUp, pero no todas. Se
+presentan a continuación algunos de estos servicios, junto a los problemas que
+se han detectado.
+
+\begin{description}
+\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
+  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
+  ofrece chequeo de registros DNS.
+\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
+  días. No ofrece chequeo de registros DNS.
+\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
+  minutos. No ofrece chequeo de DNS.
+\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
+  cuenta gratuita. No tienen chequeo de DNS.
+\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
+  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
+
+\end{description}
+
+Una carencia importante que no se ha mencionado por ser generalizada es la falta
+de aplicaciones nativas para móviles. 
+
+Así pues, queda patente la dificultad de encontrar un servicio que aúne el mayor
+número de características posibles a la vez que mantiene un servicio gratuito y
+de calidad, quedando manifiesta la necesidad del proyecto.
+
 
 \section{Alcance}
 \textbf{SiteUp} se modela como una herramienta de monitorización de servicios de
@@ -84,26 +149,25 @@ hayan dado de alta no coincidan con los resultados obtenidos.
 
 Además, el usuario tendrá la posibilidad de recibir notificaciones de manera
 instantánea a través del correo electrónico y de una aplicación para la
-plataforma móvil Android. El servicio web estará totalmente adaptado para su uso
-en dispositivos móviles.
+plataforma móvil \textbf{Android}. El servicio web estará totalmente adaptado
+para su uso en dispositivos móviles.
 
 \subsection{Limitaciones del proyecto}
 Aunque cubre una gran parte de los puntos de vigilancia habituales, la
 aplicación se limita a ofrecer chequeo de respuesta de ping, chequeo de puertos,
 chequeo de registros DNS y chequeo de cabeceras y contenidos HTTP.
 
-La aplicación de Android no cuenta con ninguna funcionalidad para gestionar los
-chequeos de un usuario, sino que sirve para recibir notificaciones instantáneas
-provenientes de la aplicación web. Ésta, por otro lado, está completamente
+La aplicación de Android no contará con ninguna funcionalidad para gestionar los
+chequeos de un usuario, sino que servirá para recibir notificaciones instantáneas
+provenientes de la aplicación web. Ésta, por otro lado, estará completamente
 adaptada para su uso a través de dispositivos móviles gracias al uso del
 \textit{responsive web design}.
 
 Idealmente los chequeos deberían hacerse simultáneamente desde diferentes
 máquinas colocadas en diversos puntos geográficos, para así tener unos
 resultados más fiables. La falta de infraestructuras y la finalidad didáctica
-del proyecto han limitado la aplicación a una estructura monolítica en la que
-los chequeos se hacen desde una sola máquina, la misma que sirve el servicio
-web.
+del proyecto limitan la aplicación a una estructura monolítica en la que los
+chequeos se hacen desde una sola máquina, la misma que sirve el servicio web.
 
 \subsection{Licencia}
 El proyecto está publicado como software libre bajo la licencia
@@ -111,14 +175,17 @@ El proyecto está publicado como software libre bajo la licencia
 tienen las siguientes licencias:
 
 \begin{itemize}
+\item El intérprete del lenguaje de programación \textbf{Python} se distribuye
+  bajo la licencia \ac{PSFL}, una licencia permisiva estilo \ac{BSD} y
+  compatible con la \ac{GNU} \ac{GPL}.
 
-\item El framework de desarrollo web en el que se basa la aplicación es
-  \textbf{Django}~\cite{django}, que utiliza la licencia
-  \textit{\ac{BSD}}~\footnote{\url{https://github.com/django/django/blob/master/LICENSE}}.
+\item \textbf{Django}~\cite{django}, el framework de desarrollo web en el que se
+  basa la aplicación, se distribuye bajo la licencia \textit{\ac{BSD}}.
 
-\item El servidor web \textbf{nginx}~\cite{nginx} también utiliza la licencia \textit{BSD}.
+\item El servidor web \textbf{nginx}~\cite{nginx} está licenciado bajo la
+  licencia \ac{BSD} simplificada.
 
-\item Los siguientes paquetes de Python utilizan también la licencia \textit{BSD}:
+\item Los siguientes paquetes de Python utilizan también la licencia \ac{BSD}:
   \begin{itemize}
   \item Celery
   \item Sqlparse
@@ -131,7 +198,7 @@ tienen las siguientes licencias:
   \item Fabric
   \end{itemize}
 
-\item Los siguientes paquetes de Python utilizan la licencia \textit{\ac{MIT}}:
+\item Los siguientes paquetes de Python utilizan la licencia \ac{MIT}:
   \begin{itemize}
   \item PyDot
   \item Gunicorn
@@ -150,28 +217,33 @@ tienen las siguientes licencias:
 El presente documento se rige según la siguiente estructura:
 
 \begin{itemize}
-\item \textbf{\nameref{chap:introduccion}}. Se exponen las motivaciones y
+\item \textbf{\nameref{chap:introduccion}}. Se exponen el contexto, las motivaciones y
   objetivos detrás del proyecto \textbf{SiteUp}, así como información sobre las
   licencias de sus componentes, glosario y estructura del documento.
+
 \item \textbf{\nameref{chap:calendario}}, donde se explica la planificación del
   proyecto, la división de sus etapas, la extensión de las etapas a lo largo del
   tiempo y los porcentajes de esfuerzo.
-\item \textbf{\nameref{chap:fundamentos}}, que explica las labores de
-  documentación y experimentación previas al desarrollo, que han servido para
-  labrar una base de conocimientos que nos diera las suficientes garantías para
-  afrontar el proyecto.
+
+\item \textbf{\nameref{chap:requisitos}}, capítulo en el que se formalizan los
+  objetivos y requisitos planteados en la introducción.
+
 \item \textbf{\nameref{chap:analisis}}. Se detalla la fase de análisis del
   sistema, explicando los requisitos funcionales del sistema, los diferentes
   casos de uso, así como las principales operaciones con sus diagramas de
   secuencia y contratos.
+
 \item \textbf{\nameref{chap:diseno}}. Seguido del análisis, se expone en detalle
   la etapa de diseño del sistema, con los diagramas de clases.
+
 \item \textbf{\nameref{chap:implementacion}}. Una vez analizado el sistema y
   definido su diseño, en esta parte se detallan las decisiones de implementación
   más relevantes que tuvieron lugar durante el desarrollo del proyecto.
+
 \item \textbf{\nameref{chap:pruebas}}. Listamos y describimos las pruebas que se
   han llevado a cabo sobre el proyecto para garantizar su fiabilidad y
   consistencia.
+
 \item \textbf{\nameref{chap:conclusiones}}. Comentamos las conclusiones a las
   que se han llegado durante el transcurso y al término del proyecto.
 \end{itemize}
@@ -184,7 +256,7 @@ Y los siguientes apéndices:
 \item \textbf{\nameref{chap:manual_usuario}}, donde se explica cómo usar la aplicación.
 \end{itemize}
 
-\subsection{Acrónimos}
+\section{Acrónimos}
 
 \input{1_introduccion/acronimos.tex}
 
