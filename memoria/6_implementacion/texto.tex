@@ -1,0 +1,162 @@
+Como complemento a la lectura de este capítulo se recomienda tener una copia
+local del repositorio del proyecto, disponible para su libre descarga desde la
+forja oficial~\cite{forja}.
+
+\section{Entorno de construcción}
+
+En esta sección se detalla el marco tecnológico utilizado para al construcción
+del sistema, basándonos en lo presentado en la sección~\ref{sec:alternativas-solucion},~\nameref{sec:alternativas-solucion}.
+
+\subsection{Aplicación web}
+
+El entorno tecnológico de la aplicación web ha resultado ser muy variado y rico
+en tecnologías en total vigencia en la actualidad. 
+
+\subsubsection{Herramientas de diseño y desarrollo}
+
+Como editor principal se ha utilizado \textbf{Sublime Text
+  2}~\cite{sublime-text}, un editor freeware escrito en Python especialmente
+dotado para el desarrollo de aplicaciones web. Cuenta con un gran número de
+características que lo han hecho destacar en los últimos años, como la habilidad
+de seleccionar y editar a la vez varios fragmentos de texto, el rápido motor de
+\textit{búsqueda difusa} para encontrar ficheros y cadenas o su capacidad de
+extensión a través de paquetes escritos por terceros y fácilmente instalables.
+
+Para ciertas tareas, como la escritura de la presente memoria, se ha hecho uso
+del veterano editor \textbf{Emacs}~\cite{emacs}, que sigue siendo la mejor
+opción a la hora de editar documentos de \LaTeX. 
+
+Se ha utilizado \textbf{draw.io}~\cite{draw.io} para la generación de diagramas
+de casos de uso, secuencia, diagramas de flujo y similares. Se trata de una
+herramienta web, actualmente integrable en Google Drive, con un enorme número de
+elementos de dibujo y la capacidad de exportar en un gran número de formatos,
+entre ellos en formato vectorial \ac{PDF}. Para el diseño visual de las
+interfaces de usuario se ha utilizado \textbf{Adobe Photoshop}~\cite{photoshop}.
+
+\subsubsection{Gestión de dependencias}
+
+Para facilitar la gestión de las dependencias del proyecto se han utilizado
+\textbf{VirtualEnv}~\cite{virtualenv} y
+\textbf{VirtualEnvWrapper}~\cite{virtualenvwrapper}. Estas herramientas permiten
+generar \textit{entornos virtuales} para cada proyecto, en los que se instalan
+las dependencias necesarias. Estos entornos se activan y desactivan, de forma
+que las bibliotecas instaladas en el entorno virtual de un proyecto no son
+accesibles desde el entorno del otro proyecto. Esto evita la polución del nivel
+general de bibliotecas y facilita el control estricto de las versiones de las
+dependencias. 
+
+Junto a virtualenv, la herramienta \textbf{pip}~\cite{pip} permite guardar en un
+fichero anexo la lista de dependencias de un proyecto, de forma que sea fácil
+reinstalarlas todas si hubiese que repetir la instalación en otro sistema.
+
+\subsubsection{Control de versiones}
+
+Todo el código fuente del proyecto se encuentra alojado en un repositorio
+público en \textbf{GitHub}~\cite{forja}, haciendo uso de los planes
+gratuitos. GitHub es una forja que utiliza el sistema de control de versiones
+\textbf{Git}~\cite{git}. Además del alojamiento de código, GitHub provee
+numerosas funcionalidades adicionales, tanto a nivel social (permitiendo a las
+forjas tener \textit{followers}, por ejemplo) como a nivel funcional (ofreciendo
+sistemas de tickets, estadísticas, etcétera).
+
+El uso de un control de versiones es fundamental por varios motivos. En primer
+lugar, sirve como sistema de copia de seguridad. En segundo lugar, permite
+deshacer cambios en el código que no funcionen bien, siendo siempre posible
+\textit{volver atrás}. Por último, sirve como \textit{cuaderno de bitácora}
+improvisado, ya que se guarda el historial de \textit{commits} que el
+desarrollador va enviando junto a los mensajes, siendo posible ver en una línea
+temporal el progreso del trabajo.
+
+\subsubsection{Lenguaje de programación}
+
+Como se ha comentado en numerosas ocasiones en la presente memoria, el lenguaje
+de programación elegido para el desarrollo del proyecto es
+\textbf{Python}~\cite{Python}, un lenguaje interpretado de alto nivel
+desarrollado por Guido Van Rossum en 1991. Python soporta múltiples paradigmas
+de programación, desde la orientación a objetos hasta la programación funcional,
+pasando por el clásico estilo imperativo. Su principal uso ha sido como lenguaje
+de scripting, pero también tiene su hueco en contextos más amplios como lenguaje
+principal.
+
+Su facilidad de aprendizaje, lo simple de su sintaxis (basada en la indentación
+para marcar los bloques) y su extensibilidad (sobre todo gracias al uso de
+métodos \textit{mágicos} y metaprogramación) han hecho que el lenguaje sea muy
+popular y su uso en los últimos años se haya expandido enormemente.
+
+\subsubsection{Framework de desarrollo}
+
+El framework de desarrollo elegido es \textbf{Django}~\cite{Django}, un
+proyecto de código abierto nacido en 2005. La meta fundamental de Django es
+facilitar la creación de sitios web complejos, haciendo especial hincapié en
+mantener un ritmo de desarrollo rápido y evitar la duplicidad de código. Así,
+gran parte del potencial de Django es la gran cantidad de funcionalidad que ya
+trae integrada, ya sea en el propio núcleo del framework o a través de
+\textit{apps} oficiales que se incluyen en la distribución oficial.
+
+Los elementos más destacables de Django son:
+
+\begin{itemize}
+\item Un sistema de mapeo objeto-relacional, que facilita enormemente el trabajo
+  con elementos de bases de datos a través de instancias de modelos.
+\item Un sistema de procesamiento de peticiones a través de vistas.
+\item Un despachador de URLs basado en expresiones regulares.
+\item Soporte para plantillas.
+\item Un sistema de autenticación extensible.
+\item Una interfaz de administración que se adapta dinámicamente a cualquier proyecto.
+\item Un sistema de comentarios.
+\item Soporte integrado contra numerosos tipos de ataques vía web, como
+  inyección SQL o cross-site scripting.
+\end{itemize}
+
+\subsubsection{Nivel de persistencia}
+
+\textbf{SQLite} es un sistema de gestión de bases de datos relacional de dominio público,
+contenido en una pequeña biblioteca. A diferencia de los sistema de gestión de
+bases de datos cliente-servidor, el motor de SQLite no es un proceso
+independiente con el que el programa principal se comunica. En lugar de eso, la
+biblioteca SQLite se enlaza con el programa pasando a ser parte integral del
+mismo. El programa utiliza la funcionalidad de SQLite a través de llamadas
+simples a subrutinas y funciones. Esto reduce la latencia en el acceso a la base
+de datos, debido a que las llamadas a funciones son más eficientes que la
+comunicación entre procesos. 
+
+El conjunto de la base de datos (definiciones, tablas, índices, y los propios
+datos), son guardados como un sólo fichero estándar en la máquina host. Este
+diseño simple se logra bloqueando todo el fichero de base de datos al principio
+de cada transacción. Esto no impide que varios procesos o hilos pueden acceder a
+la misma base de datos sin problemas.
+
+En general, SQLite no suele ser la mejor opción en sistemas de producción muy
+extensos, pero para proyectos de menor envergadura su rendimiento es más que
+suficiente.
+
+\subsubsection{Gestión de tareas}
+
+Para la gestión de tareas de forma asíncrona se ha utilizado \textbf{Celery},
+una cola de tareas asíncrona enfocada a operaciones en tiempo real. Celery está
+escrito en Python, pero se integra fácilmente con cualquier otro sistema que
+implemente su interfaz. Las unidades de ejecución básicas, las \textit{tareas},
+se ejecutan de forma concurrente en uno o varios \textit{workers}. Las tareas
+pueden ejecutarse de forma asíncrona, en segundo plano, o de forma síncrona,
+haciendo que el flujo de ejecución espere hasta que el resultado de la tarea
+esté disponible.
+
+Celery se comunica mediante mensajes, normalmente utilizando un \textbf{broker}
+que media entre los clientes y los workers. Para iniciar una tarea, el cliente
+pone un mensaje en la cola del broker. Entonces, el broker entrega el mensaje al
+worker de Celery. La opción recomendada, y la que se ha utilizado en SiteUp, es
+usar \textbf{RabbitMQ} como broker de mensajes.
+
+RabbitMQ, y la mayoría de brókers de mensajes, implementan el protocolo
+\ac{AMQP}, un estándar abierto para enviar mensajes entre aplicaciones y
+organizaciones, siempre que éstas sean capaces de interactuar usando las
+interfaces del protocolo.
+
+\subsubsection{Dependencias de Django}
+
+En el proyecto se han utilizado un gran número
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

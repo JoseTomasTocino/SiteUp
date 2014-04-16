@@ -1,0 +1,247 @@
+A continuación se presentan las instrucciones de instalación de la plataforma
+web en un servidor de producción.
+
+Las instrucciones de instalación que se presentan a continuación suponen un
+sistema con unos requisitos de hardware mínimos especificados en la
+sección~\ref{subsec:entorno-produccion},
+\textit{\nameref{subsec:entorno-produccion}}. Se supone un servidor con una
+distribución basada en paquetería Debian con acceso root.
+
+La versión más actualizada de las instrucciones de instalación de la plataforma
+web se encuentran en el fichero \texttt{INSTALLING-web.md} alojado en el
+directorio raíz de la forja de código~\cite{forja}.
+
+\section{Instalación inicial}
+
+\subsection{Descarga de código}
+
+Para instalar la plataforma web es necesario clonar el repositorio~\cite{forja}
+con el código de la aplicación. Primero, creamos una ubicación donde alojar el
+código desde la terminal:
+
+\begin{bashcode}
+mkdir /srv/siteup -P  
+cd /srv/siteup
+\end{bashcode}
+
+Una vez ahí, clonamos el repositorio desde Github:
+
+\begin{bashcode}
+git clone https://github.com/JoseTomasTocino/pfc-ii.git .  
+\end{bashcode}
+
+\subsection{Entorno virtual y dependencias}
+
+Como se ha comentado previamente, el proyecto utiliza \textbf{virtualenv} y
+\textbf{virtualenvwrapper} para una gestión más limpia de las dependencias. La
+instalación de estos dos elementos es sencilla, en primer lugar se instalan los
+dos paquetes:
+
+\begin{bashcode}
+pip install virtualenv
+pip install virtualenvwrapper
+\end{bashcode}
+
+En segundo lugar, añadimos el código de \textit{bootstrapping} de
+virtualenvwrapper a nuestro perfil de terminal, habitualmente \texttt{.bashrc}:
+
+\begin{bashcode}
+cat >> ~/.bashrc
+
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]
+then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+EOF
+\end{bashcode}
+
+Hecho esto, será necesario reiniciar la terminal, tras lo cual podremos crear el
+entorno virtual e instalar las dependencias:
+
+\begin{bashcode}
+mkvirtualenv siteup
+sudo apt-get install python-dev
+pip install -r web/requirements.txt 
+\end{bashcode}
+
+\subsection{Creación de la base de datos}
+
+El siguiente paso es preparar la base de adtos. El siguiente comando genera la
+estructura básica de la base de datos para las tablas y aplica las migraciones
+existentes:
+
+\begin{bashcode}
+python web/manage.py syncdb
+python web/migrate siteup_api  
+\end{bashcode}
+
+Tras esto, la base de datos se habrá generado y se encontrará en el fichero\\
+\texttt{web/db/django-db.sqlite3}.
+
+\subsection{Instalación del servidor}
+
+En estas instrucciones vamos a usar \textbf{Nginx} como servidor frontal, aunque
+también es posible utilizar Apache. Para instalar nginx, en sistemas GNU/Linux
+basados en paquetería Debian, el procedimiento es muy sencillo:
+
+\begin{bashcode}
+sudo apt-get install nginx -y
+\end{bashcode}
+
+\subsection{Instalación del bróker de mensajes}
+
+El bróker de mensajes elegido es \textbf{RabbitMQ}, aunque en principio valdría
+cualquier otro bróker que fuese compatible con el estándar \ac{AMQP}. La
+instalación es sencilla:
+
+\begin{bashcode}
+sudo apt-get install rabbitmq-server -y
+\end{bashcode}
+
+La configuración por defecto es suficiente para las necesidades del proyecto.
+
+\subsection{Ejecución de los servicios}
+
+Para el control de los servicios que ejecutan el proyecto es necesario utilizar
+alguna clase de software de monitorización de procesos. La opción recomendada es
+\textbf{supervisor}. Su instalación es sencilla:
+
+\begin{bashcode}
+sudo apt-get install supervisor -y
+\end{bashcode}
+
+Tras esto, es necesario generar el fichero de configuración de
+supervisor. SiteUp integra una tarea que automáticamente genera este fichero por
+nosotros. Solo tendremos que indicar un par de variables, que nos pedirá por
+teclado. En particular:
+
+\begin{itemize}
+\item \texttt{GMAIL\_PASS}, es la clave de la cuenta de correo utilizada para
+  enviar notificaciones. Se define en el fichero \texttt{web/siteup/settings/base.py}.
+\item \texttt{GCM\_API\_KEY}, es la clave de la API del servicio Google Cloud Messaging.
+\end{itemize}
+
+Para generar el fichero de configuración utilizaremos el siguiente comando:
+
+\begin{bashcode}
+python web/manage.py supervisor_conf
+\end{bashcode}
+
+Se generará un fichero \texttt{supervisor-siteup.conf} con la configuración. Es
+buena idea revisar el fichero para comprobar que todas las rutas son
+correctas. Tras ello, solo queda mover el fichero al lugar correcto y reiniciar
+el demonio de supervisor.
+
+\begin{bashcode}
+sudo mv web/supervisor-siteup.conf /etc/supervisord/conf.d  
+\end{bashcode}
+
+En entornos de producción, normalmente no se usará supervisor, ni gunicorn ni
+nginx, sino que utilizaremos el servidor integrado de Django. En esas
+circunstancias será necesario definir las variables mencionadas previamente de
+otra manera. La manera más habitual es añadirlas al \textbf{script de activación} del
+entorno virtual, de la siguiente manera:
+
+\begin{bashcode}
+cdvirtualenv
+cd bin
+cat >> postactivate
+export GMAIL_PASS=yourpass
+export GCM_API_KEY=yourkey
+
+EOF
+\end{bashcode}
+
+\subsection{Configuración del servidor frontal}
+
+El siguiente paso es configurar el servidor nginx para que reciba las peticiones
+apropiadas. Vamos a suponer que SiteUp va a recibir las peticiones en el dominio
+\texttt{siteup.uca.es}. Creamos el fichero
+\texttt{/etc/nginx/sites-available/siteup} y añadimos el siguiente contenido:
+
+\begin{minted}{nginx}
+ server {
+    listen 80;
+    server_name siteup.uca.es;
+
+    # Static files
+    location /static/ {
+        root /srv/siteup/web/siteup_frontend;
+        try_files $uri $uri/ =404;
+    }
+
+    location / {
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header Host             $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass       http://127.0.0.1:8000;
+            break;
+        }
+    }
+} 
+\end{minted}
+
+Tras eso, activamos el fichero de configuración de la siguiente manera:
+
+\begin{bashcode}
+cd /etc/nginx/sites-enabled
+ln -s ../sites-available/siteup
+\end{bashcode}
+
+Básicamente lo que hace ese fichero de configuración es revisar las peticiones
+que llegan y, si apuntan a la ruta \texttt{/static}, nginx se encarga de servir
+esos ficheros estáticos de front-end. Si no, pasa la petición al servidor
+gunicorn que estará escuchando en la dirección local \texttt{127.0.0.1:8000}.
+
+\subsection{Lanzamiento final}
+
+Tras toda esta configuración, los últimos pasos que quedan son activar los
+servicios y servidores. Primero, lanzamos el controlador supervisor, que a su
+vez lanzará el servidor dinámico gunicorn y el servidor de tareas celery:
+
+\begin{bashcode}
+sudo service supervisord reload  
+\end{bashcode}
+
+Seguidamente, reiniciamos el servidor frontal para que pueda empezar a recibir
+peticiones:
+
+\begin{bashcode}
+sudo service nginx restart  
+\end{bashcode}
+
+Con esto, el proyecto estará funcionando y debería ser accesible a través del
+navegador.
+
+
+\section{Mejora del rendimiento}
+
+La configuración por defecto de \textbf{RabbitMQ} hace que consuma mucha memoria
+y puede llegar a resultar un problema en sistemas con recursos limitados, como
+los VPS de bajo coste.
+
+Para arreglar esto, una opción es modificar el fichero de configuración,
+situadio en \texttt{/etc/rabbitmq/rabbitmq.config} para limitar la memoria
+máxima usada por Rabbit a un 15\% del total. El contenido a añadir al fichero es
+el siguiente:
+
+\begin{minted}{text}
+[
+    {rabbit, [{vm_memory_high_watermark, 0.15}]}
+].  
+\end{minted}
+
+Por otro lado, si el número de chequeos que se preveen tener es bajo, es posible
+reducir el número de workers que utiliza \textbf{Celery} modificando el fichero
+\texttt{supervisor-siteup.conf} que se generó en los pasos anteriores, cambiando
+el valor del parámetro \texttt{-c 16} a un número menor.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

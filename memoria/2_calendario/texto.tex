@@ -1,0 +1,205 @@
+El desarrollo del proyecto se ha ajustado razonablemente bien al calendario
+inicialmente dispuesto en la planificación, con algunas etapas durando más de lo
+previsto pero otras terminando antes de lo planificado. En esta sección se
+detallan las etapas y otros detalles relativos a la planificación del proyecto.
+
+\section{Metodología de desarrollo}
+
+Para la realización del proyecto se ha utilizado un modelo de desarrollo
+iterativo incremental. En la redacción del presente documento se presentarán la
+fase de investigación preliminar y las etapas de análisis, diseño,
+implementación y pruebas del proyecto en su estado final. A continuación se
+detallan cada una de las iteraciones por las que ha ido pasando el proyecto.
+
+\subsection{Primera iteración: aprendizaje preeliminar}
+
+Antes de poder comenzar con el análisis y diseño del propio proyecto,
+era esencial adquirir una serie de conocimientos para poder afrontar
+su desarrollo con todas las garantías. Durante esta iteración, se
+llevaron a cabo labores de documentación y aprendizaje autodidacta con
+las que se asentaron los conocimientos necesarios.
+
+Además, durante este periodo también se barajaron las diferentes
+posibilidades de implementación del sistema, así como las posibles
+herramientas y bibliotecas de terceros que pudieran ser de ayuda.
+
+En particular, en esta etapa se decidió el uso del framework web
+\textbf{Django}, las tecnologías de desarrollo \textit{front-end}~\footnote{El
+  desarrollo web \textit{front-end} hace referencia a la parte de una web con la
+  que el usuario interactúa directamente en el navegador.} (entre otras, Sass,
+Compass, jQuery y D3), el motor de tareas asíncronas para lanzar los chequeos
+(Celery y RabbitMQ) y el stack de soporte del servidor (nginx, supervisord y
+gunicorn).
+
+\subsection{Segunda iteración: herramientas básicas de chequeo}
+
+Una vez adquiridos los conocimientos necesarios, y decididas las técnicas y
+herramientas para llevar aquellos a la práctica, fue obvia la necesidad de
+empezar por diseñar una serie de herramientas que fuesen capaces de lanzar
+chequeos contra servicios web de forma simple y aislada.
+
+Así, se desarrolló un módulo en Python capaz de lanzar los cuatro tipos de
+chequeos con los que posteriormente contaría el proyecto:
+\begin{itemize}
+\item Chequeo mediante paquetes \ac{ICMP} (ping) con verificación de tiempo de espera máximo.
+\item Chequeo de coherencia de registros \ac{DNS}.
+\item Chequeo del estado de puertos remotos.
+\item Chequeo de peticiones \ac{HTTP}, tanto en su cabecera como en contenido.
+\end{itemize}
+
+Este módulo sería el motor de los chequeos que posteriormente se darían de alta
+en el proyecto.
+
+\subsection{Tercera iteración: inicio de proyecto Django y CRUD básico}
+
+Con el módulo de chequeo desarrollado, \textit{sólo} restaba desarrollar el
+resto de la aplicación alrededor de sus funcionalidades. En esta tercera
+iteración se creó la estructura básica del proyecto y se inició el desarrollo de
+la funcionalidad \ac{CRUD} básica.
+
+También en esta etapa se definió el diseño visual de la aplicación: logotipo,
+esquema de colores y tipografías.
+
+\subsection{Cuarta iteración: integración del motor de tareas asíncronas}
+
+Con la aplicación teniendo la funcionalidad básica para la creación y edición de
+chequeos, el siguiente paso fue integrar un motor de tareas asíncronas que se
+dedicase a revisar y lanzar los chequeos dados de alta en el sistema, guardando
+el resultado de cada uno de ellos en la base de datos y generando estadísticas.
+
+\subsection{Quinta iteración: desarrollo de la aplicación Android}
+
+Tras concluir el desarrollo de la aplicación web, en esta etapa se desarrolló
+una aplicación móvil para el sistema operativo Android que recibe notificaciones
+con información sobre los resultados de los chequeos dados de alta en el sistema.
+
+\section{Planificación temporal}
+Se ha diseñado un diagrama de Gantt para reflejar la distribución de las tareas
+a lo largo del tiempo (figura~\ref{fig:gantt}).
+
+\vspace{0.5cm}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.77\textwidth]{2_calendario/imagen_diagrama_gantt}
+  \caption{Diagrama Gantt de iteraciones}
+  \label{fig:gantt}
+\end{figure}
+
+\section{Organización}
+
+El proyecto ha sido desarrollado en su totalidad por el que escribe, alumno de
+la Universidad de Cádiz, llevando a cabo las labores de análisis, diseño y
+desarrollo, así como de diseño visual de las interfaces y \textit{branding} del
+proyecto. El desarrollo del proyecto ha sido revisado y guiado de forma continua por el
+tutor Ivan Ruiz Rube.
+
+\section{Recursos inventariables}
+
+Los recursos de hardware utilizados durante el desarrollo y la implantación del
+proyecto engloban aquellos empleados por el alumno para la elaboración del
+proyecto y los necesarios para la implantación y puesta en marcha del proyecto.
+
+En particular:
+\begin{itemize}
+\item Como puesto de desarrollo se ha utilizado un equipo con las siguientes características:
+  \begin{itemize}
+  \item Procesador Intel i5 4670k
+  \item Placa Gigabyte Z87X-OC
+  \item Memoria Corsair Vengeance 16GB DDR3
+  \item Gráfica NVidia GeForce GTX 660 Ti
+  \item SSD Crucial M4 128GB
+  \item Pantalla Dell u2713H 27"
+  \end{itemize}
+
+\item Como servidores para el \textit{deployment} se han contratado los
+  servicios de la empresa alemana Hetzner, haciendo uso del plan \textit{vServer
+    VQ7} que proporciona un servidor virtual con las siguientes características:
+  \begin{itemize}
+  \item Procesador Single Core
+  \item RAM 512MB
+  \item Disco Duro 20GB
+  \item NIC 100Mbit
+  \item Tráfico máximo 1TB al mes
+  \end{itemize}
+
+\end{itemize}
+
+\section{Costes}
+
+La estimación de los costes del proyecto es divisible en dos áreas. Por un lado,
+el coste de personal, que en este caso particular se limita al alumno, y por
+otro lado el coste de infraestructuras y servicios externos. No se tiene en
+cuenta el coste del software ya que en todo momento se ha utilizado software con
+licencias libres para uso personal y comercial.
+
+En lo que respecta al personal:
+
+\begin{itemize}
+\item La realización del proyecto necesitó de 480 horas de trabajo. De acuerdo a
+  la planificación, con una carga de trabajo diaria de 4 horas, la duración del
+  proyecto ha sido de 120 días, aproximadamente cuatro meses.
+\item Según el estado de mercado, el salario medio de un programador
+  Python/Django de categoría junior ronda los 17€ por hora trabajada antes de
+  impuestos.
+\item Así pues, la estimación de gastos de personal es de \textbf{8160€}.
+\end{itemize}
+
+En cuanto al gasto en infraestructuras:
+
+\begin{itemize}
+\item El sistema en el que se ha llevado a cabo el desarrollo estaba comprado
+  con anterioridad al proyecto, por lo que no se ha reflejado en este despliegue
+  de gastos.
+
+\item La plataforma de despliegue del sistema tiene un coste fijo de 7.90€ al
+  mes~\cite{hetznervq7}, impuestos incluidos. Suponiendo un periodo mínimo de
+  actividad de 12 meses, el coste asciende a \textbf{94.80€}.
+\end{itemize}
+
+\section{Riesgos}
+
+Los principales riesgos presentes en SiteUp son los siguientes.
+
+\subsection{Compromiso de la plataforma de despliegue}
+
+Dada la limitada envergadura del proyecto por ser éste un PFC y no un desarrollo
+con fines comerciales, los chequeos de los servicios web se hacen de forma
+centralizada desde la plataforma de despliegue. Cualquier problema que pueda
+comprometer la estabilidad de esta plataforma supone un riesgo de obtener datos
+falsos de los chequeos. En un entorno real, para obtener la mayor fiabilidad y
+datos siempre precisos, cada chequeo se lanza desde diversos puntos, tanto
+geográficos como lógicos, de forma que es más difícil que un falso positivo o
+negativo causado por un error de la plataforma pueda llegar hasta el usuario.
+
+Lógicamente la adición de nuevas \textit{sondas} de chequeo incrementaría
+enormemente la complejidad logística y el presupuesto del proyecto.
+
+\subsection{Limitación de recursos}
+
+SiteUp hace uso de un gran número de sistemas, desde el servidor web que recibe
+las peticiones hasta la cola de tareas asíncronas. La plataforma de despliegue
+cuenta con unos recursos limitados que, en situaciones de gran afluencia de
+peticiones, pueden no ser suficientes y dar lugar a problemas en el
+sistema. 
+
+Este riesgo puede superarse considerando contratar planes con más recursos para
+la plataforma, lo que por otro lado conllevaría un incremento en los gastos.
+
+\subsection{Rechazo de los servicios vigilados}
+
+Por definición, los sistemas de vigilancia tienen que lanzar chequeos de forma
+periódica y repetida a lo largo del tiempo. Algunos sistema están configurados
+para detectar esta clase de comprobaciones y bloquearlas, al identificarlas (a
+veces erróneamente) como ataques de denegación de servicio~\cite{ddos}. 
+
+Este riesgo es algo que tenemos que asumir y frente al que no se puede hacer
+mucho, aparte de configurar la periodicidad de las comprobaciones para
+disminuir la frecuencia y que no se tomen como un ataque.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 
