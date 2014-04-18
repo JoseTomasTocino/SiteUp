@@ -673,21 +673,22 @@ Dada la mayor familiaridad del desarrollador con el lenguaje, solo se barajaron
 frameworks de desarrollo basados en el lenguaje Python.
 
 \begin{itemize}
-\item \textbf{Django}: popular framework para el desarrollo rápido de
-  aplicaciones web. Consta de una arquitectura similar al popular patrón
+\item \textbf{Django}\cite{django}: popular framework para el desarrollo rápido
+  de aplicaciones web. Consta de una arquitectura similar al popular patrón
   \ac{MVC}, y cuenta con una basta comunidad de usuarios. Los proyectos Django
   se organizan en \textit{apps}, que permiten modularizar la
   funcionalidad. Integra un \ac{ORM}, un sistema de plantillas y una sección de
   administración adaptable a cualquier sitio web.
 
-\item \textbf{Flask}: se trata de un minimalista framework para Python que
+\item \textbf{Flask}\cite{flask}: se trata de un minimalista framework para Python que
   provee las funcionalidades más básicas, dejando al desarrollador elegir el
   resto de componentes. En los últimos meses, Flask ha ganado gran popularidad
   frente a Django al dar más libertad al programador.
 
-\item \textbf{Bottle}: similar a Flask, Bottle es otro micro-framework para
-  Python, siendo tan minimalista que está encapsulado en un solo fichero fuente
-  y no necesita de dependencias externas. Se encuentra en etapas tempranas de su desarrollo.
+\item \textbf{Bottle}\cite{bottle}: similar a Flask, Bottle es otro
+  micro-framework para Python, siendo tan minimalista que está encapsulado en un
+  solo fichero fuente y no necesita de dependencias externas. Se encuentra en
+  etapas tempranas de su desarrollo.
 
 \end{itemize}
 
@@ -698,12 +699,12 @@ Instagram, afianzó aún más la decisión de usarlo.
 \subsection{Sistemas de gestión de bases de datos}
 
 \begin{itemize}
-\item \textbf{MySQL}, uno de los sistemas de bases de datos más populares. Se
+\item \textbf{MySQL}\cite{mysql}, uno de los sistemas de bases de datos más populares. Se
   usa en multitud de proyectos de gran envergadura y su utilidad y fiabilidad
   están más que demostradas. Cuenta con una arquitectura cliente-servidor, y
   suele necesitar bastantes recursos.
 
-\item \textbf{SQLite}: potente pero ligero, SQLite se aleja de la arquitectura
+\item \textbf{SQLite}\cite{sqlite}: potente pero ligero, SQLite se aleja de la arquitectura
   cliente-servidor y se integra directamente en la aplicación cliente pasando a
   ser parte integral del mismo. Esto reduce la latencia en las comunicaciones de
   datos. Es el SGBD que Django usa por defecto.
@@ -723,13 +724,13 @@ arquitectura cliente-servidor, como MySQL.
 \subsection{Sistemas para la ejecución asíncrona de tareas}
 
 \begin{itemize}
-\item \textbf{Cron} es un demonio~\footnote{Entiéndase \textit{demonio} en el
+\item \textbf{Cron}\cite{cron} es un demonio~\footnote{Entiéndase \textit{demonio} en el
     sentido de un servicio que se ejecuta en segundo plano.} encargado de lanzar
   procesos de forma periódica utilizado en sistemas operativos basados en
   Unix. Cada usuario en un sistema cuenta con un fichero \textit{crontab}, en el
   que puede definir qué tareas ejecutar y con qué periodicidad deben ejecutarse. 
 
-\item \textbf{Celery} es una cola de tareas asíncronas desarrollado en
+\item \textbf{Celery}\cite{celery} es una cola de tareas asíncronas desarrollado en
   Python. Una instalación de celery cuenta con una serie de \textit{workers} que
   leen tareas de una cola de mensajes (basada en el estándar \ac{AMQP}) y las
   ejecutan de forma síncrona o asíncrona, opcionalmente guardando su resultado
@@ -759,6 +760,113 @@ varias razones:
   ninguna opción de integración.
 
 \end{itemize}
+
+\subsection{Plataformas para el desarrollo de la aplicación móvil}
+
+Como se especificó en la sección~\ref{sec:objetivos}, uno de los objetivos
+principales del proyecto era el desarrollo, junto a la plataforma web, de una
+aplicación móvil para que los usuarios pudiesen recibir notificaciones
+instantáneas en cualquier momento y lugar, directamente en su móvil. Así pues,
+resultó necesario hacer un estudio de las plataformas móviles existentes para
+ver en cuál de ellas se centraría el desarrollo.
+
+\begin{itemize}
+\item \textbf{iOS}\cite{ios} es un sistema operativo móvil de la empresa
+  \textbf{Apple} utilizado en los dispositivos de la familia iPhone, iPod Touch
+  e iPad. A pesar de estar basado en un núcleo \ac{BSD} libre, iOS tiene una
+  licencia privativa.
+
+  El desarrollo para iOS es bastante estricto. Sólo es posible desarrollar para
+  iOS utilizando computadoras Mac con el sistema operativo OS X 10.8 o
+  superior\cite{ios-development-requirements}. La programación se lleva a cabo
+  utilizando \textbf{Objective-C}, un lenguaje derivado del C cuyo uso a día de
+  hoy prácticamente se limita al desarrollo en iOS. Además, es necesario
+  utilizar el conjunto de herramientas que provee Apple, en particular XCode.
+
+  El control de Apple sobre las aplicaciones que se desarrollan es férreo. La
+  \textit{App Store}, aplicación desde la que los usuarios instalan nuevos
+  programas, controla fuertemente las aplicaciones que se envían mediante
+  exhaustivas revisiones, que suelen tardar entorno a una semana. Además, para
+  poder lanzar una app es necesario pagar una cuota anual de 99 dólares.
+
+\item \textbf{Android}\cite{android} es un sistema operativo móvil basado en el
+  kernel de Linux, diseñado para su uso en móviles y tabletas. Inicialmente su
+  desarrollo fue llevado a cabo por la empresa Android, Inc, pero posteriormente
+  Google compró la empresa y es la que en la actualidad impulsa el desarrollo.
+
+  El desarrollo en Android es bastante más laxo que en iOS. El lenguaje de
+  programación utilizado es Java, un lenguaje compilado muy conocido y utilizado
+  en muchos ámbitos, más allá del desarrollo móvil. Es posible desarrollar en
+  cualquier plataforma (GNU/Linux, Windows o Mac), utilizando cualquier entorno
+  de desarrollo que sea capaz de compilar código Java con las bibliotecas de
+  Android.
+
+  Las aplicaciones desarrolladas para Android se pueden lanzar en un mercado de
+  aplicaciones llamado \textit{Google Play Store}, aunque también existen
+  mercados de terceros al igual que es posible instalar aplicaciones de forma
+  manual. Google cobra una tarifa única de 25 dólares por desarrollador, válida
+  de por vida. Las revisiones que hace Google de las aplicaciones son menos
+  rígidas que en el caso de Apple, y suelen tardar mucho menos.
+
+\item \textbf{BlackBerry}, \textbf{Windows Phone} y \textbf{Symbian} son otras
+  paltaformas móviles de mucho menor calado y público. El desarrollo para esas
+  plataformas está mucho menos extendido, tiene menor soporte y menor clientela.
+
+  BlackBerry OS es un sistema operativo que nació en 1999, época en la que
+  BlackBerry era la compañía estrella en dispositivos \textit{handheld}, siendo
+  la opción principal para empresarios y gente de negocios que tuviese necesidad
+  de chequear el correo electrónico o notas estando lejos de una computadora. En
+  la actualidad, el número de dispositivos que utilizan BlackBerry ha caído
+  estrepitosamente, principalmente por la limitada compatibilidad del sistema
+  BlackBerry 10 con otros dispositivos.
+
+  Windows Phone es la apuesta de Microsoft en el mercado móvil. Lanzado en 2010,
+  la última versión del sistema es Windows Phone 8.1. Actualmente se encuentra
+  en pleno crecimiento, principalmente gracias al dominio de Nokia en mercados
+  crecientes como Asia, América Latina y África\cite{wp-beats-ios}. A pesar de
+  ello, todavía no es una plataforma firme con una base de usuarios a considerar.
+
+  Symbian es una plataforma libre que tuvo un gran éxito en la década de 2000,
+  siendo la alternativa más asequible a BlackBerry hasta la aparición de Android
+  en 2010. La última versión del sistema se lanzó en octubre de 2012, y desde
+  entonces no habido más desarrollo.
+
+\end{itemize}
+
+\subsubsection{Cuotas de mercado}
+
+En la tabla~\ref{tab:cuota-2014} se detallan las cuotas de mercado de las
+principales plataformas móviles medidas en enero de 2014 entre usuarios mayores
+de 13 años de edad~\cite{comscore-report-2014}.
+
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}[h]{|l|l|}
+    \hline
+    \textit{Plataforma} & \textit{Porcentaje} \\
+    \hline
+    Android & 51.7\% \\
+    Apple & 41.6\% \\
+    BlackBerry & 3.1\% \\
+    Microsoft & 3.2\% \\
+    Symbian & 0.2\% \\
+    \hline
+  \end{tabular}
+  \caption{Cuota de mercado de plataformas móviles en enero de 2014}
+  \label{tab:cuota-2014}
+\end{table}
+
+\subsubsection{Decisión}
+
+Así, dadas las evidencias en la cuota de mercado, facilidad de desarrollo y
+costes en licencias, se tomó la decisión de usar \textbf{Android} como
+plataforma móvil principal a la hora de desarrollar la aplicación móvil.
+
+En un futuro, según las circunstancias, se valorará trasladar el desarrollo
+también a la plataforma iOS, aunque es algo harto improbable dadas las
+exigencias de infraestructura (es necesario tener un ordenador Mac reciente) y
+monetarias (el coste de la licencia anual es prohibitivo para una aplicación
+gratuita).
 
 %%% Local Variables: 
 %%% mode: latex

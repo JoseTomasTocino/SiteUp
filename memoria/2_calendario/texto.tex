@@ -1,17 +1,27 @@
-El desarrollo del proyecto se ha ajustado razonablemente bien al calendario
+En este capítulo procederemos a detallar la planificación que ha seguido el
+proyecto. En particular, se describe la metodología seguida, las etapas por las
+que ha pasado el proyecto, la planificación temporal y la organización del
+personal involucrado. 
+
+Tras ello se exponen los recursos inventariables de los
+que se han hecho uso a lo largo del desarrollo y puesta en producción del
+producto, haciendo una estimación de los costes y, por último, explicando los
+posibles riesgos que pueden tener lugar.
+
+En general, el desarrollo del proyecto se ha ajustado razonablemente bien al calendario
 inicialmente dispuesto en la planificación, con algunas etapas durando más de lo
-previsto pero otras terminando antes de lo planificado. En esta sección se
-detallan las etapas y otros detalles relativos a la planificación del proyecto.
+previsto pero otras terminando antes de lo planificado. 
 
 \section{Metodología de desarrollo}
 
 Para la realización del proyecto se ha utilizado un modelo de desarrollo
-iterativo incremental. En la redacción del presente documento se presentarán la
-fase de investigación preliminar y las etapas de análisis, diseño,
-implementación y pruebas del proyecto en su estado final. A continuación se
-detallan cada una de las iteraciones por las que ha ido pasando el proyecto.
+iterativo incremental, definiendo en cada etapa las funcionalidades a
+elaborar y completando el ciclo completo de desarrollo y pruebas. 
 
-\subsection{Primera iteración: aprendizaje preeliminar}
+A continuación se detallan cada una de las iteraciones por las que ha ido
+pasando el proyecto.
+
+\subsection{Primera iteración: adquisición de conocimientos y elicitación de requisitos}
 
 Antes de poder comenzar con el análisis y diseño del propio proyecto,
 era esencial adquirir una serie de conocimientos para poder afrontar
@@ -19,19 +29,21 @@ su desarrollo con todas las garantías. Durante esta iteración, se
 llevaron a cabo labores de documentación y aprendizaje autodidacta con
 las que se asentaron los conocimientos necesarios.
 
-Además, durante este periodo también se barajaron las diferentes
-posibilidades de implementación del sistema, así como las posibles
-herramientas y bibliotecas de terceros que pudieran ser de ayuda.
+Además, durante este periodo también se definieron los requisitos que se
+impondrían al sistema, y se barajaron las diferentes posibilidades de
+implementación del proyecto, así como las posibles herramientas y bibliotecas de
+terceros que pudieran ser de ayuda, tal y como queda reflejado en el capítulo~\ref{chap:requisitos}.
 
 En particular, en esta etapa se decidió el uso del framework web
-\textbf{Django}, las tecnologías de desarrollo \textit{front-end}~\footnote{El
+\textbf{Django}, las tecnologías de desarrollo \textit{front-end}\footnote{El
   desarrollo web \textit{front-end} hace referencia a la parte de una web con la
   que el usuario interactúa directamente en el navegador.} (entre otras, Sass,
 Compass, jQuery y D3), el motor de tareas asíncronas para lanzar los chequeos
 (Celery y RabbitMQ) y el stack de soporte del servidor (nginx, supervisord y
 gunicorn).
 
-\subsection{Segunda iteración: herramientas básicas de chequeo}
+\subsection{Segunda iteración: desarrollo de módulo de herramientas básicas de
+  chequeo}
 
 Una vez adquiridos los conocimientos necesarios, y decididas las técnicas y
 herramientas para llevar aquellos a la práctica, fue obvia la necesidad de
@@ -74,14 +86,13 @@ una aplicación móvil para el sistema operativo Android que recibe notificacion
 con información sobre los resultados de los chequeos dados de alta en el sistema.
 
 \section{Planificación temporal}
+\label{sec:planificacion}
 Se ha diseñado un diagrama de Gantt para reflejar la distribución de las tareas
-a lo largo del tiempo (figura~\ref{fig:gantt}).
+a lo largo del tiempo (figura~\ref{fig:gantt}, en la página \pageref{fig:gantt}).
 
-\vspace{0.5cm}
-
-\begin{figure}[h!]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.87\textwidth]{2_calendario/imagen_diagrama_gantt}
+  \includegraphics[width=\textwidth]{2_calendario/imagen_diagrama_gantt}
   \caption{Diagrama de Gantt}
   \label{fig:gantt}
 \end{figure}
@@ -121,6 +132,18 @@ En particular:
   \item Disco Duro 20GB
   \item NIC 100Mbit
   \item Tráfico máximo 1TB al mes
+  \end{itemize}
+
+\item Como dispositivo para las pruebas de la aplicación móvil se ha utilizado
+  un \textbf{Samsung Galaxy Nexus} con las siguientes características:
+
+  \begin{itemize}
+  \item Sistema: Android 4.3
+  \item CPU: 1.2 GHz ARM Cortex-A9 de doble núcleo.
+  \item GPU: 307 MHz PowerVR SGX540.
+  \item Memoria: 1 GB.
+  \item Almacenamiento: 16GB
+  \item Pantalla: 4.65" HD Super AMOLED, 1280x720px.
   \end{itemize}
 
 \end{itemize}

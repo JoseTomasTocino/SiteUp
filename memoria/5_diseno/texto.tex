@@ -478,6 +478,405 @@ aplicación en concreto. Los campos que contiene son:
   módulo.
 \end{itemize}
 
+\section{Diseño de la imagen corporativa}
+
+La \textbf{imagen corporativa} del proyecto comprende el diseño del
+\textbf{logotipo}, la elección de la paleta de \textbf{colores} y las
+\textbf{tipografías}, que se usan en el diseño de la web, emails y cualquier
+otro elemento visual.
+
+Para su elaboración se han seguido ciertas premisas o \textit{guías de
+  branding}, de forma que se consiguiese el look más adecuado:
+
+\begin{itemize}
+\item \textbf{Diseño minimalista}. En SiteUp, la información es lo más
+  importante, así que no tiene sentido utilizar un diseño muy sobrecargado.
+\item \textbf{Colores monocromáticos}. Siguiendo en la línea del punto anterior,
+  esta \textit{regla} facilita que haya una consistencia en las interfaces de la
+  web y la aplicación móvil sin tener que recurrir a complejas combinaciones de
+  color.
+\item \textbf{Tipografías libres}. Era importante no utilizar tipografías que
+  requiriesen una licencia comercial para su uso.
+\end{itemize}
+
+\subsection{Diseño del logotipo}
+\label{subsec:logotipo}
+
+Partiendo del nombre del proyecto se pensaron varios bocetos para el
+logotipo. La idea principal era jugar con las dos palabras que componen el
+nombre: \textit{Site} y \textit{Up}. Para la primera palabra, la metáfora de
+usar una ventana de un navegador o algo que representase un servidor era
+demasiado compleja, así que se decidió simplemente usar la letra S. 
+
+Por otro lado, para la segunda palabra estaba claro desde el principio que se
+usaría alguna metáfora de tipo flecha para representar la dirección
+\textit{arriba}. Se probaron distintos tipos de flechas y al final se decidió
+por una doble flecha de tipo galón, con suficiente separación para que se viese
+en bajas resoluciones. El logotipo resultante se puede ver en la
+figura~\ref{fig:logotipo}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{5_diseno/logo.png}
+  \caption{Logotipo de SiteUp}
+  \label{fig:logotipo}
+\end{figure}
+
+\subsection{Elección de la gama cromática}
+
+Teniendo en mente la idea apuntada anteriormente de que la gama de colores
+debería ser preferiblemente monocromática, se empezó a buscar un tono que
+funcionase con la temática del sitio. Se hizo una búsqueda de sitios web de
+servicios de soporte, y en la mayoría de ellos la gama cromática era siempre muy
+neutra, con tonos poco saturados y casi siempre fríos.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/paleta-colores}
+  \caption{Detalle de la paleta de colores de SiteUp}
+  \label{fig:colores}
+\end{figure}
+
+Así, tras varias pruebas, se decidió optar por una gama de azules poco
+saturados, rozando el grisáceo. En la figura~\ref{fig:colores} se detalla la
+paleta de colores principal.
+
+\subsection{Elección de la tipografía}
+
+Siguiendo las directrices apuntadas previamente, se buscaba una tipografía
+sencilla y minimalista. Se probaron algunas alternativas comerciales, empezando,
+cómo no, por Helvética y pasando por Myriad Pro, Próxima Nova y algunas
+otras. Al final nos decantamos por utilizar \textbf{Open Sans}~\cite{open-sans},
+una tipografía sans-serif limpia y moderna, de corte humanista, y desarrollada
+por Steve Matteson para Google.
+
+Se trata de una tipografía limpia, optimizada para la legibilidad en toda clase
+de soportes, y por supuesto libre, bajo una licencia Apache 2.0.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{5_diseno/open-sans}
+  \caption{Muestra de Open Sans en diferentes pesos}
+\end{figure}
+
+\section{Diseño de la interfaz de usuario de la plataforma web}
+
+En esta sección se detallarán las interfaces visuales de la plataforma web del
+proyecto, indicando qué acciones realizan cada uno de los componentes que las
+conforman.
+
+\subsection{Pantalla de inicio}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-home.png}
+  \caption{Pantalla de inicio}
+  \label{fig:web-home}
+\end{figure}
+
+En la figura~\ref{fig:web-home} se ve el diseño de página de inicio, o
+\textit{home}, de la plataforma web. Es la pantalla que aparece al acceder a la
+base del proyecto. Se componen de una barra superior de navegación en la que
+aparece el logotipo a la izquierda, y las opciones de navegación a la
+derecha. Al pulsar el logotipo, se redirige a la pantalla de inicio.
+
+Si el usuario no está logueado, las opciones de navegación disponibles son:
+
+\begin{itemize}
+\item \textbf{Log in}: lleva al usuario a la pantalla de inicio de sesión.
+\item \textbf{Sign up}: lleva al usuario a la pantalla de registro de usuario.
+\end{itemize}
+
+Si el usuario sí está logueado, las opciones que aparecen son diferentes:
+
+\begin{itemize}
+\item \textbf{Dashboard}: lleva al usuario al listado de chequeos.
+\item \textbf{Your profile}: lleva al usuario al formulario de datos personales.
+\item \textbf{Log out}: cierra la sesión del usuario.
+\end{itemize}
+
+La barra de navegación superior tiene el mismo comportamiento en todas las
+secciones de la web.
+
+
+\subsection{Pantalla de inicio de sesión}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-login.png}
+  \caption{Pantalla de inicio de sesión}
+  \label{fig:web-login}
+\end{figure}
+
+En la figura~\ref{fig:web-login} se ve el diseño de la pantalla de inicio de
+sesión. Se presenta un formulario en el que el usuario deberá escribir su nombre
+de usuario y su contraseña, y tras ello pulsar el botón de \textit{Login}. En
+caso de que los datos introducidos sean correctos, el sistema iniciará sesión y
+redirigirá al usuario a la lista de chequeos. En caso contrario, volverá a
+aparecer el formulario con los errores que se hayan producido.
+
+Opcionalmente, si el usuario no recuerda su contraseña puede pulsar en el botón
+de \textit{Forgot password?}, lo que le llevará a la pantalla de recuperación de
+contraseña.
+
+\subsection{Pantalla de recuperación de contraseña}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-forgot-password}
+  \caption{Pantalla de recuperación de contraseña}
+  \label{fig:web-forgot-password}
+\end{figure}
+
+En esta pantalla, visible en la figura~\ref{fig:web-forgot-password}, el usuario
+podrá introducir su correo electrónico para recuperar su contraseña. Tras
+rellenar el campo de texto, deberá pulsar el botón. Si el email introducido es
+correcto, el sistema enviará un correo electrónico con instrucciones para
+reiniciar la contraseña, y en pantalla se mostrará un mensaje indicando que se
+ha iniciado el proceso de reinicio.
+
+% \vfill
+
+\subsection{Pantalla de registro de usuario}
+
+En la figura~\ref{fig:web-register} se puede ver la pantalla de registro de
+usuario.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-register}
+  \caption{Pantalla de registro de usuario}
+  \label{fig:web-register}
+\end{figure}
+
+Dispone de un formulario, en el que el usuario deberá introducir sus datos
+personales: nombre de usuario, dirección de correo electrónico y contraseña. Una
+vez rellenos, deberá pulsar el botón. Si los datos son correctos, el sistema
+creará la cuenta de usuario. Si no, el sistema volverá a mostrar el formulario,
+resaltando los errores en los datos.
+
+% \vfill
+
+\subsection{Pantalla de lista de chequeos}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-dashboard}
+  \caption{Pantalla de lista de chequeos}
+  \label{fig:web-dashboard}
+\end{figure}
+
+En la figura~\ref{fig:web-dashboard} se puede ver la pantalla principal de
+SiteUp, la lista de chequeos o \textbf{dashboard}. En esta pantalla aparecen los
+grupos de chequeos que tiene dados de alta un usuario, así como los chequeos que
+pertenecen a cada grupo. Desde esta pantalla se pueden hacer un gran número de
+operaciones:
+
+\begin{itemize}
+\item Pulsando el botón \textit{Add group} aparecerá la pantalla de creación de
+  grupo.
+\item Cada grupo tiene un menú desplegable que aparece al pulsar o colocar el
+  ratón sobre el botón \textit{Actions}. Desde ahí, es posible:
+  \begin{itemize}
+  \item Añadir un chequeo al grupo pulsando el botón \textit{Add check}.
+  \item Activar todos los chequeos del grupo pulsando el botón \textit{Enable
+      all checks}.
+  \item Desactivar todos los chequeos del grupo pulsando el botón
+    \textit{Disable all checks}.
+  \item Editar los detalles del grupo pulsando el botón \textit{Edit}.
+  \item Borrar el grupo y los chequeos que contiene pulsando el botón \textit{Delete}.
+  \end{itemize}
+\item Dentro de cada grupo aparece cada uno de los chequeos que contiene, con un
+  icono indicando el estado del chequeo, el título, descripción, una gráfica de
+  su estado en las últimas 24 horas y una serie de botones de acción, que
+  permiten:
+  \begin{itemize}
+  \item Ver los detalles del chequeo pulsando el botón \textit{Details}.
+  \item Editar las propiedades del chequeo con el botón \textit{Edit}.
+  \item Borrar el chequeo con el botón \textit{Delete}.
+  \item Activar o desactivar el chequeo pulsando \textit{Enable} o
+    \textit{Disable}.
+  \end{itemize}
+
+\end{itemize}
+
+% \vfill
+
+\subsection{Pantalla de creación de grupo}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-create-group}
+  \caption{Pantalla de creación de grupo de chequeos}
+  \label{fig:web-create-group}
+\end{figure}
+
+La figura~\ref{fig:web-create-group} representa la pantalla para crear un grupo
+de chequeos. Muestra un formulario en el que hay que introducir los detalles del
+grupo, concretamente el título que lo describe.
+
+Cuando el usuario introduzca el título y pulse el botón, el sistema revisará que
+los datos sean correctos. En caso afirmativo, el sistema creará el nuevo
+grupo. En caso negativo, se volverá a mostrar el formulario, indicando los
+fallos ocurridos.
+
+% \vfill
+
+\subsection{Pantallas de creación de chequeo}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-choose-type}
+  \caption{Pantalla de elección de tipo de chequeo}
+  \label{fig:web-choose-type}
+\end{figure}
+
+La creación de un chequeo se divide en dos pantallas principalmente. El primer
+paso es elegir el tipo de chequeo a crear, mediante los botones que aparecen en
+la pantalla de la figura~\ref{fig:web-choose-type}. 
+
+Una vez elegido el tipo de chequeo a crear, aparecerá un formulario para
+introducir los detalles del chequeo, que variará según el tipo de chequeo
+elegido. En la figura~\ref{fig:web-create-check} se puede ver el formulario que
+aparecerá a la hora de crear un chequeo de tipo DNS.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-create-check}
+  \caption{Pantalla de introducción de datos del chequeo}
+  \label{fig:web-create-check}
+\end{figure}
+
+
+Cuando el usuario rellene el formulario y pulse el botón, se enviarán los datos
+y el sistema comprobará que la información es correcta. En tal caso, se creará
+el nuevo chequeo y se redirigirá al usuario al \textit{dashboard}. En caso
+contrario, se volverá a mostrar el formulario, indicando los errores
+encontrados.
+
+\subsection{Pantalla genérica de borrado}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-delete}
+  \caption{Pantalla genérica de borrado}
+  \label{fig:web-delete}
+\end{figure}
+
+En la figura~\ref{fig:web-delete} se representa la pantalla de confirmación de
+borrado que aparece cuando se intenta borrar un chequeo o un grupo de
+chequeos. La pantalla es sencilla: pregunta al usuario si desea realmente borrar
+el elemento, ofreciendo dos botones, uno para confirmar el borrado y otro para
+cancelar la operación. En ambos casos, tras la interacción el sistema redirige
+al usuario al \textit{dashboard}.
+
+\subsection{Pantalla del perfil de usuario}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/web-profile}
+  \caption{Pantalla del perfil de usuario}
+  \label{fig:web-profile}
+\end{figure}
+
+En la figura~\ref{fig:web-profile} se muestra la pantalla para editar el perfil
+de usuario, a la que se llega pulsando el botón \textit{Your profile} situado en
+la barra superior de navegación.
+
+Desde esta pantalla el usuario puede modificar sus datos de usuario: nombre de
+usuario, correo electrónico y si desea recibir un reporte diario sobre el estado
+de sus chequeos.
+
+También cuenta con la opción de cambiar la contraseña pulsando el botón
+\textit{Change password}.
+
+
+\FloatBarrier
+\section{Diseño de la interfaz de usuario de la aplicación móvil}
+
+En esta sección se detallarán las interfaces visuales de la aplicación móvil
+para sistemas operativos Android, indicando la navegabilidad e interacción entre
+las pantallas.
+
+
+\subsection{Aspecto desde el lanzador}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.4\textwidth]{5_diseno/android-1}
+  \caption{Icono de SiteUp en el lanzador}
+  \label{fig:android-launcher}
+\end{figure}
+
+La figura~\ref{android-launcher} muestra el aspecto del icono de la aplicación
+desde el lanzador de aplicaciones de Android. 
+
+Como se comentó en la sección~\ref{subsec:logotipo}, el logotipo fue diseñado
+pensando en su legibilidad en bajas resoluciones, por lo que el icono de la
+aplicación es fácilmente identificable desde el lanzador.
+
+Al pulsar el icono de la aplicación, se lanza la pantalla de carga.
+
+\subsection{Pantalla de carga}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.4\textwidth]{5_diseno/android-2}
+  \caption{Pantalla de carga de la aplicación móvil}
+  \label{fig:android-loading}
+\end{figure}
+
+En cuanto se pulsa el lanzador aparece la pantalla de carga de la aplicación,
+visible en la figura~\ref{fig:android-loading}. Esta pantalla permanece visible
+poco tiempo ya que el tiempo de carga es rápido.
+
+Tras el proceso de carga, si la aplicación Android detecta que el usuario ha
+iniciado sesión previamente, se carga la pantalla con el listado de chequeos. En
+caso de que no haya datos de una sesión anterior, se carga la pantalla de login.
+
+\subsection{Pantalla de inicio de sesión}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.4\textwidth]{5_diseno/android-3}
+  \caption{Pantalla de inicio de sesión de la aplicación móvil}
+  \label{fig:android-login}
+\end{figure}
+
+Tras cargar la aplicación, si no se detectan datos de inicio de sesión previos
+se muestra la pantalla de inicio de sesión, visible en la
+figura~\ref{fig:android-login}, en la que el usuario debe introducir su nombre
+de usuario y contraseña para iniciar sesión.
+
+\subsection{Pantalla de listado de chequeos}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.4\textwidth]{5_diseno/android-4}
+  \caption{Pantalla de chequeos de la aplicación móvil}
+  \label{fig:android-dashboard}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.4\textwidth]{5_diseno/android-5}
+  \caption{Aspecto de las notificaciones}
+  \label{fig:android-notification}
+\end{figure}
+
+La figura~\ref{fig:android-dashboard} muestra la pantalla con el listado de
+chequeos del usuario. Desde aquí es posible cerrar la sesión de usuario, o
+pulsar en alguno de los chequeos para ver sus detalles, lo cual abrirá un
+navegador y mostrará la plataforma web.
+
+\subsection{Notificación}
+
+
+
+La figura~\ref{fig:android-notification} muestra el aspecto que tienen las
+notificaciones que la aplicación es capaz de recibir. Desde estas notificaciones
+es posible dirigirse a la web para ver los detalles del chequeo involucrado.
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "../memoria"

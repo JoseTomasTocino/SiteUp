@@ -8,7 +8,7 @@
 \usepackage{tikz}
 
 % Márgenes, hace que los márgenes laterales sean iguales
-%\usepackage[hmarginratio=1:1]{geometry}
+\usepackage[a4paper,top=3cm,right=3cm,left=3cm,bottom=3cm]{geometry}
 
 % Referencias externas
 \usepackage{xr-hyper}
@@ -66,7 +66,11 @@
 % Paquete para figuras giradas
 \usepackage{rotating}
 
+% Borra la indentación de párrafos y añade separación entre ellos
 \usepackage{parskip}
+
+% Paquete para quitar la numeración de las páginas en blanco
+\usepackage{emptypage}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Paquetes en local (directorio 'paquetes')
@@ -105,6 +109,10 @@
 
 % Agradecimientos
 \input{0_misc/agradecimientos.tex}
+\cleardoublepage
+
+% Resumen
+\input{0_misc/resumen.tex}
 \cleardoublepage
 
 % Índices varios
