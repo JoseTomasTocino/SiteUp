@@ -20,14 +20,14 @@ con el código de la aplicación. Primero, creamos una ubicación donde alojar e
 código desde la terminal:
 
 \begin{bashcode}
-mkdir /srv/siteup -P  
-cd /srv/siteup
+$ mkdir /srv/siteup -P  
+$ cd /srv/siteup
 \end{bashcode}
 
 Una vez ahí, clonamos el repositorio desde Github:
 
 \begin{bashcode}
-git clone https://github.com/JoseTomasTocino/pfc-ii.git .  
+$ git clone https://github.com/JoseTomasTocino/pfc-ii.git .  
 \end{bashcode}
 
 \subsection{Entorno virtual y dependencias}
@@ -38,15 +38,15 @@ instalación de estos dos elementos es sencilla, en primer lugar se instalan los
 dos paquetes:
 
 \begin{bashcode}
-pip install virtualenv
-pip install virtualenvwrapper
+$ pip install virtualenv
+$ pip install virtualenvwrapper
 \end{bashcode}
 
 En segundo lugar, añadimos el código de \textit{bootstrapping} de
 virtualenvwrapper a nuestro perfil de terminal, habitualmente \texttt{.bashrc}:
 
 \begin{bashcode}
-cat >> ~/.bashrc
+$ cat >> ~/.bashrc
 
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]
 then
@@ -60,9 +60,9 @@ Hecho esto, será necesario reiniciar la terminal, tras lo cual podremos crear e
 entorno virtual e instalar las dependencias:
 
 \begin{bashcode}
-mkvirtualenv siteup
-sudo apt-get install python-dev
-pip install -r web/requirements.txt 
+$ mkvirtualenv siteup
+$ sudo apt-get install python-dev
+$ pip install -r web/requirements.txt 
 \end{bashcode}
 
 \subsection{Creación de la base de datos}
@@ -72,8 +72,8 @@ estructura básica de la base de datos para las tablas y aplica las migraciones
 existentes:
 
 \begin{bashcode}
-python web/manage.py syncdb
-python web/migrate siteup_api  
+$ python web/manage.py syncdb
+$ python web/migrate siteup_api  
 \end{bashcode}
 
 Tras esto, la base de datos se habrá generado y se encontrará en el fichero\\
@@ -86,7 +86,7 @@ también es posible utilizar Apache. Para instalar nginx, en sistemas GNU/Linux
 basados en paquetería Debian, el procedimiento es muy sencillo:
 
 \begin{bashcode}
-sudo apt-get install nginx -y
+$ sudo apt-get install nginx -y
 \end{bashcode}
 
 \subsection{Instalación del bróker de mensajes}
@@ -96,7 +96,7 @@ cualquier otro bróker que fuese compatible con el estándar \ac{AMQP}. La
 instalación es sencilla:
 
 \begin{bashcode}
-sudo apt-get install rabbitmq-server -y
+$ sudo apt-get install rabbitmq-server -y
 \end{bashcode}
 
 La configuración por defecto es suficiente para las necesidades del proyecto.
@@ -108,7 +108,7 @@ alguna clase de software de monitorización de procesos. La opción recomendada 
 \textbf{supervisor}. Su instalación es sencilla:
 
 \begin{bashcode}
-sudo apt-get install supervisor -y
+$ sudo apt-get install supervisor -y
 \end{bashcode}
 
 Tras esto, es necesario generar el fichero de configuración de
@@ -125,7 +125,7 @@ teclado. En particular:
 Para generar el fichero de configuración utilizaremos el siguiente comando:
 
 \begin{bashcode}
-python web/manage.py supervisor_conf
+$ python web/manage.py supervisor_conf
 \end{bashcode}
 
 Se generará un fichero \texttt{supervisor-siteup.conf} con la configuración. Es
@@ -134,7 +134,7 @@ correctas. Tras ello, solo queda mover el fichero al lugar correcto y reiniciar
 el demonio de supervisor.
 
 \begin{bashcode}
-sudo mv web/supervisor-siteup.conf /etc/supervisord/conf.d  
+$ sudo mv web/supervisor-siteup.conf /etc/supervisord/conf.d  
 \end{bashcode}
 
 En entornos de producción, normalmente no se usará supervisor, ni gunicorn ni
@@ -144,9 +144,9 @@ otra manera. La manera más habitual es añadirlas al \textbf{script de activaci
 entorno virtual, de la siguiente manera:
 
 \begin{bashcode}
-cdvirtualenv
-cd bin
-cat >> postactivate
+$ cdvirtualenv
+$ cd bin
+$ cat >> postactivate
 export GMAIL_PASS=yourpass
 export GCM_API_KEY=yourkey
 
@@ -188,8 +188,8 @@ apropiadas. Vamos a suponer que SiteUp va a recibir las peticiones en el dominio
 Tras eso, activamos el fichero de configuración de la siguiente manera:
 
 \begin{bashcode}
-cd /etc/nginx/sites-enabled
-ln -s ../sites-available/siteup
+$ cd /etc/nginx/sites-enabled
+$ ln -s ../sites-available/siteup
 \end{bashcode}
 
 Básicamente lo que hace ese fichero de configuración es revisar las peticiones
@@ -204,14 +204,14 @@ servicios y servidores. Primero, lanzamos el controlador supervisor, que a su
 vez lanzará el servidor dinámico gunicorn y el servidor de tareas celery:
 
 \begin{bashcode}
-sudo service supervisord reload  
+$ sudo service supervisord reload  
 \end{bashcode}
 
 Seguidamente, reiniciamos el servidor frontal para que pueda empezar a recibir
 peticiones:
 
 \begin{bashcode}
-sudo service nginx restart  
+$ sudo service nginx restart  
 \end{bashcode}
 
 Con esto, el proyecto estará funcionando y debería ser accesible a través del

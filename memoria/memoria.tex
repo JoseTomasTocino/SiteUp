@@ -78,7 +78,11 @@
 % Automatiza el resaltado de sintaxis usando pygments
 \usepackage{paquetes/minted}
 
-\newminted{bash}{}
+\usemintedstyle[console]{vs}
+
+\newminted[bashcode]{console}{} % tango vs
+\newminted{python}{}
+
 
 % Soporte de acrónimos
 \usepackage[printonlyused]{paquetes/acronym-custom}
@@ -152,13 +156,9 @@
 
 \chapter{Conclusiones}
 \label{chap:conclusiones}
-%\input{8_conclusiones/texto_conclusiones.tex}
+\input{8_conclusiones/texto.tex}
 
 \appendix
-
-%\chapter{Herramientas utilizadas}
-%\label{chap:herramientas}
-%\input{apendice_herramientas/texto_apendice_herramientas.tex}
 
 \chapter{Manual de instalación de la plataforma web}
 \label{chap:manual_instalacion}
@@ -166,7 +166,7 @@
 
 \chapter{Manual de usuario}
 \label{chap:manual_usuario}
-%\input{apendice_manual_usuario/texto_apendice_manual_usuario.tex}
+\input{apendice_manual_usuario/texto_apendice_manual_usuario.tex}
 
 \chapter{GNU Free Documentation License}
 \label{sec:fdl}

@@ -9,6 +9,7 @@ del sistema, basándonos en lo presentado en la
 sección~\ref{sec:alternativas-solucion},\textit{~\nameref{sec:alternativas-solucion}}.
 
 \subsection{Aplicación web}
+\label{subsec:entorno-aplicacion-web}
 
 El entorno tecnológico de la aplicación web ha resultado ser muy variado y rico
 en tecnologías en total vigencia en la actualidad. 
@@ -534,7 +535,7 @@ ocupaba mucho más espacio y era mucho más propenso a errores e inconsistencia.
 
 \subsubsection{Segunda iteración: herencia multitabla}
 
-El siguiente paso fue utilizar herencia directa (o \textit{multitabla})de
+El siguiente paso fue utilizar herencia directa (o \textit{multitabla}) de
 modelos. Pongamos un ejemplo:
 
 \begin{minted}{python}
@@ -751,6 +752,156 @@ más populares.
 
 Tras este proceso, el fichero generado se copia a la carpeta
 \texttt{siteup\_frontend/static/css}.
+
+\section{Gestión de la base de datos}
+
+El uso del mapeo objeto-relacional (ORM) que integra Django ayuda a que el
+desarrollador no tenga que interactuar con la base de datos utilizando lenguajes
+de bajo nivel como \ac{SQL}, sino que se trabaja con una capa de abstracción
+mayor. Es más, la creación de las estructuras de la base de datos (tablas,
+índices, restricciones de integridad, etc.) también la lleva a cabo el ORM, en
+particular a través de scripts de sincronización y migraciones.
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{6_implementacion/diagrama-er-1}
+  \caption{Diagrama ER de ejemplo 1}
+  \label{fig:er-1}
+\end{figure}
+
+Pongamos por ejemplo un sencillo esquema entidad-relación como el que aparece en
+la figura~\ref{fig:er-1}, en el que se definen dos entidades con una relación de
+tipo 1:N. Haciendo uso del ORM de Django, este esquema se implementaría de la
+siguiente manera:
+
+\begin{minted}{python}
+from django.db import models
+
+class Fabricante(models.Model):
+    nombre = models.CharField(max_length=100)
+    correo_electronico = models.EmailField(max_length=254)
+
+class Coche(models.Model):
+    modelo = models.CharField(max_length=100)
+    plazas = models.PositiveSmallIntegerField()
+
+    fabricante = models.ForeignKey(Fabricante)
+\end{minted}
+
+Una vez definidos los modelos, la base de datos se generará utilizando el
+siguiente comando de Django:
+
+\begin{bashcode}
+$ python manage.py syncdb  
+\end{bashcode}
+
+El comando \texttt{syncdb} \textit{sincroniza} la base de datos con los modelos,
+creando las tablas necesarias. Desde este momento, el ORM de Django ofrecerá una
+serie de comandos para hacer consultas de manera sencilla. Por ejemplo, para
+obtener todos los fabricantes:
+
+\begin{minted}{python}
+fabricantes = Fabricante.objects.all()  
+\end{minted}
+
+Para obtener el fabricante llamado \textit{Seat}:
+
+\begin{minted}{python}
+fabricante = Fabricante.objects.get(nombre="Seat") 
+\end{minted}
+
+Es posible embeber condiciones algo más avanzadas. Por ejemplo, para obtener los
+coches con más de 3 plazas:
+
+\begin{minted}{python}
+coches_grandes = Coche.objects.filter(plazas__gt=3)
+\end{minted}
+
+Django detecta las relaciones entre modelos y provee mecanismos para navegar
+esas relaciones, por ejemplo.
+
+\begin{minted}{python}
+fabricante = Fabricante.objects.get(nombre="BMW") 
+coches_de_bmw = fabricante.coche_set.all()
+
+leon = Coche.objects.get(modelo="Leon")
+fabricante_del_leon = Coche.fabricante
+\end{minted}
+
+Django automáticamente detecta las relaciones y genera las consultas necesarias
+para unir los datos de las tablas involucradas. Django también cumple con las
+restricciones de integridad que se impongan en la base de datos. En nuestro
+ejemplo, si borramos un fabricante, todos sus coches son borrados también de
+forma automática.
+
+\begin{minted}{pycon}
+>>> fabricante = Fabricante.objects.get(nombre="BMW") 
+>>> fabricante.delete()
+>>> coche_318 = Coche.objects.get(modelo="318i")
+Traceback (most recent call last):
+ ...
+DoesNotExist: Coche matching query does not exist.
+\end{minted}
+
+Este comportamiento puede configurarse para que no se produzca el borrado
+\textit{en cascada}, al igual que muchísimos otros parámetros que también son
+configurables.
+
+Django también ofrece métodos para comprobar que los datos de un modelo son
+correctos antes de guardarlo en la base de datos. Por ejemplo, si intentamos
+introducir una dirección de correo inválida, el sistema nos alertará:
+
+\begin{minted}{pycon}
+>>> fabricante = Fabricante()
+>>> fabricante.nombre = "Fab"
+>>> fabricante.correo_electronico = "invalido"
+>>> fabricante.full_clean()
+Traceback (most recent call last):
+ ...
+ValidationError: {'correo_electronico': [u'Enter a valid email address.']}
+\end{minted}
+
+
+\subsection{Cambios en la estructura}
+
+El problema del proces planteado ahora es que tiene una limitación: no contempla
+cambios estructurales en los modelos una vez que la base de datos esté
+creada. Para ello es necesario utilizar \textbf{South}, tal y como se comentó en
+la sección~\ref{subsec:entorno-aplicacion-web}. 
+
+South compara el estado de la base de datos con los nuevos modelos, detecta los
+cambios y realiza las operaciones necesarias. Si, por ejemplo, añadiésemos un
+atributo \textit{fecha\_fundacion} al modelo \textit{Fabricante}, éste quedaría
+así:
+
+\begin{minted}{python}
+class Fabricante(models.Model):
+    nombre = models.CharField(max_length=100)
+    correo_electronico = models.EmailField(max_length=254)
+    fecha_fundacion = models.DateField()
+  
+\end{minted}
+
+Ahora, para evitar perder los datos que ya tuviésemos en la base, utilizaríamos
+South para crear una \textbf{migración}:
+
+\begin{bashcode}
+$ python manage.py schemamigration aplicacion --auto  
+ + Added field fecha_fundacion on main.Fabricante
+Created 0002_auto__add_field_fabricante_fecha_fundacion.py. 
+
+$ python manage.py migrate aplicacion
+Running migrations for main:
+ - Migrating forwards to 0002_auto__add_field_fabricante_fecha_fundacion.
+ > main:0002_auto__add_field_fabricante_fecha_fundacion
+ - Loading initial data for main.
+Installed 0 object(s) from 0 fixture(s)
+\end{bashcode}
+
+En caso de que borrásemos el campo o quisiésemos hacer más cambios, estas
+migraciones pueden deshacerse o modificarse sin mayor problema.
+
+
 
 
 %%% Local Variables: 

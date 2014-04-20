@@ -1,4 +1,4 @@
-Durante el transcurso del desarrollo de oFlute, y sobre todo al término del
+Durante el transcurso del desarrollo de SiteUp, y sobre todo al término del
 mismo, se han obtenido unas conclusiones y unos resultados, tanto de forma
 personal como para con la comunidad, que intentaremos reflejar en este capítulo.
 
@@ -9,150 +9,152 @@ objetivos a cumplir, presentes en el planteamiento inicial y detallados en la
 sección \textit{\ref{sec:objetivos}}. En particular:
 
 \begin{itemize}
-\item Se llevó a cabo la creación del módulo de análisis de sonido, consiguiendo
-  una efectividad en la detección de las notas muy alta.
-\item Se hizo uso del módulo en una sección de análisis de notas y en el propio
-  juego de interpretación de canciones, con resultados muy satisfactorios y
-  funcionamiento correcto.
-\item Además, el sistema de lecciones planteado se llevó a cabo correctamente,
-  consiguiendo un motor dinámico bastante potente y fácilmente ampliable, con
-  opción a añadir nuevas lecciones al sistema (apéndice
-  \ref{chap:manual_lecciones}).
-\item Finalmente, todos los objetivos se llevaron a cabo respetando la premisa
-  de mantener una interfaz de usuario amigable y fluida, agradable a la vista y
-  sencilla de usar.
+\item Se ha creado un conjunto de herramientas de chequeo de servicios de
+  internet, que se encuentra disponible en el módulo
+  \texttt{siteup\_checker/monitoring} del proyecto.
+\item Se ha creado una aplicación online de acceso público con la que los
+  usuarios pueden gestionar sus chequeos de manera sencilla, que en la fecha de
+  escritura de la presente memoria es accesible en la url
+  \url{http://siteup.josetomastocino.com}.
+\item Se ha establecido un sistema de notificaciones con el que mantener
+  informados a los usuarios tanto por correo electrónico como mediante una
+  aplicación móvil para el sistema operativo Android desarrollada a tal efecto.
 \end{itemize}
+
+La compleción total de los objetivos funcionales también pone de manifiesto que
+se han alcanzado satisfactoriamente los objetivos transversales y personales
+dispuestos en el inicio. Se han afianzado fuertemente los conocimientos de
+desarrollo web en general y con Django en particular hasta un nivel de
+competencia suficiente para servir como baza en la búsqueda laboral. Además,
+SiteUp ha servido satisfactoriamente como primera incursión en el mundo del
+desarrollo de aplicaciones Android.
 
 \section{Conclusiones personales}
 
-oFlute ha sido el proyecto más longevo al que me he enfrentado hasta ahora. A
-pesar de tener conciencia de la envergadura del mismo desde el principio, el
-tiempo para completarlo ha superado todas mis expectativas, sobre todo en lo que
-a documentación se refiere. 
+SiteUp es uno de los pocos proyectos personales que han surgido para suplir una
+\textbf{necesidad} real y específica y que, al término del desarrollo, han
+conseguido su objetivo. La idea inicial, expuesta en la sección
+\ref{sec:situacion-actual}, ha servido como eje motor del proyecto en todo
+momento. Si se diese la situación presentada en el inicio, el proyecto SiteUp
+sería capaz de detectar el problema e informar en consecuencia. 
 
-La causa de esto ha sido, en primer lugar, una planificación inicial algo
-ineficiente y, por otro lado, mi recelo sobre los procedimientos actuales sobre
-ingeniería del software. De cualquier modo, estoy bastante satisfecho con lo
-obtenido, y esto me ha servido para aprender a regirme por una planificación de
-forma más estricta.
+\subsection{Lecciones aprendidas}
 
-\subsection{Conocimiento adquirido}
+Si bien es cierto que el proyecto no es de una complejidad técnica muy alta, el
+\textbf{cúmulo de tecnologías} diferentes utilizadas en cada uno de los niveles
+de abstracción es sobrecogedor. Adquirir una \textbf{competencia} básica en
+todas estas tecnologías es una tarea de una envergadura importante, y la
+correcta ejecución del sistema es comparable al mecanismo de un reloj, en el que
+todas las piezas deben funcionar de manera coordinada.
 
-Gracias a oFlute he aprendido las técnicas básicas de la programación de audio,
-sobre todo en la parte técnica más que teórica. Es esta parte teórica, sobre
-todo la de análisis, la que me gustaría reforzar en un futuro, ahora que cuento
-con las bases para conseguirlo. Como se comentó en el capítulo
-\textit{\nameref{chap:fundamentos}}, los videojuegos relacionados con el audio
-son un nicho aún poco explorado y que puede dar muchas satisfacciones, sobre
-todo cuando el producto se orienta a un público joven.
+Desde la configuración de los numerosos servicios usados en el entorno de
+producción, al despliegue de la aplicación, pasando por el desarrollo de los
+módulos de chequeo, hasta llegar a la implementación del código de la capa de
+presentación, sin olvidar la implementación de la aplicación Android. En todos
+los niveles, en unos en mayor medida que en otros, se ha alcanzado una
+\textbf{soltura} suficiente para el desarrollo y posterior lanzamiento de un
+producto completo.
 
-Por otro lado, oFlute también me ha ayudado a aprender a usar bastantes
-tecnologías auxiliares, en algunos casos meras herramientas que han facilitado
-el trabajo y, en otros casos, elementos que resultaron ser de inestimable ayuda
-e imprescindible uso al término del proyecto.
+Al tratarse de un proyecto de ejecución continua en el que constantemente se
+están haciendo chequeos y enviando notificaciones, el flujo de \textit{feedback}
+entre los usuarios y el desarrollador (que en las etapas iniciales son la misma
+persona) es mucho más \textbf{dinámico} que en cualquier otro proyecto en el que
+la ejecución fuese momentánea, como un juego o una aplicación de
+escritorio. Este planteamiento ha permitido que en SiteUp se hayan detectado
+rápidamente conflictos y problemas en el sitio, como por ejemplo que algunos
+usuarios prefieren no recibir resúmenes diarios de sus chequeos, motivando la
+inclusión de una opción en sus perfiles para desactivar esta funcionalidad.
 
-Una de estas tecnologías es \textbf{Boost}~\cite{boost}, un conjunto de
-bibliotecas para C++ que amplían en gran medida la biblioteca estándar del
-lenguaje. Un amplio número de componentes de Boost formarán parte del nuevo
-estándar C++0x, por lo que me ha servido para ponerme al día en las
-novedades que están por llegar.
+Finalmente, tras la conclusión del proyecto, se ha conseguido un \textbf{punto
+  de vista} diferente de las alternativas presentadas en la sección
+\ref{sec:estado-del-arte}, \textit{\nameref{sec:estado-del-arte}}. 
 
-\begin{figure}[htp!]
-  \centering
-  \includegraphics[width=0.4\textwidth]{8_conclusiones/imagen_logoboost}
-  \caption{Logotipo de Boost}
-\end{figure}
-
-Utilizando como material de apoyo el libro \textit{``Beyond the C++ Standard
-  Library''}~\cite{libroboost}, pude conocer una gran parte de las bibliotecas
-de Boost, incluyendo punteros inteligentes, programación funcional, bibliotecas
-para hilos, y utilizarlas en el proyecto.
-
-Al tratarse de la principal biblioteca utilizada durante el desarrollo, oFlute
-me ha provisto de un profundo conocimiento de \textbf{Gosu}~\cite{gosu},
-permitiéndome implementar videojuegos con mucha más fluidez y labrándome un
-pequeño \textit{framework} personal que utilizar de base en próximos
-proyectos. 
-
-\begin{figure}[htp!]
-  \centering
-  \includegraphics[width=0.4\textwidth]{8_conclusiones/imagen_logogosu}
-  \caption{Logotipo de Gosu}
-\end{figure}
-
-Otra de las tecnologías que he aprendido ha sido \textbf{GNU Gettext}, que ha
-servido para internacionalizar el proyecto. Aunque inicialmente se pensó en
-utilizar una solución propia para la internacionalización el proyecto,
-posteriormente se decidió usar esta tecnología, ampliamente conocida y
-utilizada.
-
-\section{Difusión y derivados}
-
-A raíz del desarrollo de oFlute se abrieron varias vías de trabajo, en forma de
-actividades de difusión de conocimiento, proyectos informáticos y participación
-en comunidad.
-
-\subsection{Conocimiento generado}
-
-Además de servir como recurso para el correcto transcurso del proyecto, los
-conocimientos adquiridos me permitieron, en numerosos casos, generar
-documentación adicional e impartir talleres relacionados las tecnologías
-previamente mencionadas.
-
-En cuanto a Boost, se llevó a cabo un taller durante los \textit{Cursos de
-  Verano de la OSLUCA}~\cite{cursosverano}, en el que se explicaron las partes
-más importantes de esta colección de bibliotecas, con numerosos ejemplos de
-muchas de ellas. Toda la documentación es libre~\cite{materialesCursoBoost}.
-
-Por otro lado, impartí un taller~\cite{tallergosu} sobre la biblioteca Gosu en
-colaboración con la ADVUCA~\cite{advuca}, cuya afluencia superó las 50
-personas. Los materiales pueden descargarse
-libremente~\cite{tallergosumateriales}.
-
-Por último, tras la aplicación de GNU Gettext en oFlute, escribí una guía
-concisa sobre traducción de proyectos con esta herramienta, que se puede
-encontrar en el apéndice~\textit{\nameref{chap:tutorial_gettext}}.
+Con un conocimiento más formado de lo que hay detrás (salvando las distancias)
+de estos proyectos resulta más sencillo \textbf{evaluar} en qué aciertan y en
+qué fallan, qué les falta y qué les sobra, y sobre todo qué se puede aprender de
+ellos para su integración en SiteUp. En particular, me ha sorprendido que no sea
+común que esta clase de servicios proporcionen una aplicación móvil nativa que
+sirva, al menos, para la recepción de notificaciones, tal y como se hace en
+SiteUp. La inversión es despreciable si la comparamos con la utilidad que
+provee.
 
 
-\subsection{Freegemas}
+\section{Trabajo futuro}
 
-Uno de estos proyectos \textit{``hijos''} de oFlute ha sido
-\textbf{Freegemas}~\cite{freegemas}, un clon libre del popular juego tipo puzzle
-\textit{Bejeweled}. Freegemas es multiplataforma, funciona tanto en GNU/Linux
-como en Windows, y además forma parte oficial de Guadalinex~\cite{guadalinex},
-por lo que es posible encontrarlo en los repositorios oficiales.
+Durante la etapa de desarrollo y, sobre todo, durante las sesiones de pruebas
+han surgido muchos frentes de trabajo futuro, unos de mayor relevancia que
+otros, pero importantes al fin y al cabo y que aquí se presentan.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=0.55\textwidth]{8_conclusiones/imagen_freegemas}
-  \caption{Logotipo de Freegemas}
-\end{figure}
+\subsection{SiteUp Probes}
 
-Además, Freegemas sirvió como base para una serie de tres artículos que
-publiqué, junto al director del presente PFC, en la revista Linux
-Magazine~\cite{linuxmagazine} sobre desarrollo de videojuegos en C++. Es posible
-encontrar estos artículos en el archivo de la
-revista~\cite{refarticulo1}~\cite{refarticulo2}~\cite{refarticulo3} bajo una
-licencia Creative Commons.
+\textbf{SiteUp Probes} es un proyecto que busca crear \textit{sondas} que
+ejecuten de manera independiente los chequeos dados de alta en una instalación
+de SiteUp, enviando los resultados de vuelta al servidor central. La idea es que
+estas sondas esté geográficamente distribuidas, de forma que los resultados de
+los chequeos no dependan tanto de la situación del nodo central, sino que se
+calculen como una media de los resultados obtenidos por distintas sondas.
 
-\subsection{IV Concurso Universitario de Software Libre}
+La motivación de esta ampliación viene dada por lo descrito en la sección
+\ref{subsec:riesgo-compromiso-plataforma},
+\textit{\nameref{subsec:riesgo-compromiso-plataforma}}. El uso de un solo punto
+a la hora de lanzar los chequeos puede comprometer la veracidad y corrección de
+los resultados.
 
-Por otro lado, gracias a oFlute tuve la oportunidad de participar en el IV
-Concurso Universitario de Software Libre~\cite{cusl}. En el transcurso del
-concurso formé parte de una comunidad muy unida, en la que reinó el apoyo y la
-ayuda entre los concursantes. La final del concurso se celebró en la Escuela
-Superior de Ingeniería de Cádiz, en la que oFlute obtuvo una mención
-especial~\cite{cusl2}.
+Se trata de un escalón importante y complejo en el trabajo de ampliación del
+proyecto. A nivel de implementación implicaría habilitar alguna clase de canal
+de comunicación entre el nodo central de SiteUp y las sondas para la
+comunicación de los chequeos a ejecutar y de los resultados de éstos. A nivel
+logístico conllevaría la búsqueda de nuevos sistemas en los que instalar las
+sondas, más allá del servidor de producción que está alquilado para el proyecto.
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=0.65\textwidth]{8_conclusiones/imagen_logocusl}
-  \caption{IV Concurso Universitario de Software Libre}
-\end{figure}
+\subsection{Monetización}
 
-Previa a la final nacional tuvo lugar la fase local del concurso, en el que el
-proyecto también recibió un accésit al mejor proyecto de
-innovación~\cite{cusllocal}.
+Para asegurar la supervivencia de cualquier proyecto es necesario contar alguna
+clase de \textbf{modelo de negocio} que sufrague los gastos que se generan. En
+el caso de SiteUp, la \textbf{monetización} se puede conseguir mediante la
+creación de niveles de cuentas de usuarios, que gocen de distintos
+beneficios. Por ejemplo:
+
+\begin{itemize}
+\item Las cuentas gratuitas solo podrán crear un chequeo, y el tiempo entre
+  chequeos será como mínimo de 5 minutos.
+\item Las cuentas básicas costarán 5€ al mes, podrán crear hasta 5 chequeos y el
+  tiempo mínimo entre chequeos será de 2 minutos.
+\item Las cuentas premium costarán 10€ al mes, podrán crear hasta 30 chequeos y
+  el tiempo mínimo entre chequeos será de 1 minuto.
+\end{itemize}
+
+La implementación de este modelo de monetización no es compleja, aunque la
+gestión de pasarelas de pago y cobros recurrentes es una de los procedimientos
+más problemáticos a nivel de programación, sobre todo a la hora de verificar la
+correcta ejecución del sistema. 
+
+\subsection{Ampliación de los tipos de chequeos}
+
+Los cuatro tipos de chequeos actualmente presentes en SiteUp cubren un gran
+abanico de frentes a la hora de vigilar el estado de un servicio de Internet,
+pero existen (y seguirán surgiendo) nuevos puntos que convendría comprobar. Como
+ejemplos de posibles chequeos a añadir en un futuro se podrían considerar:
+
+\begin{itemize}
+\item Chequeo de servidores de bases de datos mediante el envío de consultas de
+  verificación.
+\item Chequeo de transacciones. Esto es, chequeos compuestos de varios pasos.
+\item Chequeos de APIs con campos adicionales, como autenticación, cabeceras
+  especiales o parámetros GET/POST.
+\end{itemize}
+
+El trabajo en este punto pasaría, básicamente, por encontrar una manera de
+modularizar satisfactoriamente los chequeos, de forma que fuese trivial añadir
+más tipos de chequeos sin necesidad de modificar código en todas las partes de
+la aplicación.
+
+\subsection{Ampliación de tipos de notificación}
+
+Actualmente, SiteUp envía notificaciones mediante correo electrónico y mediante
+la aplicación Android. Como posibles ampliaciones se podrían considerar el uso
+de mensajes cortos (SMS) y el desarrollo de una app para iOS capaz de recibir
+notificaciones PUSH.
 
 %%% Local Variables: 
 %%% mode: latex
