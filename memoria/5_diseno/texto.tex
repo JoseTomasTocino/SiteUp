@@ -5,6 +5,7 @@ general y el diseño físico de datos entre otros aspectos.
 \section{Arquitectura del sistema}
 
 \subsection{Arquitectura física}
+\label{arquitectura-fisica}
 
 En este apartado, describimos los principales componentes hardware que forman la
 arquitectura física de nuestro sistema, recogiendo por un lado los componentes
@@ -27,7 +28,7 @@ proyecto se detalla en la siguiente lista:
 \paragraph{Software}
 
 En cuanto al software necesario para la ejecución del proyecto, se detallan los
-siguientes elementos, que es necesario instalar antes de desplegar el sistema:
+siguientes elementos, que es necesario instalar para desplegar el sistema:
 
 \begin{itemize}
 \item Sistema operativo \textbf{GNU/Linux}, preferiblemente basado en paquetería Debian.
@@ -41,32 +42,32 @@ siguientes elementos, que es necesario instalar antes de desplegar el sistema:
   dependencias.
 \end{itemize}
 
-Una vez satisfechos los anteriores requisitos, el proyecto SiteUp instalará una
-serie de dependencias propias, de forma encapsulada dentro de un entorno
-virtual. Algunas de las dependencias más importantes son:
+% Una vez satisfechos los anteriores requisitos, el proyecto SiteUp instalará una
+% serie de dependencias propias, de forma encapsulada dentro de un entorno
+% virtual. Algunas de las dependencias más importantes son:
 
-\begin{itemize}
-\item \textbf{Django}, framework web en el que se basa el proyecto.
-\item \textbf{Celery}, cola de tareas asíncronas.
-\item \textbf{Fabric}, servicio para la creación de scripts de despligue en servidores remotos.
-\item \textbf{Gunicorn}, servidor para aplicaciones web desarrolladas en Python
-  basadas en el estándar WSGI.
-\item Bibliotecas auxiliares para el lanzamiento de diversos tipos de chequeos
-  en red: \textbf{requests}, \textbf{dnspython} y \textbf{urllib}.
-\end{itemize}
+% \begin{itemize}
+% \item \textbf{Django}, framework web en el que se basa el proyecto.
+% \item \textbf{Celery}, cola de tareas asíncronas.
+% \item \textbf{Fabric}, servicio para la creación de scripts de despligue en servidores remotos.
+% \item \textbf{Gunicorn}, servidor para aplicaciones web desarrolladas en Python
+%   basadas en el estándar WSGI.
+% \item Bibliotecas auxiliares para el lanzamiento de diversos tipos de chequeos
+%   en red: \textbf{requests}, \textbf{dnspython} y \textbf{urllib}.
+% \end{itemize}
 
-De igual modo para el desarrollo del lado \textit{front-end} de la web existen
-ciertas dependencias, instalables en forma de módulos de Node JS. Las
-dependencias más importantes son:
+% De igual modo para el desarrollo del lado \textit{front-end} de la web existen
+% ciertas dependencias, instalables en forma de módulos de Node JS. Las
+% dependencias más importantes son:
 
-\begin{itemize}
-\item \textbf{Sass}, lenguaje de hojas de estilo que amplía las funcionalidades
-  de CSS. El código Sass compila a código CSS válido.
-\item \textbf{Compass}, framework para Sass que añade numerosas funciones y
-  \textit{mixins} para facilitar el desarrollo front-end.
-\item \textbf{Grunt}, un lanzador que automatiza la ejecución de tareas comunes
-  y tediosas escrito en JavaScript.
-\end{itemize}
+% \begin{itemize}
+% \item \textbf{Sass}, lenguaje de hojas de estilo que amplía las funcionalidades
+%   de CSS. El código Sass compila a código CSS válido.
+% \item \textbf{Compass}, framework para Sass que añade numerosas funciones y
+%   \textit{mixins} para facilitar el desarrollo front-end.
+% \item \textbf{Grunt}, un lanzador que automatiza la ejecución de tareas comunes
+%   y tediosas escrito en JavaScript.
+% \end{itemize}
 
 \subsubsection{Cliente de acceso web}
 
@@ -91,6 +92,9 @@ base, más el software desarrollado para cumplir los requisitos de la
 aplicación. En esta sección se muestra la organización de los distintos
 elementos software que componen el proyecto así como la comunicación entre
 ellos. 
+
+\subsubsection{Plataforma web}
+\label{subsec:arquitectura-logica-web}
 
 En la figura~\ref{fig:arquitectura-logica} se puede ver un esquema de cómo se
 comunican los diferentes elementos que conforma el sistema web a alto nivel. En
@@ -261,6 +265,83 @@ tareas y sus resultados en forma de mensajes en una cola.
 En este proceso es necesario \textit{traducir} las tareas a un formato que sea
 almacenable y gestionable en una cola. En el caso de Django lo más habitual es
 utilizar Pickle, el estándar de facto para la serialización de objetos Python.
+
+\subsubsection{Aplicación Android}
+\label{subsec:arquitectura-logica-android}
+
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[width=\textwidth]{5_diseno/diagrama_arquitectura_logica_android}
+  \caption{Arquitectura lógica de la aplicación Android}
+  \label{fig:arquitectura-logica-android}
+\end{figure}
+
+En la figura~\ref{fig:arquitectura-logica-android} se puede ver un esquema
+general de la arquitectura de la aplicación móvil desarrollada para el sistema
+operativo Android. El flujo se detalla a continuación:
+
+\paragraph{Lanzador}
+
+Partimos de la premisa de que el usuario ha instalado la aplicación
+\textit{SiteUp Client} en su dispositivo. Si el usuario decide lanzar la
+aplicación, deberá dirigirse al lanzador de aplicaciones de su dispositivo y
+pulsar sobre el icono de la aplicación, con lo que se iniciará la ejecución.
+
+\paragraph{Gestor de inicio de sesión}
+
+Cuando la aplicación Android se inicia, se lanza una actividad
+\texttt{LoginActivity} que hace varias cosas. En primer lugar, verifica si hay
+datos de inicio de sesión guardados en el dispositivo. Si no los hay, muestra un
+formulario para que el usuario introduzca su nombre de usuario y contraseña. 
+
+Una vez obtenidos los datos, la aplicación móvil se comunica con la plataforma
+web para verificar el inicio de sesión. En caso correcto, la plataforma web
+envía la información de los chequeos a la aplicación móvil.
+
+\paragraph{Listado de chequeos}
+
+En la aplicación móvil se ha dispuesto una actividad \texttt{CheckListActivity}
+que mostrará la lista de chequeos que el usuario ha dado de alta, con
+información básica de cada uno de ellos. Cuando el usuario pulse en cualquiera
+de los chequeos, se abrirá un navegador y será redirigido a la plataforma web,
+particularmente a la página de detalle del chequeo seleccionado.
+
+\paragraph{Gestor de notificaciones}
+
+La aplicación móvil cuenta con un servicio capaz de recibir notificaciones
+\textit{Push} del servicio \textit{Google Cloud Messaging}. Cuando se recibe un
+mensaje, se muestra una notificación al usuario, informándole también de forma
+audible y a través de vibración. La notificación aparece en el área de
+notificaciones del sistema operativo. Si el usuario pulsa en la notificación
+podrá obtener información sobre el chequeo involucrado.
+
+\paragraph{Google Cloud Messaging}
+
+GCM~\cite{gcm} es un servicio para Android que permite enviar datos desde un
+servidor a los dispositivos Android que tengan instaladas una aplicación en
+particular. El servicio GCM se encarga de todos los aspectos de la entrega de
+mensajes. Se trata de un servicio gratuito independientemente del número de
+mensajes y el tamaño de éstos.
+
+GCM recibirá las notificaciones del \textit{backend} de la plataforma móvil, y
+se encargará de reenviarlas a los dispositivos Android.
+
+\paragraph{SiteUp Checker}
+
+Dentro de la aplicación móvil, el módulo \texttt{siteup\_checker} es el
+encargado de realizar los chequeos, y también de enviar las notificaciones a los
+dispositivos Android a través del servicio GCM. La plataforma web tiene una
+clave especial con la que se realizan las peticiones a los servidores de Google,
+enviando los mensajes.
+
+\paragraph{Runtime y bibliotecas de Android}
+
+Las aplicaciones Android utilizan como base el runtime y las bibliotecas que
+provee el sistema operativo para acceder a las funciones del dispositivo y demás
+servicios, como la comunicación por red, acceso a datos del usuario, lectura y
+escritura de ficheros en el dispositivo, etcétera.
+
 
 \section{Diseño físico de datos}
 
