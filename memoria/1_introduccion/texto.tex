@@ -45,10 +45,11 @@ personal (y, por extensión, mi correo electrónico) tuvo un problema y reemplaz
 los registros DNS personalizados por unos por defecto. En particular, los
 registros MX y TXT quedaron en blanco, y los registros A apuntaron a una página
 de párking\footnote{Una página de \textit{párking de dominio} sirve como página
-  temporal mientras un servicio web no es lanzado, de forma que el dominio no esté
-  en blanco.}, de forma que los chequeos de tipo ping que tenía puestos no
-dieron error, ya que efectivamente la web devolvía el ping, pero el contenido de
-los registros no era el correcto, ni los correos se estaban direccionando bien.
+  temporal mientras un servicio web no es lanzado, de forma que el dominio no
+  esté en blanco.}, de forma que los chequeos de tipo ping que tenía puestos no
+dieron error, ya que efectivamente el servidor devolvía el ping, pero el
+contenido de los registros no era el correcto, ni los correos se estaban
+direccionando bien.
 
 Esta situación se prolongó durante varios días, en los cuales perdí varios
 mensajes importantes. Esto podría haberse detectado rápidamente si hubiera tenido
@@ -82,7 +83,7 @@ final de la aplicación y sobre la experiencia de desarrollo de la misma.
 \item Crear una aplicación online, de acceso público, que permita la creación y
   gestión de chequeos de manera sencilla, basada internamente en las
   herramientas mencionadas en el punto anterior.
-\item Habilitar esta aplicación de un sistema de notificaciones mediante correo
+\item Habilitar a esta aplicación de un sistema de notificaciones mediante correo
   electrónico que alerte a los usuarios de posibles cambios en la disponibilidad
   de los servicios monitorizados.
 \item Crear una aplicación móvil para que los usuarios tengan la opción de
@@ -134,7 +135,8 @@ se han detectado.
 \end{description}
 
 Una carencia importante que no se ha mencionado por ser generalizada es la falta
-de aplicaciones nativas para móviles. 
+de aplicaciones nativas para móviles con las que recibir notificaciones sobre el
+estado de los servicios y gestionar los chequeos.
 
 Así pues, queda patente la dificultad de encontrar un servicio que aúne el mayor
 número de características posibles a la vez que mantiene un servicio gratuito y
@@ -147,7 +149,7 @@ internet accesible a través de la web. Los usuarios tendrán la posibilidad de
 crear y gestionar una serie de \textit{chequeos} de diversos tipos sobre los
 servicios web que elijan. La aplicación irá recopilando información relativa a
 esos chequeos, e informará al usuario en caso de que las verificaciones que se
-hayan dado de alta no coincidan con los resultados obtenidos.
+hayan dado de alta no coincidan con los resultados esperados.
 
 Además, el usuario tendrá la posibilidad de recibir notificaciones de manera
 instantánea a través del correo electrónico y de una aplicación para la
@@ -234,7 +236,7 @@ El presente documento se rige según la siguiente estructura:
   sistema, explicando los requisitos funcionales del sistema, los diferentes
   casos de uso y bosquejando las interfaces visuales de los diferentes sistemas.
 
-\item \textbf{\nameref{chap:diseno}}. Seguido del análisis, se expone en detalle
+\item \textbf{\nameref{chap:diseno}}. Tras el análisis, se expone en detalle
   la etapa de diseño del sistema, con los diagramas de las arquitecturas lógicas
   de los sistemas y los diagramas de diseño físico de datos.
 
