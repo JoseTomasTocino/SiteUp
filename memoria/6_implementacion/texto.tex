@@ -530,7 +530,7 @@ agrupar esos elementos comunes para evitar duplicidad de código.
 
 El primer enfoque que se intentó fue, directamente, repetir todos los campos y
 métodos en todos los chequeos. Dado que el proyecto cuenta con cuatro tipos de
-chequeos, los campso y métodos comunes se repetían cuatro veces, el código
+chequeos, los campos y métodos comunes se repetían cuatro veces, el código
 ocupaba mucho más espacio y era mucho más propenso a errores e inconsistencia.
 
 \subsubsection{Segunda iteración: herencia multitabla}
@@ -864,7 +864,7 @@ ValidationError: {'correo_electronico': [u'Enter a valid email address.']}
 
 \subsection{Cambios en la estructura}
 
-El problema del proces planteado ahora es que tiene una limitación: no contempla
+El problema del proceso planteado ahora es que tiene una limitación: no contempla
 cambios estructurales en los modelos una vez que la base de datos esté
 creada. Para ello es necesario utilizar \textbf{South}, tal y como se comentó en
 la sección~\ref{subsec:entorno-aplicacion-web}. 
