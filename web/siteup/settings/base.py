@@ -186,17 +186,29 @@ LOGOUT_URL = '/logout/'
 
 BASE_URL = 'http://siteup.josetomastocino.com'
 
-# In hours. Logs older than this will be removed by a periodic maintenance task
-CHECKLOG_EXPIRATION_TIME = 24 * 7
+from datetime import timedelta
+
+# Number of consecutive logs to consider a change of status
+CONSECUTIVE_LOGS_FOR_FAILURE = 2
+
+# Logs older than this will be removed by a periodic maintenance task
+CHECKLOG_EXPIRATION_TIME = timedelta(days=30)
 
 # The same for CheckStatus objects
-CHECKSTATUS_EXPIRATION_TIME = 24 * 2
+CHECKSTATUS_EXPIRATION_TIME = timedelta(days=365) *   # A year
+
+# # Each collapse level has:
+# # - ID
+# # - timedelta that indicates how old logs must be to be collapsed
+# # - timedelta that indicates the interval of logs to collapse
+
+# CHECKLOG_COLLAPSE_LEVELS = (
+#     (1, timedelta(hours=24), timedelta(minutes=30)), # Collapse 1-minute interval to 30-minute-interval
+#     (2, timedelta(hours=7 * 24), timedelta(hours=2)) # Collapse 30-minute-interval to 2-hour-interval
+# )
 
 # In hours. Logs older than this will get first level collapsing (1 min -> 30 min)
 CHECKLOG_COLLAPSE_TIME_1 = 24
-
-# Number of consecutive logs to consider to mark a Check as DOWN
-CONSECUTIVE_LOGS_FOR_FAILURE = 3
 
 # CELERY Settings
 CELERY_ACCEPT_CONTENT = ['pickle']

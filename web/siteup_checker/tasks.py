@@ -58,7 +58,7 @@ def remove_old_logs():
     """
 
     # Calculate the limit date from which the checks will be deleted
-    date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKLOG_EXPIRATION_TIME)
+    date_limit = datetime.datetime.now() - settings.CHECKLOG_EXPIRATION_TIME
 
     # Get the CheckLogs older than the limit date
     checks = models.CheckLog.objects.filter(date__lt=date_limit)
@@ -70,7 +70,7 @@ def remove_old_logs():
     checks.delete()
 
     # Same as before, calculate the limit date
-    date_limit = datetime.datetime.now() - datetime.timedelta(hours=settings.CHECKSTATUS_EXPIRATION_TIME)
+    date_limit = datetime.datetime.now() - settings.CHECKSTATUS_EXPIRATION_TIME
 
     # Get the CheckStatus. Filter the active ones
     statuses = models.CheckStatus.objects.filter(date_start__lt=date_limit).exclude(date_end=None)
