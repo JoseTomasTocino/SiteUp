@@ -195,7 +195,7 @@ CONSECUTIVE_LOGS_FOR_FAILURE = 2
 CHECKLOG_EXPIRATION_TIME = timedelta(days=30)
 
 # The same for CheckStatus objects
-CHECKSTATUS_EXPIRATION_TIME = timedelta(days=365) *   # A year
+CHECKSTATUS_EXPIRATION_TIME = timedelta(days=365)   # A year
 
 # # Each collapse level has:
 # # - ID
