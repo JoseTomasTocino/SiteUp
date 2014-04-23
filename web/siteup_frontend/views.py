@@ -566,3 +566,16 @@ class CheckDisableView(GenericCheckViewMixin, LoginRequiredMixin, View):
 class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
     template_name = "checks/detail.html"
     context_object_name = "check"
+
+    def get_context_data(self, **kwargs):
+        context = super(CheckDetailView, self).get_context_data(**kwargs)
+
+        periods = [
+            {'title': 'Last 24 hours', 'logs': self.object.logs.in_period(check_type=self.object.type_name, hours=24)},
+            {'title': 'Last week', 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=7)},
+            {'title': 'Last month', 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=30)},
+        ]
+
+        context['periods'] = periods
+
+        return context

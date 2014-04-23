@@ -100,7 +100,7 @@ def collapse_logs():
         for check in check_type.objects.all():
 
             # Get uncollapsed, old enough logs
-            uncollapsed_logs = check.logs.order_by('date').filter(collapse_level=0, date__lt=date_limit)
+            uncollapsed_logs = check.logs.order_by('date').filter(collapse_level=0, date__lte=date_limit)
 
             if not uncollapsed_logs:
                 continue

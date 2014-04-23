@@ -15,17 +15,14 @@ return d||(f=$b[b],$b[b]=e,e=null!=c(a,b,d)?b.toLowerCase():null,$b[b]=f),e}});v
         var ajaxUrl = base_url + '/get_dashboard_graph_data/' + graphData['type'] + '/' + graphData['id'];
 
         $.getJSON(ajaxUrl, function(data) {
-
-            /*
-            data.map(function(current, index, array) {
-                graphData['data'].push([new Date(current[0]), current[1]]);
-            }); //*/
-
             graphData['data'] = data;
 
             buildGraphD3(graphName, graphData);
         });
-    } else {
+    }
+
+    // Detail page already has the data
+    else {
         buildGraphD3(graphName, graphData);
     }
 }
@@ -62,17 +59,38 @@ function buildGraphD3(graphName, graphData) {
         .range([height, 0])
         .domain(yDomain);
 
-    // Init X axis
-    xAxis = d3.svg.axis()
-        .scale(x)
-        .tickFormat(d3.time.format('%H:%M'))
-        .orient("bottom");
+    // Verify the timespan
 
-    if (graphData['is_week'] == true) {
-        xAxis.ticks(d3.time.hours, 12)
-    } else {
-        xAxis.ticks(d3.time.hours, 3)
+    firstDate = data[0][0];
+    lastDate = data[data.length - 1][0];
+    var dateDif = (lastDate - firstDate) / 1000 / 60 / 60;
+
+    if (dateDif < 25) {
+        // Init X axis
+
+        xAxis = d3.svg.axis()
+            .scale(x)
+            .tickFormat(d3.time.format('%H:%M'))
+            .ticks(d3.time.hours, 3)
+            .orient("bottom");
     }
+
+    else if (dateDif <= 170 || 1) {  // ~ weekly
+        xAxis = d3.svg.axis()
+            .scale(x)
+            .tickFormat(d3.time.format('%d/%m %H:%M'))
+            .ticks(d3.time.hours, 24)
+            .orient("bottom");
+    } else {
+        xAxis = d3.svg.axis()
+            .scale(x)
+            .tickFormat(d3.time.format('%d/%m %H:%M'))
+            .ticks(d3.time.hours, 96)
+            .orient("bottom");
+    }
+
+    console.log('DRAW');
+
 
     if (graphData['type'] == 'pingcheck') {
         // Init Y axis
@@ -226,7 +244,8 @@ $(".more-help a").on('click', function(e){
     $(this).parent().find('div').slideToggle();
 });
 
-$(window).load(function(){
+$(window).load(function()
+{
     if ($('body').hasClass('section-dashboard')) {
         buildGraphs();
     }

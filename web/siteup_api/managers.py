@@ -35,6 +35,14 @@ class CheckLogManager(models.Manager):
         q = self.filter(date__gt=datetime.datetime.now() - datetime.timedelta(days=7), date__lt=datetime.datetime.now() - datetime.timedelta(hours=24))
         return CheckLogManager._with_extra(q)
 
+    def in_period(self, check_type, **kwargs):
+        q = self.filter(date__gt=datetime.datetime.now() - datetime.timedelta(**kwargs))
+
+        ret = CheckLogManager._with_extra(q)
+        return ret
+
+
+
     @staticmethod
     def _with_extra (q):
         """
