@@ -21,6 +21,10 @@ class CSRFExemptMixin(object):
 
 
 class LoginView(CSRFExemptMixin, View):
+    """
+    View for the Android app, it logs in the user and returns his/her checks.
+    """
+
     def post(self, request, *args, **kwargs):
 
         # Post request should have all the proper fields
@@ -47,13 +51,17 @@ class LoginView(CSRFExemptMixin, View):
             'groups': []
         }
 
+        # Go over user's CheckGroups
         for group in user.checkgroup_set.all():
+
             group_info = {
                 'title': group.title,
                 'checks': []
             }
 
+            # Go over group's Checks
             for check in group.checks():
+
                 group_info['checks'].append({
                     'title': check.title,
                     'description': check.description,
