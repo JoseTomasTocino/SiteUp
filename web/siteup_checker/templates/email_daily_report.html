@@ -1,3 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <title>SiteUp</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body style="margin: 0; padding: 0;" bgcolor="#d8dfe5">
+
+ {# general table #}
+ <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td>
+
+    {# inner table #}
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+
+     {# header #}
+     <tr>
+      <td bgcolor="#29343e" style="padding: 10px 10px 10px 10px" align="center">
+       <img src="http://siteup.josetomastocino.com/static/images/logo_w.png" width="64">
+      </td>
+     </tr>
+
+     {# subheader #}
+     <tr>
+      <td bgcolor="#46596A" style="padding: 10px 10px 10px 10px; font-family: arial, sans-serif; font-size: 19px; color: #EDF0F3;">
+       Daily status report</em>
+      </td>
+     </tr>
+
+     {# content table #}
+     <tr>
+      <td bgcolor="#ffffff" style="padding: 20px 20px 20px 20px; font-family: arial, sans-serif;">
+
+       <p>This is a daily report of the checks you've registered in SiteUp.</p>
+
+       <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        {% for group in check_groups %}
+         <tr>
+          <td style="background-color: #eee;">&nbsp;</td>
+          <td style="background-color: #eee; padding: 10px; font-size: 16px; font-weight:bold"><em>{{group.title}}</em></td>
+         </tr>
+
+        {% for check in group.checks %}
+        <tr>
+         <td width="35" style=" vertical-align: top; padding: 15px 0 0 0">
+          {% if not check.is_active %}
+          <img src="http://siteup.josetomastocino.com/static/images/ic_siteup_down.png" width="35" alt="" />
+          {% elif not check.last_status%}
+          <img src="http://siteup.josetomastocino.com/static/images/ic_siteup_down.png" width="35" alt="" />
+          {% elif check.last_status.status != 0%}
+          <img src="http://siteup.josetomastocino.com/static/images/ic_siteup_down.png" width="35" alt="" />
+          {% else %}
+          <img src="http://siteup.josetomastocino.com/static/images/ic_siteup_up.png" width="35" alt="" />
+          {% endif %}
+         </td>
+         <td style="padding: 15px 0 15px 10px; vertical-align: top;">
+          <strong>{{check.title}}</strong>
+          <br>
+          {% if not check.is_active %}
+          INACTIVE
+          {% elif not check.last_status%}
+          NO DATA
+          {% elif check.last_status.status != 0%}
+          DOWN
+          {% else %}
+          UP
+          {% endif %}
+         </strong>
+
+         {% if check.last_status %}
+         since {{ check.last_status.date_start|date:"H:i d/m/Y"}}
+         {% endif %}
+        </td>
+       </tr>
+
+       {% endfor %}
+       {% endfor %}
+
+      </table>
+
+     </td>
+    </tr>
+
+     <tr> {# footer #}
+      <td bgcolor="#29343e" align="center" style="padding: 10px 10px 10px 10px; font-family: arial, sans-serif; color: #EDF0F3;">
+       The SiteUp team
+      </td>
+     </tr> {# /footer #}
+
+    </table>
+   </td>
+  </tr>
+ </table>
+</body>
+
+</html>
+<!--
+
+{% comment %}
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -53,3 +158,5 @@ The SiteUp team</p>
 
 </body>
 </html>
+{% endcomment %}
+-->

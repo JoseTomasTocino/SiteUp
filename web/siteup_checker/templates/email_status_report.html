@@ -1,3 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <title>SiteUp</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body style="margin: 0; padding: 0;" bgcolor="#d8dfe5">
+ <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td>
+
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+     <tr>
+      <td bgcolor="#29343e" style="padding: 10px 10px 10px 10px" align="center">
+       <img src="http://siteup.josetomastocino.com/static/images/logo_w.png" width="64">
+      </td>
+     </tr>
+     <tr>
+      <td bgcolor="#46596A" style="padding: 10px 10px 10px 10px; font-family: arial, sans-serif; font-size: 19px; color: #EDF0F3;">
+       Status report for check <em>{{check_name}}</em>
+      </td>
+     </tr>
+     <tr>
+      <td bgcolor="#ffffff" style="padding: 20px 20px 20px 20px; font-family: arial, sans-serif;">
+
+       <p>This is a status report from SiteUp for your check named
+       <strong>"{{check_name}}"</strong>. The status changed to:</p>
+
+       <p style="font-weight:bold; font-size: 19px; text-transform:uppercase; text-align:center;">
+        {{ new_status }}
+       </p>
+
+       <p>On {{status_date|date:"H:i d/m/Y"}}. You can check the details at {{check_details}}.</p>
+      </td>
+     </tr>
+     <tr>
+      <td bgcolor="#29343e" align="center" style="padding: 10px 10px 10px 10px; font-family: arial, sans-serif; color: #EDF0F3;">
+       The SiteUp team
+      </td>
+     </tr>
+    </table>
+
+   </td>
+  </tr>
+ </table>
+</body>
+
+</html>
+<!--
+
+{% comment %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,3 +72,5 @@ The SiteUp team</p>
 
 </body>
 </html>
+{% endcomment %}
+-->
