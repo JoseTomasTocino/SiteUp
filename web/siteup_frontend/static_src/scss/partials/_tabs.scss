@@ -12,6 +12,7 @@
         font-size: 0.7rem;
 
         &.active {
+            font-weight: bold;
             background-color: $color8;
             border-bottom: 1px solid $color8;
         }
@@ -29,4 +30,13 @@
     background-color: $color8;
     padding: 0.7rem 0;
 
+    h3 {
+        border-top: 1px solid $color6;
+        border-bottom: 1px solid $color6;
+        background-color: darken($color8, 1);
+        padding: 0.5rem 1rem;
+        font-weight: normal;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
 }

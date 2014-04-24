@@ -571,9 +571,21 @@ class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
         context = super(CheckDetailView, self).get_context_data(**kwargs)
 
         periods = [
-            {'title': 'Last 24 hours', 'logs': self.object.logs.in_period(check_type=self.object.type_name, hours=24)},
-            {'title': 'Last week', 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=7)},
-            {'title': 'Last month', 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=30)},
+            {
+                'title': 'Last 24 hours',
+                'logs': self.object.logs.in_period(check_type=self.object.type_name, hours=24),
+                'statuses': self.object.statuses.in_period(hours=24)
+            },
+            {
+                'title': 'Last week',
+                'logs': self.object.logs.in_period(check_type=self.object.type_name, days=7),
+                'statuses': self.object.statuses.in_period(days=7)
+            },
+            {
+                'title': 'Last month',
+                'logs': self.object.logs.in_period(check_type=self.object.type_name, days=30),
+                'statuses': self.object.statuses.in_period(days=30)
+            },
         ]
 
         context['periods'] = periods
