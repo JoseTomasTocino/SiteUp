@@ -119,12 +119,14 @@ LOGGING = {
     'loggers': {
         'operations': {
             'handlers': ['operations_file'],
-            'level': 'DEBUG'
+            'level': 'DEBUG',
+            'propagate': False
         },
 
         'debugging': {
             'handlers': ['debug_file', 'console'],
-            'level': 'DEBUG'
+            'level': 'DEBUG',
+            'propagate': False
         },
 
         'django': {
@@ -147,7 +149,8 @@ LOGGING = {
 
         '' : {
             'handlers' : ['console'],
-            'level': 'INFO'
+            'level': 'INFO',
+            'propagate': False
         },
 
     }
