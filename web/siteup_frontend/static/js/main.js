@@ -43,10 +43,28 @@ function buildGraphD3(graphName, graphData) {
         d[0] = parseDate(d[0]);
     });
 
+    var format = d3.time.format.multi([
+      [".%L", function(d) { return d.getMilliseconds(); }],
+      [":%S", function(d) { return d.getSeconds(); }],
+      ["%H:%M", function(d) { return d.getMinutes(); }],
+      ["%H:00", function(d) { return d.getHours(); }],
+      ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+      ["%b %d", function(d) { return d.getDate() != 1; }],
+      ["%B", function(d) { return d.getMonth(); }],
+      ["%Y", function() { return true; }]
+    ]);
+
     // Init X scale
     x = d3.time.scale()
         .range([0, width])
         .domain(d3.extent(data, function(d) { return d[0]; }));
+
+    x.ticks(9);
+
+    xAxis = d3.svg.axis()
+            .scale(x)
+            .tickFormat(format)
+            .orient("bottom");
 
     // Init Y scale
     if (graphData['type'] == 'pingcheck') {
@@ -61,36 +79,9 @@ function buildGraphD3(graphName, graphData) {
 
     // Verify the timespan
 
-    firstDate = data[0][0];
-    lastDate = data[data.length - 1][0];
-    var dateDif = (lastDate - firstDate) / 1000 / 60 / 60;
 
-    if (dateDif < 25) {
-        // Init X axis
-
-        xAxis = d3.svg.axis()
-            .scale(x)
-            .tickFormat(d3.time.format('%H:%M'))
-            .ticks(d3.time.hours, 3)
-            .orient("bottom");
-    }
-
-    else if (dateDif <= 170 || 1) {  // ~ weekly
-        xAxis = d3.svg.axis()
-            .scale(x)
-            .tickFormat(d3.time.format('%d/%m %H:%M'))
-            .ticks(d3.time.hours, 24)
-            .orient("bottom");
-    } else {
-        xAxis = d3.svg.axis()
-            .scale(x)
-            .tickFormat(d3.time.format('%d/%m %H:%M'))
-            .ticks(d3.time.hours, 96)
-            .orient("bottom");
-    }
 
     console.log('DRAW');
-
 
     if (graphData['type'] == 'pingcheck') {
         // Init Y axis
