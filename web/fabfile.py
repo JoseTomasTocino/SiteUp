@@ -31,3 +31,11 @@ def deploy():
             run("web/manage.py migrate siteup_api")
             run("sudo supervisorctl restart siteup_gunicorn siteup_celery")
 
+
+def pull():
+    with cd(code_dir):
+        with prefix('workon siteup'):
+            run("git checkout .")
+            run("git pull")
+            run("web/manage.py collectstatic --noinput")
+
