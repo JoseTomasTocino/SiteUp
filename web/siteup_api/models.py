@@ -272,7 +272,7 @@ class BaseCheck(models.Model):
         return self.generic_url('delete_check')
 
     def enable_url(self):
-        return self.generic_url('enablecheck')
+        return self.generic_url('enable_check')
 
     def disable_url(self):
         return self.generic_url('disable_check')
