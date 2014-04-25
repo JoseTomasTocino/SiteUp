@@ -533,34 +533,26 @@ ofrece mucha información sobre el chequeo. En particular:
 
 \item En la parte media de la pantalla se sitúa un bloque con pestañas. Mediante
   estas pestañas es posible indicar sobre qué periodo de tiempo queremos
-  visualizar los datos: últimas 24 horas o última semana. La información
-  disponible es la siguiente:
+  visualizar los datos: últimas 24 horas, última semana, último mes, etc. La
+  información disponible es la siguiente:
 
   \begin{itemize}
   \item Porcentaje de \textit{uptime} del chequeo.
   \item \textit{(Solo chequeos tipo ping)} Tiempo de respuesta mínimo, máximo y promedio.
   \item Gráfica con el estado del chequeo.
+  \item Eventos durante ese periodo de tiempo. Un evento es un cambio de estado
+    del chequeo, con la siguiente información:
+    \begin{itemize}
+    \item Tipo de cambio de estado (\textit{Up}, \textit{Down}).
+    \item Duración del estado.
+    \item Hora de comienzo del estado.
+    \item Hora de fin del estado. Si es el estado en el que el chequeo se
+      encuentra actualmente, no aparecerá ninguna fecha.
+    \item Extra: muestra información adicional para estados de error.
+    \end{itemize}
   \end{itemize}
 
-\item En la parte inferior de la pantalla se sitúa el panel de eventos del
-  chequeo. Éste permite ver los últimos cambios de estado del chequeo:
-
-  \begin{itemize}
-  \item Tipo de cambio de estado (\textit{Up}, \textit{Down}).
-  \item Duración del estado.
-  \item Hora de comienzo del estado.
-  \item Hora de fin del estado. Si es el estado en el que el chequeo se
-    encuentra actualmente, no aparecerá ninguna fecha.
-  \item Extra: muestra información adicional para estados de error.
-  \end{itemize}
 \end{itemize}
-
-\begin{figure}[hbtp]
-  \centering
-  \includegraphics[width=\textwidth]{apendice_manual_usuario/pantalla_grafica_semanal.png}
-  \caption{Detalle de la gráfica para un intervalo de tiempo de una semana}
-  \label{fig:grafica-semanal}
-\end{figure} 
 
 \subsection{Recepción de notificaciones por correo electrónico}
 
