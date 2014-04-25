@@ -44,12 +44,20 @@ WSGI_APPLICATION = 'siteup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+db_folder = os.path.join(BASE_DIR, 'db')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db', 'django-db.sqlite3'),
+        'NAME': os.path.join(db_folder, 'django-db.sqlite3'),
     }
 }
+
+if not os.path.isdir(db_folder):
+    if not os.path.exists(db_folder):
+        os.mkdir(db_folder)
+    else:
+        raise Exception("'%s' is not a folder... wtf" % db_folder)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

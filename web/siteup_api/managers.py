@@ -5,6 +5,23 @@ logger = logging.getLogger("debugging")
 from django.db import models
 from django.db.models import Q
 
+class CheckStatusManager(models.Manager):
+    """
+    Manager for CheckStatus model.
+    """
+
+    def in_period(self, **kwargs):
+        """
+        Return the elements with the starting date within the given period of time.
+        This can be called like CheckStatus.objects.in_period(days=7) # CheckStatus in last 7 days
+        """
+
+        # Include statuses within the time period AND the current status (the one without date_end)
+        q = self.order_by('-date_start').filter(Q(date_end__gt=datetime.datetime.now() - datetime.timedelta(**kwargs)) | Q(date_end=None))
+
+        return q
+
+
 class CheckLogManager(models.Manager):
 
     def last_24_hours(self, *args, **kwargs):

@@ -125,6 +125,9 @@ class CheckStatus(models.Model):
     object_id = models.PositiveIntegerField()
     check = generic.GenericForeignKey('content_type', 'object_id')
 
+    # This is using a custom Model Manager
+    objects = managers.CheckStatusManager()
+
     def get_date_start(self):
         return self.date_start.isoformat()
 

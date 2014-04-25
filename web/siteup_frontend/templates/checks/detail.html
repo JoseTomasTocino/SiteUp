@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="single-check">
-
     <header class="container cf">
         <div class="icon">
             {% if not check.is_active %}
@@ -27,7 +26,6 @@
                 <strong>{% trans "Description" %}:</strong> {{ check.description|default:"<em>No description</em>"}}
             </div>
         </div> {# .texts #}
-
     </header>
 
     <div class="check-actions container">
@@ -53,7 +51,6 @@
     </div> {# .check-actions #}
 
     <div class="container tabs">
-
         <header class="tabs-header cf">
             {% for period in periods %}
                 <a href="#">
@@ -121,6 +118,62 @@
                     })();
                 </script>
 
+                {# Latest events block #}
+
+                <h3>
+                    {% trans "Events in the" %} {{ period.title|lower }}
+                </h3>
+
+                <table class="status-table">
+                    <thead>
+                        <th></th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Duration" %}</th>
+                        <th>{% trans "Start date" %}</th>
+                        <th>{% trans "End date" %}</th>
+                        <th>{% trans "Extra" %}</th>
+                    </thead>
+
+                    <tbody>
+                    {% for status in period.statuses  %}
+                        <tr class="single-status">
+                            <td>
+                            {% if status.status == 0 %}
+                                <i class="fa fa-arrow-up fa-lg"></i>
+                            {% else %}
+                                <i class="fa fa-arrow-down fa-lg"></i>
+                            {% endif %}
+                            </td>
+
+                            <td>
+                                {% if status.status == 0 %}
+                                    {% trans "Up" %}
+                                {% else %}
+                                    {% trans "Down" %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not status.date_end %}
+                                    <strong>[ {% trans "Current state" %} ] </strong>
+                                {% else %}
+                                    {{ status.get_duration }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ status.date_start | date:"Y/m/d - G:i" }}
+                            </td>
+                            <td>
+                                {{ status.date_end | date:"Y/m/d - G:i"  }}
+                            </td>
+                            <td>
+                                {{ status.status_extra }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
             </div> {# .tabs-content #}
 
         {% endfor %}
@@ -128,65 +181,7 @@
 
 
 
-    <div class="container block complex last-events">
-        <header>
-            <h3>
-                {% trans "Last events" %}
-            </h3>
-        </header>
 
-        <div class="content padded">
-            <table class="status-table">
-                <thead>
-                    <th></th>
-                    <th>{% trans "Status" %}</th>
-                    <th>{% trans "Duration" %}</th>
-                    <th>{% trans "Start date" %}</th>
-                    <th>{% trans "End date" %}</th>
-                    <th>{% trans "Extra" %}</th>
-                </thead>
-
-                <tbody>
-                {% for status in check.get_statuses  %}
-                    <tr class="single-status">
-                        <td>
-                        {% if status.status == 0 %}
-                            <i class="fa fa-arrow-up fa-lg"></i>
-                        {% else %}
-                            <i class="fa fa-arrow-down fa-lg"></i>
-                        {% endif %}
-                        </td>
-
-                        <td>
-                            {% if status.status == 0 %}
-                                {% trans "Up" %}
-                            {% else %}
-                                {% trans "Down" %}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if not status.date_end %}
-                                <strong>[ {% trans "Current state" %} ] </strong>
-                            {% else %}
-                                {{ status.get_duration }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ status.date_start | date:"Y/m/d - G:i" }}
-                        </td>
-                        <td>
-                            {{ status.date_end | date:"Y/m/d - G:i"  }}
-                        </td>
-                        <td>
-                            {{ status.status_extra }}
-                        </td>
-                    </tr>
-                {% endfor %}
-
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 </div>
 {% endblock content %}
