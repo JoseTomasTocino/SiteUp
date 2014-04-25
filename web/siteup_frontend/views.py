@@ -427,7 +427,9 @@ class ChooseCheckTypeTemplateView(LoginRequiredMixin, TemplateView):
 
 
 class GenericCheckViewMixin(object):
-    """Base for views that handle single checks."""
+    """
+    Base for views that handle single checks.
+    """
 
     def __init__(self, *args, **kwargs):
 
