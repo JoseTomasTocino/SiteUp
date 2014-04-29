@@ -15,28 +15,28 @@
         <a href="{% url "new_check_next" pk=pk type='pingcheck' %}" class="button">
             <h3>Ping check</h3>
             <span class="desc">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+                Add a new check that uses ICMP packages to test the remote server.
             </span>
         </a>
 
         <a href="{% url "new_check_next" pk=pk type='dnscheck' %}" class="button">
             <h3>DNS check</h3>
             <span class="desc">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+                Add a new check to monitor the DNS registers of a domain.
             </span>
         </a>
 
         <a href="{% url "new_check_next" pk=pk type='portcheck' %}" class="button">
             <h3>Port check</h3>
             <span class="desc">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+                Monitor the status of a remote port.
             </span>
         </a>
 
         <a href="{% url "new_check_next" pk=pk type='httpcheck' %}" class="button">
             <h3>HTTP check</h3>
             <span class="desc">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, assumenda?
+                Use HTTP requests to check the status and content of a website.
             </span>
         </a>
     </div>
