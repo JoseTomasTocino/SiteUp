@@ -150,6 +150,17 @@ form {
         color: $color3;
     }
 
+    .captcha {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+
+    .captcha ~ input {
+        display: inline-block;
+        width: 50%;
+    }
+
     .error {
 
     }

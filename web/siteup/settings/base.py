@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'gunicorn',
     'celery',
+    'captcha'
 )
 
 MIDDLEWARE_CLASSES = (

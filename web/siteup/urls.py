@@ -48,6 +48,8 @@ urlpatterns = patterns('',
     url(r'^checks/enable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckEnableView.as_view(), name="enable_check"),
     url(r'^checks/disable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDisableView.as_view(), name="disable_check"),
 
+    url(r'^captcha/', include('captcha.urls')),
+
 )
 
 # DJANGO TOOLBAR

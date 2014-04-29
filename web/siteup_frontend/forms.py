@@ -13,7 +13,10 @@ from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+from captcha.fields import CaptchaField
+
 from siteup_api import models
+
 
 class BaseForm(forms.Form):
     """Base form class that adds a '.error' class to input widgets"""
@@ -83,6 +86,7 @@ class SignupForm(BaseForm):
     username = forms.CharField(label=_("Username"), max_length=254)
     email = forms.EmailField(label=_("Email"))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    captcha = CaptchaField()
 
     def clean(self):
         try:

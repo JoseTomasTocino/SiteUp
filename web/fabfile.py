@@ -28,7 +28,7 @@ def deploy():
             run("pip install -r web/requirements.txt")
             run("web/manage.py collectstatic --noinput")
             run("web/manage.py syncdb")
-            run("web/manage.py migrate siteup_api")
+            run("web/manage.py migrate")
             run("sudo supervisorctl restart siteup_gunicorn siteup_celery")
 
 
