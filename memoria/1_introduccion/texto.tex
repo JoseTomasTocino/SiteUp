@@ -32,7 +32,7 @@ manera que puedan subsanarse las causas de los problemas.
 La idea de desarrollar este proyecto surge a raíz de una necesidad
 personal del desarrollador del proyecto. 
 
-En octubre de 2013 tomé parte en un un importante proceso de selección en el que
+En octubre de 2013 tomé parte en un importante proceso de selección en el que
 las comunicaciones se estaban llevando a cabo a través de correo electrónico. En
 particular, la cuenta de correo electrónico que estaba usando
 (\texttt{info@josetomastocino.com}) tenía un dominio personalizado y estaba
@@ -106,7 +106,7 @@ final de la aplicación y sobre la experiencia de desarrollo de la misma.
   permitir ampliaciones y modificaciones sobre la aplicación por
   terceras personas.
 \item Hacer uso de herramientas básicas en el desarrollo de software,
-  como son los \textbf{Sistemas de Control de Versiones} para llevar
+  como son los \textbf{sistemas de control de versiones} para llevar
   un control realista del desarrollo del software, así como hacer de
   las veces de sistema de copias de seguridad.
 \end{itemize}
@@ -114,29 +114,320 @@ final de la aplicación y sobre la experiencia de desarrollo de la misma.
 \section{Estado del arte}
 \label{sec:estado-del-arte}
 
+Se detalla a continuación el estado del arte de los puntos de vigilancia de
+servicios más habituales y de los servicios web más similares a lo que se busca
+construir en el proyecto.
+
+\subsection{Métodos de monitorización}
+
+La monitorización de servicios en general, y de servicios remotos a través de
+Internet en particular, ha sido siempre un aspecto importante en el despliegue
+de cualquier proyecto. Existe un gran número de vectores de vigilancia que se
+han usado a lo largo de los años. A continuación se detallan los más habituales.
+
+\subsubsection{Envío de paquetes ICMP}
+
+\ac{ICMP} es uno de los principales protocolos de la familia TCP/IP. Es
+utilizado por dispositivos de red, como los enrutadores, para enviar mensajes de
+control con diversas funciones como, por ejemplo, mensajes de error informando
+de que una máquina remota no está disponible.
+
+La herramienta más conocida que trabaja sobre ICMP es la utilidad \textbf{Ping},
+que envía peticiones \textit{eco} a un host remoto, y espera la
+respuesta. Durante ese proceso, la herramienta mide el tiempo desde el envío a
+la recepción, monitorizando las posibles pérdidas de paquetes y otros
+valores. Respuestas incorrectas o inexistentes permiten al usuario tener una
+idea de que la máquina remota no es accesible de forma correcta.
+
+Un ejemplo de la salida del comando \texttt{ping} en un sistema GNU/Linux es la
+siguiente:
+
+\begin{bashcode}
+$ ping -c3 uca.es
+PING uca.es (150.214.80.25) 56(84) bytes of data.
+64 bytes from www21.uca.es (150.214.80.25): icmp_seq=1 ttl=48 time=43.3 ms
+64 bytes from www21.uca.es (150.214.80.25): icmp_seq=2 ttl=49 time=42.7 ms
+64 bytes from 150.214.80.25: icmp_seq=3 ttl=49 time=41.2 ms
+
+--- uca.es ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 3207ms
+rtt min/avg/max/mdev = 41.228/42.421/43.300/0.906 ms
+\end{bashcode}
+
+El uso del comando ping para el chequeo básico de servidores es algo habitual
+desde hace más de dos décadas~\cite{salus1994a}. A pesar ello, hay muchos
+servidores que tienen deshabilitada su capacidad de responder a esta clase de
+paquetes, por lo que es imperativo contar con otras medidas de chequeo
+complementarias.
+
+\subsubsection{Chequeo de peticiones HTTP}
+
+A la hora de verificar el correcto funcionamiento de un servidor web, la opción
+más lógica es utilizar peticiones \ac{HTTP} contra el servidor, tal y como haría
+un cliente web normal (como un navegador). El protocolo HTTP es la base de la
+comunicación en la web, y tiene sistemas para verificar que el envío y recepción
+de las peticiones es correcto.
+
+Cuando un navegador u otro cliente hace una petición a un servidor web, éste
+devuelve una respuesta que comienza con un \textbf{código de
+  estado}, seguido de unas cabeceras, una línea en blanco y el cuerpo del
+mensaje. El aspecto de las cabeceras es el siguiente
+
+\begin{verbatim}
+HTTP/1.1 200 OK
+Server: nginx/1.4.1 (Ubuntu)
+Date: Mon, 28 Apr 2014 17:53:26 GMT
+Content-Type: text/html; charset=utf-8
+Connection: keep-alive
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.5.3-1ubuntu2.2
+\end{verbatim}
+
+En la primera línea se observa el \textbf{código de estado}, que indica el
+estado de la petición. Estos códigos fueron establecidos por la \ac{IETF}, se
+componen de tres dígitos y contemplan un extenso número de situaciones,
+divididas en cinco familias según el primer dígito del código:
+
+\begin{itemize}
+\item \textbf{1xx, informativos}. Informan de que la petición ha sido recibida y
+  que puede continuarse el proceso, por ejemplo enviando por parte del cliente
+  el resto de la petición.
+\item \textbf{2xx, petición correcta}. Indica que la petición fue correctamente
+  recibida, entendida y aceptada. El código más conocido de esta familia es el
+  \textbf{200 - OK}, la respuesta estándar para peticiones correctas.
+\item \textbf{3xx, redirección}. Indica que se debe producir una redirección
+  para completar la petición por parte del cliente. El código más popular en
+  esta familia es el \textbf{302 - Moved temporarily}.
+\item \textbf{4xx, error del cliente}. Indica que el cliente ha cometido un
+  error al realizar la petición, por ejemplo pidiendo un recurso inexistente. Es
+  el caso del código \textbf{404 - Not Found}.
+\item \textbf{5xx, error del servidor}. Indica que aunque la petición parece
+  correcta, el servidor ha sufrido un fallo al intentar responderla. El mensaje
+  más habitual es el \textbf{500 - Internal Server Error}, que informa de manera
+  genérica de un error interno.
+\end{itemize}
+
+Así, un punto de vigilancia habitual es comprobar que las peticiones hacia
+cierta \ac{URL} devuelven el código de estado correcto. Que una web que
+normalmente devuelve un código 200 de pronto devuelva el código 500 es un
+indicador de que ha ocurrido un fallo y el sistema no funciona apropiadamente.
+
+Incluso tras la verificación del correcto código de estado uno no puede estar
+del todo seguro de que una web funcione correctamente. Hay un caso especial de
+ataque, el \textit{defacement}~\cite{wiki:defacement}, que consiste en cambiar
+de forma total o parcial el contenido de una página web, manteniendo su
+accesibilidad. Así, las comprobaciones de tipo \textit{ping} o de código de
+estado serán correctas, ya que el servidor seguirá en línea y respondiendo
+peticiones, pero el contenido no será el adecuado.
+
+Para estos casos es importante establecer un sistema de verificación del
+contenido. La forma más sencilla y ligera es decidir una serie de palabras clave
+que deberán encontrarse en el contenido. Así, el sistema de vigilancia
+verificará en cada chequeo que esas palabras clave se encuentren en el cuerpo de
+la respuesta. Otra opción es generar inicialmente una imagen del contenido, ya
+sea haciendo una copia íntegra en la base de datos o guardando un resumen
+mediante un algoritmo de \textit{hashing}, y compararla en cada chequeo. Con
+esto nos aseguramos de que la totalidad del contenido coincide con lo
+esperado. La contrapartida es que este sistema no puede utilizarse en páginas
+dinámicas, ya que cualquier cambio en el contenido haría saltar la alerta.
+
+\subsubsection{Chequeo de puertos}
+
+El envío de paquetes ICMP está bien para comprobaciones genéricas, y el uso de
+peticiones HTTP es el más apropiado para servidores web, pero es necesario un
+término medio que sirva para vigilar otros servicios remotos de forma algo más
+exhaustiva pero manteniendo la adaptabilidad.
+
+Estos servicios remotos utilizan \textbf{puertos lógicos} a través de los cuales
+los clientes pueden conectarse y obtener información. Los servidores web no son
+ninguna excepción, y suelen utilizar el puerto 80 como interfaz de comunicación
+con el exterior, pero hay muchos otros. Se pueden usar los números entre 0 y
+65536 para identificar un puerto, y la \ac{IANA} es responsable de asignar los
+números de puerto por debajo del 1024 a los servicios más habituales:
+
+\begin{itemize}
+\item 20 y 21: File Transfer Protocol (FTP)
+\item 22: Secure Shell (SSH)
+\item 23: Telnet remote login service
+\item 25: Simple Mail Transfer Protocol (SMTP)
+\item 53: Domain Name System (DNS)
+\item 80: Hypertext Transfer Protocol (HTTP)
+\item 110: Post Office Protocol (POP3)
+\item 119: Network News Transfer Protocol (NNTP)
+\item 143: Internet Message Access Protocol (IMAP)
+\item 161: Simple Network Management Protocol (SNMP)
+\item 194: Internet Relay Chat (IRC)
+\item 443: HTTP Secure (HTTPS)
+\item 465: SMTP Secure (SMTPS)
+\end{itemize}
+
+La verificación más habitual en este caso es abrir una conexión al puerto
+remoto, comprobando que la conexión se realiza correctamente y no es denegada
+por el servidor remoto. Opcionalmente se puede comprobar la respuesta textual
+del servidor, verificando que se obtiene un mensaje de bienvenida o algo
+similar, habitual en servicios como SSH o FTP. Por ejemplo, un servidor SSH
+puede devolver como línea inicial el siguiente mensaje:
+
+\begin{verbatim}
+SSH-2.0-OpenSSH_6.2p2 Ubuntu-6ubuntu0.1
+\end{verbatim}
+
+Con esto nos cercioramos de que el servidor está en línea, es accesible, tiene
+abierto el puerto asociado al servicio, éste acepta conexiones y responde con el
+mensaje habitual.
+
+\subsubsection{Verificación de dominios y registros DNS}
+
+Hasta ahora, los mecanismos de monitorización que se han mencionado actúan
+directamente sobre el servidor remoto que ofrece el servicio a monitorizar,
+normalmente a través de una \ac{URL} o un \textit{hostname}. Desafortunadamente
+existen vectores de ataque que se dirigen hacia servicios relacionados pero no
+alojados o gestionados directamente por el servidor. Un ejemplo de esto es la
+gestión de los registros \ac{DNS}.
+
+En cualquier red, y en Internet en particular, los sistemas conectados se
+identifican generalmente utilizando una dirección \ac{IP}, normalmente asignada
+por el \ac{ISP} con el que se haya contratado el acceso o por el administrador
+de la red. Dado que recordar una dirección IP es algo difícil, surgen los
+\textbf{nombres de dominio}, cuyo principal propósito es el de ofrecer términos
+memorizables y fáciles de encontrar. Así, a un servidor con la ip
+\texttt{78.47.140.228} se le puede asignar el nombre de dominio
+\texttt{josetomastocino.com}, siendo ambos términos equivalentes.
+
+El sistema \ac{DNS} se encarga de gestionar y distribuir las asociaciones entre
+direcciones IP y nombres de dominio a través de los \textbf{registros DNS}. Para
+cada dominio es posible definir varios tipos de registros DNS, con diferente
+utilidad en cada caso. Los más habituales son los siguientes:
+
+\begin{itemize}
+\item Los registros de tipo \textbf{A} (\textit{address record}) se utilizan
+  para traducir nombres de servidores a direcciones IPv4. Es el registro más habitual.
+\item Los registros de tipo \textbf{AAAA} son similares a los tipo A pero para IPv6.
+\item Los registros \textbf{CNAME} (\textit{canonical name}) se usan para crear
+  nombres de servidor adicionales o \textit{alias}. Es la herramienta a utilizar
+  cuando se desea añadir un subdominio, como \texttt{subdominio.uca.es}.
+\item Los registros \textbf{MX} (\textit{mail exchange}) sirven para asociar un
+  dominio a una lista de servidores de correo, de forma que un agente de correo
+  sepa a qué servidor enviar los mensajes.
+\item Los registros \textbf{TXT} (\textit{Text}) guardan información textual,
+  utilizada habitualmente como forma de identificación frente a servicios
+  externos. Por ejemplo, en el caso de Google Apps, los dueños de los dominios
+  deben incluir un registro TXT con un contenido similar a
+
+\begin{verbatim}
+google-site-verification=rXOxyZounnZasA8Z7oaD3c14Jdj
+\end{verbatim}
+\end{itemize}
+
+La información DNS asociada a un dominio se transmite a los clientes web a
+través de una estructura jerárquica de servidores DNS. Cuando se produce un
+cambio en los registros DNS de un dominio, estos cambios no están disponibles
+inmediatamente a todos los usuarios, sino que se \textit{propagan} de forma
+gradual a través todos los servidores de nombres del mundo. El proceso de
+propagación puede durar entre 10 y 72 horas, dependiendo de la zona geográfica
+de cada servidor.
+
+El proceso de propagación de cambios, los errores en los servidores DNS y las
+actividades maliciosas de terceros pueden dar lugar a que, en un momento dado,
+un cliente no tenga la información DNS adecuada para un dominio. Puede ocurrir,
+por ejemplo, que a través de un ataque de
+\textit{man-in-the-middle}~\cite{ataquemitm} un usuario malicioso sirva a un
+cliente unos registros DNS incorrectos para un dominio en particular,
+redirigiendo a la víctima a otro servidor en el que puede producirse un robo de
+datos. Es por tanto importante establecer un sistema de vigilancia que permita
+comprobar que la información DNS asociada a un dominio sea la correcta en todo
+momento, revisando periódicamente la información de los registros.
+
+\subsection{Servicios similares}
+
 En la actualidad existen bastantes servicios web que ofrecen algunas
 características similares a las que se desean en SiteUp, pero no todas. Se
-presentan a continuación algunos de estos servicios, junto a los problemas que
-se han detectado.
+presentan a continuación algunos de estos servicios, junto a las características
+que ofrecen y finalmente una comparativa con el proyecto que se presenta.
 
-\begin{description}
-\item[Pingdom] \url{http://pingdom.com} -- La opción más veterana y popular, con
-  clientes muy importantes. La cuenta gratuita solo permite añadir un check. No
-  ofrece chequeo de registros DNS.
-\item[Alertra] \url{http://alertra.com} -- La cuenta gratuita solo dura 30
-  días. No ofrece chequeo de registros DNS.
-\item[UptimeRobot.com] \url{http://uptimerobot.com} -- Periodicidad mínima de 5
-  minutos. No ofrece chequeo de DNS.
-\item[ServerCheck] \url{http://servercheck.in} -- Aspecto amateur. No tienen
-  cuenta gratuita. No tienen chequeo de DNS.
-\item[StatusCake] \url{http://statuscake.com} -- Periodicidad mínima de 5
-  minutos. No permite el chequeo de códigos de estado en su cuenta gratuita.
+\paragraph{Pingdom} \url{http://pingdom.com}
 
-\end{description}
+Pingdom es un servicio sueco de monitorización fundado en 2007. Tienen más de
+400.000 usuarios en 200 países, con clientes tan importantes como Spotify,
+Instagram y Dropbox. Recientemente han actualizado su web con un nuevo diseño, y
+han añadido soporte para iOS y Android. Entre sus servicios se encuentran los
+clásicos chequeos por ping, por web, de protocolos y chequeos de interacciones
+de varios pasos.
 
-Una carencia importante que no se ha mencionado por ser generalizada es la falta
-de aplicaciones nativas para móviles con las que recibir notificaciones sobre el
-estado de los servicios y gestionar los chequeos.
+Ofrecen una cuenta gratuita con la que probar el servicio que permite añadir un
+chequeo.
+
+\paragraph{Alertra} \url{http://alertra.com}
+
+Alertra es un servicio de monitorización fundado en el año 2000 en Estados
+Unidos. Actualmente cuentan con bastantes tipos de chequeos, además de ofrecer
+información técnica sobre los chequeos que se realizan.
+
+La cuenta gratuita está limitada a 30 días, tras los cuales hay que pagar.
+
+
+\paragraph{Uptime Robot} \url{http://uptimerobot.com}
+
+Uptime Robot es una popular plataforma de monitorización desarrollada en Estados
+Unidos por un solo programador. Su principal atractivo es su cuenta gratuita,
+que permite a los usuarios añadir hasta 50 chequeos con una periodicidad de 5
+minutos sin coste alguno. Lamentablemente en los últimos meses su servicio ha
+ido teniendo problemas y su credibilidad ha caído, especialmente debido a no
+contar con un equipo completo de personal técnico detrás del producto.
+
+\paragraph{StatusCake} \url{http://statuscake.com}
+
+StatusCake es uno de los principales servicios de monitorización de sitios web
+actuales. Se ofrece (literalmente) como una alternativa mejor que Uptime Robot,
+y cuenta con importantes clientes como Disney, Fender y Electronic Arts.
+
+Su cuenta gratuita es una de las más generosas, ofreciendo chequeos ilimitados.
+
+\subsubsection{Tabla comparativa}
+
+En la figura~\ref{tabla_comparativa} se hace una comparativa de los requisitos
+que se buscan en el proyecto, verificando si se ofrecen o no en las alternativas de
+servicio previamente estudiadas.
+
+\begin{sidewaystable}
+  \centering
+  \label{tabla_comparativa}
+  \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    \textit{Concepto} & Pingdom & Alertra & UptimeRobot & StatusCake & SiteUp\\
+    \hline
+    Chequeo mediante Ping & Sí & Sí & Sí & Sí & Sí \\
+    \hline    
+    Chequeo de peticiones HTTP (código de estado) & No & No & No & Sí & Sí \\
+    \hline
+    Chequeo de peticiones HTTP (contenido) & Sí & Sí & Sí & Solo cuentas de pago & Sí \\
+    \hline
+    Chequeo de registros DNS & Limitado & No & No & Limitado & Sí \\
+    \hline
+    Chequeo de puertos & Sí & Sí & Sí & Sí & Sí \\
+    \hline
+    Chequeo de puertos (contenido) & Sí & Sí & No & No & Sí \\
+    \hline
+    Cuenta gratuita & Sí & 30 días & Sí & Sí & Sí \\
+    \hline    
+    Chequeos en cuenta gratuita & 1 & 1 & 50 & Ilimitado & Ilimitado \\
+    \hline
+    Frecuencia mínima en cuenta gratuita & 1 minuto & 5 minutos & 5 minutos & 5 minutos & 1 minuto \\
+    \hline
+    Notificación por e-mail & Sí & Sí & Sí & Sí & Sí \\
+    \hline
+    Notificación por App Android & Sí & No & No & No & Sí \\
+    \hline
+    Open Source & No & No & No & No & Sí \\
+    \hline   
+  \end{tabular}
+  \caption{Tabla comparativa de servicios de monitorización}
+\end{sidewaystable}
+
+Una carencia importante bastante generalizada es la falta de aplicaciones
+nativas para móviles con las que recibir notificaciones sobre el estado de los
+servicios y gestionar los chequeos. Solo Pingdom y el presente proyecto, SiteUp,
+ofrecen aplicaciones para Android.
 
 Así pues, queda patente la dificultad de encontrar un servicio que aúne el mayor
 número de características posibles a la vez que mantiene un servicio gratuito y
@@ -156,22 +447,7 @@ instantánea a través del correo electrónico y de una aplicación para la
 plataforma móvil \textbf{Android}. El servicio web estará totalmente adaptado
 para su uso en dispositivos móviles.
 
-\subsection{Limitaciones del proyecto}
-Aunque cubre una gran parte de los puntos de vigilancia habituales, la
-aplicación se limita a ofrecer chequeo de respuesta de ping, chequeo de puertos,
-chequeo de registros DNS y chequeo de cabeceras y contenidos HTTP.
 
-La aplicación de Android no contará con ninguna funcionalidad para gestionar los
-chequeos de un usuario, sino que servirá para recibir notificaciones instantáneas
-provenientes de la aplicación web. Ésta, por otro lado, estará completamente
-adaptada para su uso a través de dispositivos móviles gracias al uso del
-\textit{responsive web design}.
-
-Idealmente los chequeos deberían hacerse simultáneamente desde diferentes
-máquinas colocadas en diversos puntos geográficos, para así tener unos
-resultados más fiables. La falta de infraestructuras y la finalidad didáctica
-del proyecto limitan la aplicación a una estructura monolítica en la que los
-chequeos se hacen desde una sola máquina, la misma que sirve el servicio web.
 
 \subsection{Licencia}
 El proyecto está publicado como software libre bajo la licencia
@@ -244,9 +520,8 @@ El presente documento se rige según la siguiente estructura:
   definido su diseño, en esta parte se detallan las decisiones de implementación
   más relevantes que tuvieron lugar durante el desarrollo del proyecto.
 
-\item \textbf{\nameref{chap:pruebas}}. Listamos y describimos las pruebas que se
-  han llevado a cabo sobre el proyecto para garantizar su fiabilidad y
-  consistencia.
+\item \textbf{\nameref{chap:pruebas}}. Se describen las pruebas que se han
+  llevado a cabo sobre el proyecto para garantizar su fiabilidad y consistencia.
 
 \item \textbf{\nameref{chap:conclusiones}}. Comentamos las conclusiones a las
   que se han llegado durante el transcurso y al término del proyecto.

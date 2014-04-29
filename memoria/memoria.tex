@@ -72,6 +72,12 @@
 % Paquete para quitar la numeración de las páginas en blanco
 \usepackage{emptypage}
 
+% Cálculos de márgenes
+\usepackage{calc}
+
+% Entornos para tablas y figuras giradas
+\usepackage{rotating}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Paquetes en local (directorio 'paquetes')
 
@@ -122,6 +128,10 @@
 % Índices varios
 \tableofcontents
 \listoffigures
+
+% Cambia el nombre del índice de tablas
+\renewcommand{\listtablename}{Índice de tablas}
+\renewcommand{\tablename}{Tabla}
 \listoftables
 
 %\setlength{\parskip}{1.2ex plus 0.4ex minus 0.1ex}

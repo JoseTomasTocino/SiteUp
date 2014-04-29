@@ -103,7 +103,7 @@ El proyecto ha sido desarrollado en su totalidad por el que escribe, alumno de
 la Universidad de Cádiz, llevando a cabo las labores de análisis, diseño y
 desarrollo, así como de diseño visual de las interfaces y \textit{branding} del
 proyecto. El desarrollo del proyecto ha sido revisado y guiado de forma continua por el
-tutor Ivan Ruiz Rube.
+tutor Iván Ruiz Rube.
 
 \section{Recursos inventariables}
 
@@ -151,42 +151,55 @@ En particular:
 \section{Costes}
 
 La estimación de los costes del proyecto es divisible en dos áreas. Por un lado,
-el coste de personal, que en este caso particular se limita al alumno, y por
-otro lado el coste de infraestructuras y servicios externos. No se tiene en
-cuenta el coste del software ya que en todo momento se ha utilizado software con
-licencias libres para uso personal y comercial.
-
-En lo que respecta al personal:
+en cuanto al personal:
 
 \begin{itemize}
-\item La realización del proyecto necesitó de 480 horas de trabajo. De acuerdo a
-  la planificación, con una carga de trabajo diaria de 4 horas, la duración del
-  proyecto ha sido de 120 días, aproximadamente cuatro meses.
-\item Según el estado de mercado, el salario medio de un programador
-  Python/Django de categoría junior ronda los 17€ por hora trabajada antes de
-  impuestos.
-\item Además, el servidor donde se desplegará la plataforma precisa de un
-  mantenimiento que llevará a cabo un administrador cualificado de manera
-  periódica aunque poco frecuente. Suponiendo un régimen de mantenimiento
-  bimensual, con una media de dos horas por sesión, y una aportación de 24€ por
-  hora, el coste asciende a 96€ mensuales. Suponiendo una ventana de actividad
-  mínima de 12 meses, la aportación asciende a 1152€.
-\item Así pues, la estimación de gastos de personal es de \textbf{9312€}.
+\item Se requiere de un desarrollador que haga el análisis, diseño e
+  implementación de la plataforma web y la aplicación Android. Según convenio~\cite{boe:convenio},
+  en la categoría de \textit{Programador en Internet}, el sueldo base es de 17€/hora.
+\item Se precisa de un administrador del sistemas cualificado que lleve el
+  mantenimiento periódico del servidor de despliegue. Según convenio, el sueldo
+  base es de 14€/hora.
 \end{itemize}
 
-En cuanto al gasto en infraestructuras:
+Dado el contexto del proyecto, es el alumno el que cubre ambos perfiles. Por
+otro lado, la infraestructura necesaria consta de:
 
 \begin{itemize}
-\item El sistema en el que se ha llevado a cabo el desarrollo estaba comprado
+\item El sistema en el que se ha llevado a cabo el desarrollo. Estaba comprado
   con anterioridad al proyecto, por lo que no se ha reflejado en este despliegue
   de gastos.
 
-\item La plataforma de despliegue del sistema tiene un coste fijo de 7.90€ al
-  mes~\cite{hetznervq7}, impuestos incluidos. Suponiendo un periodo mínimo de
-  actividad de 12 meses, el coste asciende a \textbf{94.80€}.
+\item La plataforma de despliegue del sistema. Se trata de un \ac{VPS} alquilado
+  mensualmente con un coste fijo de 7.90€ al mes~\cite{hetznervq7}, impuestos
+  incluidos.
 \end{itemize}
 
+Así, haciendo uso de lo dispuesto en la sección~\ref{sec:planificacion},
+\textit{\nameref{sec:planificacion}} y suponiendo un periodo mínimo de actividad
+de 12 meses, se elabora la tabla de planificación de gastos del cuadro~\ref{tab:costes}.
+
+\begin{table}[hbtp]
+  \centering
+  \begin{tabular}[h]{|l|c|c|r|}
+    \hline
+    \textbf{Concepto} & \textbf{Coste unitario} & \textbf{Unidades} & \textbf{Coste total} \\
+    \hline
+    \textit{Desarrollador} & 17€/hora & 480 horas & 8160€ \\
+    \hline
+    \textit{Administrador} & 14€/hora & 48 horas & 672€ \\
+    \hline
+    \textit{Servidor VPS} & 7.90€/mes & 12 meses & 94.80€ \\
+    \hline
+    \textbf{Total} & & & \textbf{8926.80€} \\
+    \hline
+  \end{tabular}
+  \caption{Tabla de planificación de costes}
+  \label{tab:costes}
+\end{table}
+
 \section{Riesgos}
+
 \label{sec:riesgos}
 
 Los principales riesgos presentes en SiteUp son los siguientes.
@@ -220,7 +233,7 @@ la plataforma, lo que por otro lado conllevaría un incremento en los gastos.
 \subsection{Rechazo de los servicios vigilados}
 
 Por definición, los sistemas de vigilancia tienen que lanzar chequeos de forma
-periódica y repetida a lo largo del tiempo. Algunos sistema están configurados
+periódica y repetida a lo largo del tiempo. Algunos sistemas están configurados
 para detectar esta clase de comprobaciones y bloquearlas, al identificarlas (a
 veces erróneamente) como ataques de denegación de servicio~\cite{ddos}. 
 

@@ -31,6 +31,9 @@ modelo conceptual.
 
 \subsection{Usuario}
 
+Representa a un usuario de la aplicación que tiene intención de dar de alta
+chequeos.
+
 \begin{description}
 \item[Nombre] Nombre elegido por el usuario.
 \item[Correo electrónico] Dirección de correo electrónico.
@@ -40,11 +43,16 @@ modelo conceptual.
 
 \subsection{Grupo de chequeos}
 
+Representa a una agrupación de chequeos relacionados con los que operar de forma
+conjunta.
+
 \begin{description}
 \item[Título] Título para identificar al grupo de chequeos.
 \end{description}
 
 \subsection{Chequeo}
+
+Representa un chequeo o punto de vigilancia sobre un servicio remoto.
 
 \begin{description}
 \item[Título] Título para identificar al chequeo.
@@ -55,6 +63,8 @@ modelo conceptual.
 \end{description}
 
 \subsection{Registro de chequeo}
+
+Representa el resultado de la ejecución de un chequeo en un momento dado.
 
 \begin{description}
 \item[Fecha] Fecha y hora en la que se obtuvo este registro.
@@ -69,6 +79,8 @@ modelo conceptual.
 
 \subsection{Chequeo - Ping}
 
+Representa un chequeo mediante paquetes ICMP.
+
 \begin{description}
 \item[Objetivo] Identificador de la máquina a la que enviar el ping. Debe ser un
   \textit{hostname} o una IP.
@@ -79,6 +91,8 @@ modelo conceptual.
 
 \subsection{Chequeo - Port}
 
+Representa un chequeo de un puerto en un servidor remoto.
+
 \begin{description}
 \item[Objetivo] Identificador de la máquina a chequear.
 \item[Puerto objetivo] Puerto remoto en la máquina que se chequeará.
@@ -88,6 +102,8 @@ modelo conceptual.
 
 \subsection{Chequeo - DNS}
 
+Representa un chequeo de registros DNS sobre un dominio.
+
 \begin{description}
 \item[Objetivo] Dominio sobre el que realizar el chequeo de DNS.
 \item[Tipo de registro] Tipo de registro DNS a verificar. Puede ser A, AAAA, CNAME, MX y TXT.
@@ -95,6 +111,8 @@ modelo conceptual.
 \end{description}
 
 \subsection{Chequeo - HTTP}
+
+Representa un chequeo mediante peticiones HTTP sobre un host remoto.
 
 \begin{description}
 \item[Objetivo] URL a verificar.
@@ -106,6 +124,9 @@ modelo conceptual.
 
 
 \section{Modelo de casos de uso}
+
+El modelo de casos de uso representa las interacciones entre los actores y el
+sistema, desarrollado a partir de los requisitos descritos anteriormente.
 
 \subsection{Actores}
 
@@ -355,7 +376,7 @@ Los casos pertenecientes a este subsistema pueden verse en la figura~\ref{fig:su
 \subsubsection{Caso de uso: creación de chequeo}
 
 \begin{description}
-\item[Descripción] Un usuario logueado decide crear un un chequeo dentro de un grupo.
+\item[Descripción] Un usuario logueado decide crear un chequeo dentro de un grupo.
 \item[Actores] \textit{Usuario logueado}
 \item[Escenario principal] $\quad$
   \begin{enumerate}
@@ -494,6 +515,9 @@ del sistema, y de lo contratos de estas operaciones.
 
 
 \section{Modelo de interfaz de usuario}
+
+En esta sección se presenta una aproximación de la navegación y apariencia de la
+interfaz de usuario, tanto de la plataforma web como de la aplicación móvil.
 
 \subsection{Modelo de navegación}
 

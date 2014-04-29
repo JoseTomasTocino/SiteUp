@@ -336,7 +336,7 @@ entornos de producción, por lo que no supone un problema.
 El entorno tecnológico de la aplicación móvil es el estándar para el desarrollo
 de aplicaciones Android hoy en día, que consta de los siguientes elementos.
 
-\subsection{Herramientas de desarrollo}
+\subsubsection{Herramientas de desarrollo}
 
 Para el desarrollo de la aplicación móvil se ha optado por utilizar
 \textbf{Android Studio}~\cite{android-studio}, un entorno de desarrollo
@@ -352,7 +352,7 @@ sección~\ref{subsec:arquitectura-logica-android},
 \textit{\nameref{subsec:arquitectura-logica-android}}).
 
 
-\subsection{Servicio de notificaciones}
+\subsubsection{Servicio de notificaciones}
 
 Para el envío y la recepción de notificaciones se ha utilizado el servicio
 \textbf{Google Cloud Messaging for Android}. Se trata de un servicio gratuito
@@ -444,7 +444,7 @@ directorio \texttt{web} del proyecto, que contiene lo siguiente:
     \item \texttt{pport.py}: chequeo de puertos.
     \item \texttt{ddns.py}: chequeo de registros DNS.
     \end{itemize}
-  \item \texttt{templates}: plantillas para lso correos de notificación.
+  \item \texttt{templates}: plantillas para los correos de notificación.
   \item \texttt{tests}: tests para el código de la aplicación.
   \item \texttt{admin.py}: configuración de la app para el panel de administración.
   \item \texttt{models.py}: modelos de la aplicación.
@@ -499,7 +499,7 @@ Los ficheros de la aplicación móvil se encuentran contenidos en el directorio
     \begin{itemize}
     \item \texttt{CheckInList.java}: representa un chequeo en la lista de chequeos.
     \item \texttt{CheckListActivity.java}: actividad que muestra la lista de chequeos.
-    \item \texttt{CheckListArrayAdapter.java}: adptador de array para la lista de chequeos.
+    \item \texttt{CheckListArrayAdapter.java}: adaptador de array para la lista de chequeos.
     \item \texttt{GcmBroadcastReceiver.java}: receptor de notificaciones GCM. Notifica al servicio \texttt{GcmIntentService}.
     \item \texttt{GcmIntentService.java}: manejador de notificaciones GCM.
     \item \texttt{LoginActivity.java}: actividad que gestiona el inicio de sesión.

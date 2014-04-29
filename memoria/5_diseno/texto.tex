@@ -74,7 +74,7 @@ siguientes elementos, que es necesario instalar para desplegar el sistema:
 El requisito no funcional NRQ-4, presente en el cuadro~\ref{tab:accesibilidad}
 indica que la plataforma web deberá ser accesible desde cualquier clase de
 dispositivo con acceso a Internet. Así pues, la única restricción disponible
-para los clientes es que cuenten con un navegador modern que provea de acceso
+para los clientes es que cuenten con un navegador moderno que provea de acceso
 web y sea compatible con los últimos estándares web.
 
 \subsubsection{Cliente de acceso Android}
@@ -129,7 +129,7 @@ estas peticiones, enviadas por el navegador, se detalla qué recurso se necesita
 enviar. 
 
 En el caso de recursos estáticos, como por ejemplo ficheros de imágenes o
-archivos de hojas de estilo en cascada (\ac{CSS}), es buena práctica que sea el
+archivos de hojas de estilo en cascada \ac{CSS}, es buena práctica que sea el
 propio servidor el que sirva estos ficheros, dado que no necesitan de ningún
 procesado dinámico, por lo que no tiene sentido desperdiciar recursos pasando la
 petición al código Python.
@@ -186,7 +186,7 @@ básica es el siguiente:
 
 Entrando más en detalle, una aplicación de Django se organiza en una
 arquitectura de módulos pequeños o \textit{aplicaciones}, cada una de las cuales
-debe tener una serire de responsabilidades reducida y acotada, de forma que sea
+debe tener una serie de responsabilidades reducida y acotada, de forma que sea
 relativamente sencillo intercambiar las aplicaciones por otras. En el caso del
 proyecto SiteUp, se cuenta con tres aplicaciones:
 
@@ -205,8 +205,8 @@ proyecto SiteUp, se cuenta con tres aplicaciones:
 \end{itemize}
 
 Cada aplicación en Django cuenta con una arquitectura de tres capas conocida
-como \textbf{Modelo-Vista-Plantilla}, que se asimila al clásico patrón del
-\textbf{Modelo-Vista-Controlador}.
+como \textbf{Modelo-Plantilla-Vista}, que se asimila al clásico patrón del
+\textbf{Modelo-Vista-Controlador}~\cite{django:mvc}.
 
 \begin{itemize}
 \item El \textbf{modelo} representa la información en la base de datos, evitando
@@ -351,11 +351,28 @@ reflejará en la base de datos, donde se puede apreciar cada una de las tablas
 que forman el proyecto, así como los campos de las tablas y las relaciones entre
 ellas.
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[angle=90, width=\textwidth]{5_diseno/diagrama-modelos}
-  \caption{Diseño de la base de datos}
+\begin{figure}[p]
+  \vspace{-1.5cm}
+  \hspace*{-2cm}%
+
+  \begin{minipage}{1.0\linewidth+2cm}
+  \includegraphics[angle=90, width=1.0\textwidth]{5_diseno/diagrama-modelos-1}
+  \caption{Diseño de la base de datos (I)}    
   \label{fig:diagrama-modelos}
+  \end{minipage}
+  \hspace*{-1cm}%
+\end{figure}
+
+\begin{figure}[p]
+  \vspace{-1.5cm}
+  \hspace*{-2cm}%
+
+  \begin{minipage}{1.0\linewidth+2cm}
+  \includegraphics[angle=90, width=1.0\textwidth]{5_diseno/diagrama-modelos-2}
+  \caption{Diseño de la base de datos (II)}    
+  \label{fig:diagrama-modelos-2}
+  \end{minipage}
+  \hspace*{-1cm}%
 \end{figure}
 
 El diseño de los datos se ha hecho mediante las herramientas de mapeo
@@ -390,6 +407,12 @@ Sus principales campos son:
   Android obtenido a través de Google Play Services.
 \end{itemize}
 
+Sus relaciones son:
+\begin{itemize}
+\item Cada instancia de \textit{UserExtra} pertenece a un \textit{User}.
+\end{itemize}
+
+
 \subsection{CheckGroup}
 
 Parte de la aplicación \texttt{siteup\_api}. Identifica a un grupo de
@@ -398,11 +421,19 @@ chequeos. Todos los chequeos deben pertenecer a un grupo.
 El campo principal de este modelo es \texttt{title}, que guarda una cadena con
 el título del grupo.
 
+Sus relaciones son:
+\begin{itemize}
+\item Un \textit{CheckGroup} pertenece a un \textit{User}.
+\item Un \textit{CheckGroup} puede tener 0 o más chequeos.
+\end{itemize}
+
 \subsection{BaseCheck}
 
 Parte de la aplicación \texttt{siteup\_api}. Este modelo \textbf{abstracto}
 guarda campos comunes a todos los tipos de chequeos. No tiene representación
-directa en la base de datos, sino que sirve para evitar duplicidad de código.
+directa en la base de datos, sino que sirve para evitar duplicidad de
+código. Así, todas los modelos derivados de \texttt{BaseCheck} heredan sus
+atributos y relaciones.
 
 Sus principales campos son:
 
@@ -416,6 +447,16 @@ Sus principales campos son:
 \item \texttt{notify\_android} - Booleano, indica si los cambios de estado del
   chequeo se notificarán vía Android utilizando notificaciones push.
 \item \texttt{last\_log\_datetime} - Fecha, almacena la fecha de la última vez que se lanzó el chequeo.
+\end{itemize}
+
+Las relaciones de este modelo (representadas en la base de datos a través de las
+tablas de las clases herederas son las siguientes:
+
+\begin{itemize}
+\item Un chequeo pertenece a un \textit{CheckGroup}.
+\item Un chequeo tiene 0 o más registros de chequeo (\textit{CheckLog}).
+\item Un chequeo tiene 0 o más registros de estado (\textit{CheckStatus}).
+\item Un chequeo tiene 0 o 1 registro de estado actual (\textit{CheckStatus}).
 \end{itemize}
 
 \subsection{DnsCheck}
@@ -496,6 +537,12 @@ Sus principales campos son:
   sido resumido o no.
 \end{itemize}
 
+Sus relaciones son:
+
+\begin{itemize}
+\item Un \textit{CheckLog} pertenece a un chequeo.
+\end{itemize}
+
 \subsection{CheckStatus}
 
 Parte de la aplicación \texttt{siteup\_api}. Representa un cambio de estado de
@@ -517,6 +564,12 @@ Los campos principales de este modelo son:
   estar en este estado. Si es el estado actual de un chequeo, se mantiene en blanco.
 \item \texttt{notified} - Booleano, indica si este cambio de estado ha sido ya notificado.
 
+\end{itemize}
+
+Sus relaciones son:
+
+\begin{itemize}
+\item Un \textit{CheckStatus} pertenece a un chequeo.
 \end{itemize}
 
 \subsection{Session}
