@@ -518,6 +518,153 @@ En esta sección se describen algunos detalles en la implementación del proyect
 que han resultado de interés suficiente para ser dignos de mención, ya sea por
 los conflictos que dieron, por su complejidad o por otras razones subjetivas.
 
+\subsection{Implementación de los chequeos}
+
+El núcleo del proyecto, como se ha comentado en varias ocasiones, es el módulo
+\texttt{siteup\_checker}, que es el encargado de llevar a cabo los chequeos
+contra los servicios web. La implementación de estos chequeos no estuvo exenta
+de dificultados y \textit{corner cases} que se fueron depurando progresivamente.
+
+\subsubsection{Implementación del chequeo por ping}
+
+Uno de los primeros problemas que se encontraron fue que para poder enviar
+paquetes en el protocolo ICMP es necesario tener permisos de administrador (o
+\textit{root}) en el sistema, cosa que no es habitual ni recomendable al
+ejecutar una aplicación web. Este requisito se da porque es necesario abrir un
+socket puro (\textit{raw socket}), un tipo especial de socket que solo se usa en
+ocasiones especiales y cuya creación se restringe al administrador del
+sistema~\cite{linux_man_capabilities}.
+
+La alternativa más habitual es ejecutar el comando \textbf{\texttt{ping}} de
+forma externa, y procesar su salida. El comando \texttt{ping} tiene un permiso
+de acceso especial que permite a cualquier usuario lanzar el ejecutable emulando
+temporalmente los privilegios del usuario \texttt{root}.
+
+Para procesar la salida del comando se utilizó una expresión regular de gran
+envergadura, que tenía en cuenta casos especiales como aquellos en los que los
+paquetes ICMP se perdiesen. Se presenta a continuación un fragmento del código involucrado.
+
+\begin{pythoncode}
+process = subprocess.Popen(["ping", "-c3", "-w2", target], 
+                           stdout=subprocess.PIPE, 
+                           stderr=subprocess.PIPE)
+
+# Get the output
+ping_raw_response, ping_raw_error = process.communicate()
+
+# ...
+
+# Compile regular expression to parse ping's output
+matcher = re.compile(r"""
+^PING \s+                            # Header
+(?P<host>.*?) \s+                    # Host
+\((?P<ip>.*?)\)                      # IP address
+
+.*?                                  # Ignore individual pings
+
+(?P<transmitted>\d+) \s+ packets       .*?       # Packets transmitted
+(?P<received>\d+) \s+ received         .*?       # Packets received
+ms                                     \s*       # Ending of the statistics line
+(                                    # Non-capturing group for the stats
+rtt .* = \s+                         # Separator
+(?P<min>[^/]*)/                      # Min time
+(?P<avg>[^/]*)/                      # Avg time
+(?P<max>[^/]*)/                      # Max time
+(?P<mdev>.*?) \s ms                  # Mdev
+)?
+
+""", re.DOTALL | re.IGNORECASE | re.MULTILINE | re.VERBOSE)
+
+# Run the regular expression to parse ping's output
+results = matcher.match(ping_raw_response)
+
+# If it doesn't match (due to an error)
+if not results:
+    logger.error("PING ERROR" + ping_raw_response)  
+
+# ...
+\end{pythoncode}
+
+\subsubsection{Implementación del chequeo de DNS}
+
+Uno de los detalles que se encontraron en la codificación de este chequeo es que
+las peticiones a los servidores de nombres se hacen utilizando el tipo de
+registro como único criterio (obviamente además del dominio), por lo que el
+resultado es múltiple. Por ejemplo, una posible petición podría ser conocer los
+registros tipo \texttt{A} del dominio \texttt{google.com}. El servidor de nombre
+nos devolvería la lista de registros de tipo A, no uno en particular. 
+
+Así, en la implementación se itera por las respuestas, comprobando si alguna de
+ellas coincide con el valor indicado por el usuario, y dando error en caso contrario:
+
+\begin{pythoncode}
+def check_dns(target, record_type, expected_address):
+
+    """Checks if a certain domain has a DNS record (of the proper type) 
+    that matches the expected address"""
+
+    # ...
+
+    return_obj = {}
+
+    try:
+        # Launch the query
+        answer = dns.resolver.query(target, record_type)
+
+        # The query finished properly
+        return_obj['valid'] = True
+        return_obj['status_ok'] = False
+
+        # Check if any of the results matches the expected address
+        for single_result in answer.rrset:
+            ans = single_result.to_text().strip()
+
+            if expected_address.strip() == ans:
+                return_obj['status_ok'] = True
+
+    # Exception handling omitted
+    # ...
+
+    return return_obj 
+\end{pythoncode}
+
+\subsubsection{Implementación del chequeo de código de estado HTTP}
+
+Como se comentó en la sección~\ref{subsec:chequeoHttp},
+\textit{\nameref{subsec:chequeoHttp}}, las respuestas a las peticiones HTTP
+contienen un código de estado que da información sobre si la petición se procesó
+correctamente o no. Una de los tipos de código de estado son los códigos de
+redirección, aquellos que empiezan por el dígito \texttt{3xx}.
+
+Uno de los problemas que se encontraron tras la implementación inicial de este
+chequeo es que si un usuario usaba uno código de esta familia en la
+comprobación, siempre daba error. Se descubrió que esto era así porque al hacer
+la petición, si el servidor devolvía un código de redirección, el sistema
+automáticamente seguía esa redirección y no devolvía el código al cliente. Por
+ello, se tuvo que añadir un caso especial para los códigos de la familia
+\texttt{3xx} para que no se siguiesen las redirecciones.
+
+\begin{pythoncode}
+def check_http_header(target, status_code=200):
+    """Checks if a certain http URL returns the correct status code."""
+
+    return_obj = {}
+
+    try:
+        # Don't follow redirections if status_code is in the 30x family
+        if status_code / 10 == 30:
+            r = requests.head(target, timeout=10)
+        else:
+            r = requests.head(target, allow_redirects=True, timeout=10)
+
+        return_obj['valid'] = True
+        return_obj['status_code'] = r.status_code
+        return_obj['status_ok'] = r.status_code == status_code  
+
+    # ...
+\end{pythoncode}
+
+
 \subsection{Uso de herencia de modelos}
 
 Uno de los primeros dilemas que surgieron en el proyecto fue el usar o no
@@ -539,24 +686,23 @@ El siguiente paso fue utilizar herencia directa (o \textit{multitabla}) de
 modelos. Pongamos un ejemplo:
 
 \begin{minted}{python}
-class Lugar(models.Model):
-    nombre = models.CharField(max_length=50)
-    direccion = models.CharField(max_length=50)
+class BaseCheck(models.Model):
+    title = models.CharField(max_length=50)
+    target = models.CharField(max_length=50)
 
-class Restaurante(Lugar):
-    acepta_reservas = models.BooleanField()
+class PingCheck(BaseCheck):
+    should_check_timeout = models.BooleanField()
 \end{minted}
 
-En este caso, el modelo \textit{Restaurante} es, a su vez, un tipo de
-\textit{Lugar}. Además, es posible que existan \textit{Lugares} de forma
+En este caso, el modelo \textit{PingCheck} es, a su vez, un tipo de
+\textit{BaseCheck}. Además, es posible que existan \textit{BaseChecks} de forma
 independiente. Esto es así porque Django crea dos tablas, una para cada modelo,
-y se genera una relación para los casos en los que un \textit{Lugar} sea a la
-vez un \textit{Restaurante}.
+y se genera una relación para los casos en los que un \textit{BaseCheck} sea a la
+vez un \textit{PingCheck}.
 
-El problema en el caso de SiteUp es que la clase base sería un \textit{Chequeo},
-y no tendría sentido que existiese un chequeo sin tipo, por lo que este enfoque
-no era válido. Además, la herencia multitabla está desaconsejada en la mayoría
-de los casos.
+El problema en el caso de SiteUp es que no tendría sentido que existiese un
+chequeo base sin tipo, por lo que este enfoque no era válido. Además, la
+herencia multitabla está desaconsejada en la mayoría de los casos.
 
 \subsubsection{Tercera iteración: herencia abstracta}
 
@@ -566,36 +712,38 @@ los campos se guardan en la tabla de los modelos hijos. Modificando el caso
 anterior:
 
 \begin{minted}{python}
-class Lugar(models.Model):
-    nombre = models.CharField(max_length=50)
-    direccion = models.CharField(max_length=50)
+class BaseCheck(models.Model):
+    title = models.CharField(max_length=50)
+    target = models.CharField(max_length=50)
 
     class Meta:
         abstract = True
 
-class Restaurante(Lugar):
-    acepta_reservas = models.BooleanField()
+class PingCheck(BaseCheck):
+    should_check_timeout = models.BooleanField()
 
-class Colegio(Lugar):
-    es_concertado = models.BooleanField()
+class DnsCheck(BaseCheck):
+    record_type = models.CharField(max_length=50)
+
 \end{minted}
 
-En este caso, la tabla creada para el modelo \textit{Restaurante} contendrá
-columnas para los campos \textit{nombre}, \textit{dirección} y
-\textit{acepta\_reservas}, y la tabla para el modelo \textit{Colegio} contendrá
-los campos \textit{nombre}, \textit{dirección} y
-\textit{es\_concertado}. Además, cualquier método que se le añadiese al modelo
+En este caso, la tabla creada para el modelo \textit{PingCheck} contendrá
+columnas para los campos \textit{title}, \textit{target} y
+\textit{should\_check\_timeout}, y la tabla para el modelo \textit{DnsCheck} contendrá
+los campos \textit{title}, \textit{target} y
+\textit{record\_type}. Además, cualquier método que se le añadiese al modelo
 base estaría disponible para los hijos.
 
 Finalmente, esta fue el enfoque que se decidió usar. La única pega que aparece
 es que no hay manera sencilla de recuperar todos los objetos que hereden de un
-modelo -- en el ejemplo, todos los objetos de base \textit{Lugar} -- como sí la
-había en el caso de la herencia multitabla, pero es una pega menor, subsanable
-de forma sencilla utilizando métodos mágicos como \texttt{\_\_subclasses\_\_}:
+modelo -- en el ejemplo, todos los objetos que heredan de \textit{BaseCheck} --
+como sí la había en el caso de la herencia multitabla, pero es una pega menor,
+subsanable de forma sencilla utilizando métodos mágicos como
+\texttt{\_\_subclasses\_\_}:
 
 \begin{minted}{python}
 
-lugares = sum((list(x.objects.all()) for x in Lugar.__subclasses__()), [])
+lugares = sum((list(x.objects.all()) for x in BaseCheck.__subclasses__()), [])
   
 \end{minted}
 
