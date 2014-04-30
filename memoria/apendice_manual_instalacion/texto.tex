@@ -1,15 +1,32 @@
 A continuación se presentan las instrucciones de instalación de la plataforma
-web en un servidor de producción.
+web en un servidor de producción. La versión más actualizada de estas
+instrucciones se pueden encontrar en el fichero \texttt{INSTALLING-web.md}
+alojado en el directorio raíz de la forja de código~\cite{forja}.
 
-Las instrucciones de instalación que se presentan a continuación suponen un
-sistema con unos requisitos de hardware mínimos especificados en la
-sección~\ref{subsec:entorno-produccion},
-\textit{\nameref{subsec:entorno-produccion}}. Se supone un servidor con una
-distribución basada en paquetería Debian con acceso root.
+Antes de continuar se presentan los requisitos de hardware y software mínimos
+para la correcta ejecución de la plataforma web.
 
-La versión más actualizada de las instrucciones de instalación de la plataforma
-web se encuentran en el fichero \texttt{INSTALLING-web.md} alojado en el
-directorio raíz de la forja de código~\cite{forja}.
+\paragraph{Hardware}
+
+\begin{itemize}
+\item 512MiB de memoria RAM como mínimo.
+\item 10GiB de disco duro como mínimo.
+\item Acceso a Internet con un canal de subida de al menos 1Mbit/s.
+\end{itemize}
+
+\paragraph{Software}
+
+\begin{itemize}
+\item Sistema operativo \textbf{GNU/Linux}, preferiblemente basado en paquetería Debian.
+\item Servidor de shell remota \textbf{SSH}, accesible desde el exterior.
+\item \textbf{Nginx}, servidor web trabajando en modo de proxy inverso.
+\item \textbf{Supervisord}, sistema para el control de procesos que trabajen en modo demonio..
+\item \textbf{RabbitMQ}, cola de tareas sencilla que cumple el estandar \ac{AMQP}.
+\item Intérprete de \textbf{Python}, versión mínima 2.7.
+\item Soporte de entornos virtuales \textbf{VirtualEnv} para la encapsulación de
+  dependencias.
+\end{itemize}
+
 
 \section{Instalación inicial}
 
@@ -102,6 +119,7 @@ $ sudo apt-get install rabbitmq-server -y
 La configuración por defecto es suficiente para las necesidades del proyecto.
 
 \subsection{Ejecución de los servicios}
+\label{subsec:ejecucion_servicios}
 
 Para el control de los servicios que ejecutan el proyecto es necesario utilizar
 alguna clase de software de monitorización de procesos. La opción recomendada es
@@ -217,6 +235,56 @@ $ sudo service nginx restart
 Con esto, el proyecto estará funcionando y debería ser accesible a través del
 navegador.
 
+\section{Pruebas de implantación}
+
+Para probar que la instalación es correcta, lo ideal es que pruebe la aplicación
+a fondo, revisando toda la funcionalidad. El itinerario que se recomienda es el
+siguiente. Si tiene dudas sobre cómo realizar alguna de las acciones descritas,
+revise el~\nameref{chap:manual_usuario}.
+
+Primero, pruebe que \textbf{registro y acceso de usuarios} funciona creando un
+nuevo usuario y accediendo a su cuenta. Si este procedimiento funciona, se habrá
+verificado que la instalación básica de la base de datos es correcta.
+
+El siguiente paso es \textbf{crear un grupo de chequeos} y posteriormente crear
+un chequeo de tipo Ping básico. Se recomienda utilizar alguna web conocida como
+objetivo, por ejemplo la web de la Universidad de Cádiz en su dirección
+\texttt{uca.es}.
+
+Tras crear el chequeo, éste aparecerá en modo \textbf{Fetching}, durante el
+que se están obteniendo los datos iniciales. Espere dos o tres minutos y vuelva
+a revisar su estado. Si sigue en modo \textit{Fetching}, probablemente las
+tareas de chequeo no se estén llevando a cabo, lo que seguramente sea causado
+por una mala instalación del gestor de tareas \textbf{Celery} o de la cola de
+mensajes \textbf{RabbitMQ}. 
+
+Si el chequeo pasa a estado \textbf{Correcto}, entonces se habrá verificado el
+correcto funcionamiento del gestor de tareas y de la cola de mensajes. El
+siguiente paso es \textbf{comprobar las notificaciones}. Para ello, edite el
+chequeo recién creado y cambie el objetivo (\textit{target}) a uno incorrecto,
+por ejemplo \texttt{uca.foobar} y espere tres minutos. En ese periodo de tiempo
+debería llegarle una notificación a través del correo electrónico. Si no es así,
+probablemente la causa esté en que no esta bien configurada la cuenta de correo
+electrónico para el envío de notificaciones. Revise para ello la sección
+\textit{\nameref{subsec:ejecucion_servicios}}.
+
+Si ha recibido correctamente la notificación a través del correo electrónico,
+entonces el sistema de mailing estará funcionando correctamente. El siguiente
+paso es repetir el proceso de \textbf{notificación con la aplicación
+  Android}. Deberá instalar la aplicación en su móvil y acceder a la
+misma. Seguidamente, desde la aplicación web deberá editar de nuevo el chequeo y
+restaurar el objetivo original (\texttt{uca.es}), además de activar la
+notificación a través de Android.
+
+Tras dos o tres minutos el sistema debería descubrir el cambio de estado y
+enviar las notificaciones, esta vez tanto por correo electrónico como por la
+aplicación Android. Si no recibe la notificación en su dispositivo móvil puede
+que haya algún problema en la configuración de las claves para Google Cloud
+Messaging. De nuevo, debería revisar la sección
+\textit{\nameref{subsec:ejecucion_servicios}} del manual de instalación.
+
+Si ha recibido la notificación correctamente, puede dar por terminada y
+\textbf{correcta} la verificación de la instalación.
 
 \section{Mejora del rendimiento}
 

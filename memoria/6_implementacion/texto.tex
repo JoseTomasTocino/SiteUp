@@ -86,31 +86,6 @@ para marcar los bloques) y su extensibilidad (sobre todo gracias al uso de
 métodos \textit{mágicos} y metaprogramación) han hecho que el lenguaje sea muy
 popular y su uso en los últimos años se haya expandido enormemente.
 
-\subsubsection{Framework de desarrollo}
-
-El framework de desarrollo elegido es \textbf{Django}~\cite{django}, un
-proyecto de código abierto nacido en 2005. La meta fundamental de Django es
-facilitar la creación de sitios web complejos, haciendo especial hincapié en
-mantener un ritmo de desarrollo rápido y evitar la duplicidad de código. Así,
-gran parte del potencial de Django es la gran cantidad de funcionalidad que ya
-trae integrada, ya sea en el propio núcleo del framework o a través de
-\textit{apps} oficiales que se incluyen en la distribución oficial.
-
-Los elementos más destacables de Django son:
-
-\begin{itemize}
-\item Un sistema de mapeo objeto-relacional, que facilita enormemente el trabajo
-  con elementos de bases de datos a través de instancias de modelos.
-\item Un sistema de procesamiento de peticiones a través de vistas.
-\item Un despachador de URLs basado en expresiones regulares.
-\item Soporte para plantillas.
-\item Un sistema de autenticación extensible.
-\item Una interfaz de administración que se adapta dinámicamente a cualquier proyecto.
-\item Un sistema de comentarios.
-\item Soporte integrado contra numerosos tipos de ataques vía web, como
-  inyección SQL o cross-site scripting.
-\end{itemize}
-
 \subsubsection{Nivel de persistencia}
 
 \textbf{SQLite} es un sistema de gestión de bases de datos relacional de dominio público,
@@ -132,28 +107,6 @@ la misma base de datos sin problemas.
 En general, SQLite no suele ser la mejor opción en sistemas de producción muy
 extensos, pero para proyectos de menor envergadura su rendimiento es más que
 suficiente.
-
-\subsubsection{Gestión de tareas}
-
-Para la gestión de tareas de forma asíncrona se ha utilizado \textbf{Celery},
-una cola de tareas asíncrona enfocada a operaciones en tiempo real. Celery está
-escrito en Python, pero se integra fácilmente con cualquier otro sistema que
-implemente su interfaz. Las unidades de ejecución básicas, las \textit{tareas},
-se ejecutan de forma concurrente en uno o varios \textit{workers}. Las tareas
-pueden ejecutarse de forma asíncrona, en segundo plano, o de forma síncrona,
-haciendo que el flujo de ejecución espere hasta que el resultado de la tarea
-esté disponible.
-
-Celery se comunica mediante mensajes, normalmente utilizando un \textbf{broker}
-que media entre los clientes y los workers. Para iniciar una tarea, el cliente
-pone un mensaje en la cola del broker. Entonces, el broker entrega el mensaje al
-worker de Celery. La opción recomendada, y la que se ha utilizado en SiteUp, es
-usar \textbf{RabbitMQ} como broker de mensajes.
-
-RabbitMQ, y la mayoría de brókers de mensajes, implementan el protocolo
-\ac{AMQP}, un estándar abierto para enviar mensajes entre aplicaciones y
-organizaciones, siempre que éstas sean capaces de interactuar usando las
-interfaces del protocolo.
 
 \subsubsection{Herramientas de frontend}
 
@@ -223,7 +176,7 @@ que ofrece. Por suerte la evolución de los navegadores está permitiendo
 que el soporte nativo de JavaScript sea cada vez mejor, siendo progresivamente
 menos necesario el uso de bibliotecas \textit{unificadoras} como jQuery, aunque
 su utilidad a la hora de trabajar, por ejemplo, con efectos o con cargas
-asíncronas de datos (\ac{AJAX}) sigue siendo vigente.
+asíncronas de datos \ac{AJAX} sigue siendo vigente.
 
 Para el renderizado y muestra de las gráficas, en SiteUp se ha usado
 \textbf{D3.js}~\cite{d3}, una bibilioteca para la manipulación de documentos
@@ -912,7 +865,7 @@ particular a través de scripts de sincronización y migraciones.
 
 \begin{figure}[hbtp]
   \centering
-  \includegraphics[width=0.7\textwidth]{6_implementacion/diagrama-er-1}
+  \includegraphics[width=0.7\textwidth]{6_implementacion/diagrama-er-2}
   \caption{Diagrama ER de ejemplo 1}
   \label{fig:er-1}
 \end{figure}
@@ -925,15 +878,14 @@ siguiente manera:
 \begin{minted}{python}
 from django.db import models
 
-class Fabricante(models.Model):
-    nombre = models.CharField(max_length=100)
-    correo_electronico = models.EmailField(max_length=254)
+class CheckGroup(models.Model):
+    title = models.CharField(max_length=100)
 
-class Coche(models.Model):
-    modelo = models.CharField(max_length=100)
-    plazas = models.PositiveSmallIntegerField()
+class PingCheck(models.Model):
+    title = models.CharField(max_length=100)
+    check_interval = models.PositiveSmallIntegerField()
 
-    fabricante = models.ForeignKey(Fabricante)
+    group = models.ForeignKey(CheckGroup)
 \end{minted}
 
 Una vez definidos los modelos, la base de datos se generará utilizando el
@@ -946,49 +898,49 @@ $ python manage.py syncdb
 El comando \texttt{syncdb} \textit{sincroniza} la base de datos con los modelos,
 creando las tablas necesarias. Desde este momento, el ORM de Django ofrecerá una
 serie de comandos para hacer consultas de manera sencilla. Por ejemplo, para
-obtener todos los fabricantes:
+obtener todos los grupos de chequeos:
 
 \begin{minted}{python}
-fabricantes = Fabricante.objects.all()  
+grupos = CheckGroup.objects.all()
 \end{minted}
 
-Para obtener el fabricante llamado \textit{Seat}:
+Para obtener el grupo llamado \textit{Personal}:
 
 \begin{minted}{python}
-fabricante = Fabricante.objects.get(nombre="Seat") 
+grupo = CheckGroup.objects.get(title="Personal") 
 \end{minted}
 
 Es posible embeber condiciones algo más avanzadas. Por ejemplo, para obtener los
-coches con más de 3 plazas:
+chequeos que se ejecutan cada 3 minutos o menos:
 
 \begin{minted}{python}
-coches_grandes = Coche.objects.filter(plazas__gt=3)
+chequeos_frecuentes = PingCheck.objects.filter(check_interval__lte=3)
 \end{minted}
 
 Django detecta las relaciones entre modelos y provee mecanismos para navegar
 esas relaciones, por ejemplo.
 
 \begin{minted}{python}
-fabricante = Fabricante.objects.get(nombre="BMW") 
-coches_de_bmw = fabricante.coche_set.all()
+grupo = CheckGroup.objects.get(title="Personal") 
+chequeos_personales = grupo.pingcheck_set.all()
 
-leon = Coche.objects.get(modelo="Leon")
-fabricante_del_leon = Coche.fabricante
+chequeo = PingCheck.objects.get(title="Web personal")
+grupo = PingCheck.group
 \end{minted}
 
 Django automáticamente detecta las relaciones y genera las consultas necesarias
 para unir los datos de las tablas involucradas. Django también cumple con las
 restricciones de integridad que se impongan en la base de datos. En nuestro
-ejemplo, si borramos un fabricante, todos sus coches son borrados también de
-forma automática.
+ejemplo, si borramos un grupo, todos los chequeos del grupo son borrados también
+de forma automática.
 
 \begin{minted}{pycon}
->>> fabricante = Fabricante.objects.get(nombre="BMW") 
->>> fabricante.delete()
->>> coche_318 = Coche.objects.get(modelo="318i")
+>>> grupo = CheckGroup.objects.get(title="Personal") 
+>>> grupo.delete()
+>>> chequeo = PingCheck.objects.get(title="Web personal")
 Traceback (most recent call last):
  ...
-DoesNotExist: Coche matching query does not exist.
+DoesNotExist: PingCheck matching query does not exist.
 \end{minted}
 
 Este comportamiento puede configurarse para que no se produzca el borrado
@@ -997,16 +949,16 @@ configurables.
 
 Django también ofrece métodos para comprobar que los datos de un modelo son
 correctos antes de guardarlo en la base de datos. Por ejemplo, si intentamos
-introducir una dirección de correo inválida, el sistema nos alertará:
+introducir una dirección de correo inválida para un usuario, el sistema nos alertará:
 
 \begin{minted}{pycon}
->>> fabricante = Fabricante()
->>> fabricante.nombre = "Fab"
->>> fabricante.correo_electronico = "invalido"
->>> fabricante.full_clean()
+>>> usuario = User()
+>>> usuario.username = "Fab"
+>>> usuario.email = "invalido"
+>>> usuario.full_clean()
 Traceback (most recent call last):
  ...
-ValidationError: {'correo_electronico': [u'Enter a valid email address.']}
+ValidationError: {'email': [u'Enter a valid email address.']}
 \end{minted}
 
 
@@ -1019,14 +971,13 @@ la sección~\ref{subsec:entorno-aplicacion-web}.
 
 South compara el estado de la base de datos con los nuevos modelos, detecta los
 cambios y realiza las operaciones necesarias. Si, por ejemplo, añadiésemos un
-atributo \textit{fecha\_fundacion} al modelo \textit{Fabricante}, éste quedaría
+atributo \textit{description} al modelo \textit{CheckGroup}, éste quedaría
 así:
 
 \begin{minted}{python}
-class Fabricante(models.Model):
-    nombre = models.CharField(max_length=100)
-    correo_electronico = models.EmailField(max_length=254)
-    fecha_fundacion = models.DateField()
+class CheckGroup(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
   
 \end{minted}
 
@@ -1035,13 +986,13 @@ South para crear una \textbf{migración}:
 
 \begin{bashcode}
 $ python manage.py schemamigration aplicacion --auto  
- + Added field fecha_fundacion on main.Fabricante
-Created 0002_auto__add_field_fabricante_fecha_fundacion.py. 
+ + Added field description on main.CheckGroup
+Created 0002_auto__add_field_group_description.py. 
 
 $ python manage.py migrate aplicacion
 Running migrations for main:
- - Migrating forwards to 0002_auto__add_field_fabricante_fecha_fundacion.
- > main:0002_auto__add_field_fabricante_fecha_fundacion
+ - Migrating forwards to 0002_auto__add_field_group_description.
+ > main:0002_auto__add_field_group_description
  - Loading initial data for main.
 Installed 0 object(s) from 0 fixture(s)
 \end{bashcode}

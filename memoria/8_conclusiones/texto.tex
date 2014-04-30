@@ -18,7 +18,9 @@ sección \textit{\ref{sec:objetivos}}. En particular:
   \url{http://siteup.josetomastocino.com}.
 \item Se ha establecido un sistema de notificaciones con el que mantener
   informados a los usuarios tanto por correo electrónico como mediante una
-  aplicación móvil para el sistema operativo Android desarrollada a tal efecto.
+  aplicación móvil para el sistema operativo Android desarrollada a tal
+  efecto. Actualmente la aplicación se encuentra disponible en la forja de
+  código~\cite{forja} y en un futuro lo estará en el Google Play Store.
 \end{itemize}
 
 La compleción total de los objetivos funcionales también pone de manifiesto que
@@ -57,9 +59,8 @@ sería capaz de detectar el problema e informar en consecuencia.
 
 \subsection{Lecciones aprendidas}
 
-Si bien es cierto que el proyecto no es de una complejidad técnica muy alta, el
-\textbf{cúmulo de tecnologías} diferentes utilizadas en cada uno de los niveles
-de abstracción es sobrecogedor. Adquirir una \textbf{competencia} básica en
+La cantidad de tecnologías diferentes utilizadas en cada uno de los niveles de
+abstracción del proyecto es bastante grande. Adquirir una competencia básica en
 todas estas tecnologías es una tarea de una envergadura importante, y la
 correcta ejecución del sistema es comparable al mecanismo de un reloj, en el que
 todas las piezas deben funcionar de manera coordinada.
@@ -68,9 +69,8 @@ Desde la configuración de los numerosos servicios usados en el entorno de
 producción, al despliegue de la aplicación, pasando por el desarrollo de los
 módulos de chequeo, hasta llegar a la implementación del código de la capa de
 presentación, sin olvidar la implementación de la aplicación Android. En todos
-los niveles, en unos en mayor medida que en otros, se ha alcanzado una
-\textbf{soltura} suficiente para el desarrollo y posterior lanzamiento de un
-producto completo.
+los niveles, en unos en mayor medida que en otros, se ha alcanzado una soltura
+suficiente para el desarrollo y posterior lanzamiento de un producto completo.
 
 Al tratarse de un proyecto de ejecución continua en el que constantemente se
 están haciendo chequeos y enviando notificaciones, el flujo de \textit{feedback}
@@ -125,10 +125,10 @@ sondas, más allá del servidor de producción que está alquilado para el proye
 \subsection{Monetización}
 
 Para asegurar la supervivencia de cualquier proyecto es necesario contar alguna
-clase de \textbf{modelo de negocio} que sufrague los gastos que se generan. En
-el caso de SiteUp, la \textbf{monetización} se puede conseguir mediante la
-creación de niveles de cuentas de usuarios, que gocen de distintos
-beneficios. Por ejemplo:
+clase de \textbf{modelo de negocio} que sufrague los gastos que se
+generan~\cite{startupsFail}. En el caso de SiteUp, la \textbf{monetización} se
+puede conseguir mediante la creación de niveles de cuentas de usuarios, que
+gocen de distintos beneficios. Por ejemplo:
 
 \begin{itemize}
 \item Las cuentas gratuitas solo podrán crear un chequeo, y el tiempo entre
@@ -159,10 +159,9 @@ ejemplos de posibles chequeos a añadir en un futuro se podrían considerar:
   especiales o parámetros GET/POST.
 \end{itemize}
 
-El trabajo en este punto pasaría, básicamente, por encontrar una manera de
-modularizar satisfactoriamente los chequeos, de forma que fuese trivial añadir
-más tipos de chequeos sin necesidad de modificar código en todas las partes de
-la aplicación.
+El trabajo en este punto pasaría por codificar los nuevos modelos de forma
+similar a los que ya existen, que heredan de un modelo base que hace sencilla la
+extensión del sistema.
 
 \subsection{Ampliación de tipos de notificación}
 

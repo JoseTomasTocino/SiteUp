@@ -161,7 +161,33 @@ lista.
 Como se ha comentado, el worker del servidor de aplicaciones se comunica con la
 interfaz WSGI. Todas las aplicaciones desarrolladas en Django cuentan con un
 módulo \texttt{wsgi.py} que actúa como punto de entrada WSGI y que directamente
-pasa la petición al \textit{middleware} de Django que empieza el procesamiento.
+pasa la petición al \textit{middleware} del framework, que empieza el procesamiento.
+
+\paragraph{Framework web}
+
+El framework de desarrollo elegido es \textbf{Django}~\cite{django}, un
+proyecto de código abierto nacido en 2005. La meta fundamental de Django es
+facilitar la creación de sitios web complejos, haciendo especial hincapié en
+mantener un ritmo de desarrollo rápido y evitar la duplicidad de código. Así,
+gran parte del potencial de Django es la gran cantidad de funcionalidad que ya
+trae integrada, ya sea en el propio núcleo del framework o a través de
+\textit{apps} oficiales que se incluyen en la distribución oficial.
+
+Los elementos más destacables de Django son:
+
+\begin{itemize}
+\item Un sistema de mapeo objeto-relacional, que facilita enormemente el trabajo
+  con elementos de bases de datos a través de instancias de modelos.
+\item Un sistema de procesamiento de peticiones a través de vistas.
+\item Un despachador de URLs basado en expresiones regulares.
+\item Soporte para plantillas.
+\item Un sistema de autenticación extensible.
+\item Una interfaz de administración que se adapta dinámicamente a cualquier proyecto.
+\item Un sistema de comentarios.
+\item Soporte integrado contra numerosos tipos de ataques vía web, como
+  inyección SQL o cross-site scripting.
+\end{itemize}
+
 
 \paragraph{Middleware Django y aplicación}
 
@@ -245,26 +271,34 @@ Opcionalmente, las aplicaciones de Django pueden contar con ficheros
 individuales para otros elementos, como formularios, mánagers, migraciones,
 validadores, utilidades, filtros, procesadores de contexto, etcétera.
 
-\paragraph{Servidor de tareas asíncronas}
+\paragraph{Servidor de tareas asíncronas y bróker de mensajes}
 
 Habrá peticiones en SiteUp cuyo objetivo sea dar de alta chequeos. Éstos dan
-lugar a nuevas tareas que serán ejecutadas asíncronamente. Celery, el servidor
-de tareas que se utiliza, cuenta con una arquitectura de \textit{workers}
-similar a Gunicorn, que se reparten las tareas que son dadas de alta por
-SiteUp. Estas tareas se ejecutan de forma periódica. 
+lugar a nuevas tareas que serán ejecutadas asíncronamente. 
+
+Para la gestión de tareas de forma asíncrona se ha utilizado \textbf{Celery},
+una cola de tareas asíncrona enfocada a operaciones en tiempo real. Celery está
+escrito en Python, pero se integra fácilmente con cualquier otro sistema que
+implemente su interfaz. Las unidades de ejecución básicas, las \textit{tareas},
+se ejecutan de forma concurrente en uno o varios \textit{workers}. Las tareas
+pueden ejecutarse de forma asíncrona, en segundo plano, o de forma síncrona,
+haciendo que el flujo de ejecución espere hasta que el resultado de la tarea
+esté disponible.
+
+Celery se comunica mediante mensajes, normalmente utilizando un \textbf{broker}
+que media entre los clientes y los workers. Para iniciar una tarea, el cliente
+pone un mensaje en la cola del broker. Entonces, el broker entrega el mensaje al
+worker de Celery. La opción recomendada, y la que se ha utilizado en SiteUp, es
+usar \textbf{RabbitMQ} como broker de mensajes.
+
+RabbitMQ, y la mayoría de brókers de mensajes, implementan el protocolo
+\ac{AMQP}, un estándar abierto para enviar mensajes entre aplicaciones y
+organizaciones, siempre que éstas sean capaces de interactuar usando las
+interfaces del protocolo.
 
 Tras su conclusión, Celery se comunica con Django para dejar constancia de los
 resultados de esas tareas en forma de modelos de la base de datos.
 
-\paragraph{Broker de mensajes}
-
-Por debajo de Celery se encuentra el \textit{bróker} de mensajes, que implementa
-el ya mencionado estándar \ac{AMQP}. El bróker se encarga de almacenar las
-tareas y sus resultados en forma de mensajes en una cola. 
-
-En este proceso es necesario \textit{traducir} las tareas a un formato que sea
-almacenable y gestionable en una cola. En el caso de Django lo más habitual es
-utilizar Pickle, el estándar de facto para la serialización de objetos Python.
 
 \subsubsection{Aplicación Android}
 \label{subsec:arquitectura-logica-android}
