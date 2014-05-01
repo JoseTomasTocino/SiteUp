@@ -297,6 +297,9 @@ def get_dashboard_graph_data(request, check_type, check_id):
     except check_class.DoesNotExist:
         return HttpResponse('{}', content_type="application/json")
 
+    if check.group.owner != request.user:
+        raise Http404
+
     if check_type == "pingcheck":
         response_value = [(log.date.isoformat(), log.response_time) for log in check.logs.last_24_hours()]
     else:
