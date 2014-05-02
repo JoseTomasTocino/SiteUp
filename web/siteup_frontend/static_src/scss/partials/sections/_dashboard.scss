@@ -55,6 +55,8 @@ nav.controls {
 .check-down {
     background-color: rgba(mix(#b3d2d7, #f00, 30%), 0.1);
     color: #e83f40;
+
+
 }
 
 /* -------------------------------------------------------- */
@@ -200,7 +202,15 @@ nav.controls {
     shape-rendering: crispEdges;
 }
 
+.check-down {
+    .line {
+        stroke: #e83f40;
+    }
 
+    .button {
+        color: #e83f40;
+    }
+}
 
 #graphs{
     margin-bottom:2em

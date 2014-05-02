@@ -37,13 +37,15 @@ con el código de la aplicación. Primero, creamos una ubicación donde alojar e
 código desde la terminal:
 
 \begin{bashcode}
-$ mkdir /srv/siteup -P  
+$ mkdir /srv/siteup -p
 $ cd /srv/siteup
 \end{bashcode}
 
-Una vez ahí, clonamos el repositorio desde Github:
+Una vez ahí, instalamos el software de control de versiones \textbf{git} y
+clonamos el repositorio desde Github:
 
 \begin{bashcode}
+$ sudo apt-get install git
 $ git clone https://github.com/JoseTomasTocino/pfc-ii.git .  
 \end{bashcode}
 
@@ -51,12 +53,13 @@ $ git clone https://github.com/JoseTomasTocino/pfc-ii.git .
 
 Como se ha comentado previamente, el proyecto utiliza \textbf{virtualenv} y
 \textbf{virtualenvwrapper} para una gestión más limpia de las dependencias. La
-instalación de estos dos elementos es sencilla, en primer lugar se instalan los
-dos paquetes:
+instalación de estos dos elementos es sencilla, en primer lugar se instala el
+gestor de paquetes y los dos paquetes mencionados:
 
 \begin{bashcode}
-$ pip install virtualenv
-$ pip install virtualenvwrapper
+$ sudo apt-get install python-pip
+$ sudo pip install virtualenv
+$ sudo pip install virtualenvwrapper
 \end{bashcode}
 
 En segundo lugar, añadimos el código de \textit{bootstrapping} de
@@ -82,19 +85,60 @@ $ sudo apt-get install python-dev
 $ pip install -r web/requirements.txt 
 \end{bashcode}
 
-\subsection{Creación de la base de datos}
+El proceso de instalación de dependencias puede tardar entre 5 y 10 minutos aproximadamente.
 
-El siguiente paso es preparar la base de adtos. El siguiente comando genera la
-estructura básica de la base de datos para las tablas y aplica las migraciones
-existentes:
+\subsection{Instalación de credenciales}
+
+Antes de continuar es necesario dar valor a algunas variables de credenciales
+privadas que el proyecto necesita. En particular, se deben definir dos variables:
+
+\begin{itemize}
+\item \texttt{GMAIL\_PASS}, es la clave de la cuenta de correo utilizada para
+  enviar notificaciones. Se define en el fichero \texttt{web/siteup/settings/base.py}.
+\item \texttt{GCM\_API\_KEY}, es la clave de la API del servicio Google Cloud Messaging.
+\end{itemize}
+
+Para el proceso de instalación y en tiempo de desarrollo lo habitual es
+añadirlas \textbf{script de activación} del entorno virtual, de la siguiente
+manera:
 
 \begin{bashcode}
+$ cdvirtualenv
+$ cat >> bin/postactivate
+export GMAIL_PASS=yourpass
+export GCM_API_KEY=yourkey
+
+EOF
+\end{bashcode}
+
+Para la puesta en producción, esas variables se configurarán un poco más adelante.
+
+\subsection{Creación de la base de datos}
+
+El siguiente paso es preparar la base de adtos. Volvemos al directorio en el que
+estábamos antes y ejecutamos el siguiente comando, que genera la estructura
+básica de la base de datos para las tablas y aplica las migraciones existentes:
+
+\begin{bashcode}
+$ cd /srv/siteup
 $ python web/manage.py syncdb
-$ python web/migrate siteup_api  
+$ python web/manage.py migrate 
 \end{bashcode}
 
 Tras esto, la base de datos se habrá generado y se encontrará en el fichero\\
 \texttt{web/db/django-db.sqlite3}.
+
+\subsection{Disposición de ficheros estáticos}
+
+Es importante que los ficheros estáticos de todos los componentes de la
+aplicación se encuentren en un mismo lugar. Para ello, Django provee un comando
+que unifica todos los estáticos en la carpeta indicada.
+
+\begin{verbatim}
+$ python web/manage.py collectstatic --noinput
+\end{verbatim}
+
+
 
 \subsection{Instalación del servidor}
 
@@ -131,14 +175,9 @@ $ sudo apt-get install supervisor -y
 
 Tras esto, es necesario generar el fichero de configuración de
 supervisor. SiteUp integra una tarea que automáticamente genera este fichero por
-nosotros. Solo tendremos que indicar un par de variables, que nos pedirá por
-teclado. En particular:
-
-\begin{itemize}
-\item \texttt{GMAIL\_PASS}, es la clave de la cuenta de correo utilizada para
-  enviar notificaciones. Se define en el fichero \texttt{web/siteup/settings/base.py}.
-\item \texttt{GCM\_API\_KEY}, es la clave de la API del servicio Google Cloud Messaging.
-\end{itemize}
+nosotros. Solo tendremos que indicar las dos variables de credenciales que se
+han comentado previamente, simplemente introduciendo su valor por teclado cuando
+nos sea preguntado.
 
 Para generar el fichero de configuración utilizaremos el siguiente comando:
 
@@ -152,23 +191,7 @@ correctas. Tras ello, solo queda mover el fichero al lugar correcto y reiniciar
 el demonio de supervisor.
 
 \begin{bashcode}
-$ sudo mv web/supervisor-siteup.conf /etc/supervisord/conf.d  
-\end{bashcode}
-
-En entornos de producción, normalmente no se usará supervisor, ni gunicorn ni
-nginx, sino que utilizaremos el servidor integrado de Django. En esas
-circunstancias será necesario definir las variables mencionadas previamente de
-otra manera. La manera más habitual es añadirlas al \textbf{script de activación} del
-entorno virtual, de la siguiente manera:
-
-\begin{bashcode}
-$ cdvirtualenv
-$ cd bin
-$ cat >> postactivate
-export GMAIL_PASS=yourpass
-export GCM_API_KEY=yourkey
-
-EOF
+$ sudo mv web/supervisor-siteup.conf /etc/supervisor/conf.d  
 \end{bashcode}
 
 \subsection{Configuración del servidor frontal}
@@ -185,7 +208,7 @@ apropiadas. Vamos a suponer que SiteUp va a recibir las peticiones en el dominio
 
     # Static files
     location /static/ {
-        root /srv/siteup/web/siteup_frontend;
+        root /srv/siteup/web;
         try_files $uri $uri/ =404;
     }
 
@@ -207,7 +230,7 @@ Tras eso, activamos el fichero de configuración de la siguiente manera:
 
 \begin{bashcode}
 $ cd /etc/nginx/sites-enabled
-$ ln -s ../sites-available/siteup
+$ sudo ln -s ../sites-available/siteup
 \end{bashcode}
 
 Básicamente lo que hace ese fichero de configuración es revisar las peticiones
@@ -222,7 +245,7 @@ servicios y servidores. Primero, lanzamos el controlador supervisor, que a su
 vez lanzará el servidor dinámico gunicorn y el servidor de tareas celery:
 
 \begin{bashcode}
-$ sudo service supervisord reload  
+$ sudo service supervisor restart  
 \end{bashcode}
 
 Seguidamente, reiniciamos el servidor frontal para que pueda empezar a recibir
@@ -242,9 +265,20 @@ a fondo, revisando toda la funcionalidad. El itinerario que se recomienda es el
 siguiente. Si tiene dudas sobre cómo realizar alguna de las acciones descritas,
 revise el~\nameref{chap:manual_usuario}.
 
-Primero, pruebe que \textbf{registro y acceso de usuarios} funciona creando un
-nuevo usuario y accediendo a su cuenta. Si este procedimiento funciona, se habrá
-verificado que la instalación básica de la base de datos es correcta.
+El primer paso antes de nada es lanzar la batería de tests que viene incluida en
+el proyecto, mediante el comando
+
+\begin{verbatim}
+$ python web/manage.py test
+\end{verbatim}
+
+Todos los tests deberían funcionar correctamente. Si no lo hacen, es que ha
+habido un fallo en el sistema o en la aplicación.
+
+Una vez descartados esos problemas, pruebe que el \textbf{registro y acceso de
+  usuarios} funciona creando un nuevo usuario y accediendo a su cuenta. Si este
+procedimiento funciona, se habrá verificado que la instalación básica de la base
+de datos es correcta.
 
 El siguiente paso es \textbf{crear un grupo de chequeos} y posteriormente crear
 un chequeo de tipo Ping básico. Se recomienda utilizar alguna web conocida como
@@ -286,7 +320,30 @@ Messaging. De nuevo, debería revisar la sección
 Si ha recibido la notificación correctamente, puede dar por terminada y
 \textbf{correcta} la verificación de la instalación.
 
-\section{Mejora del rendimiento}
+\section{Problemas habituales}
+
+\subsection{Activación de nginx}
+
+A menudo, al instalar la configuración de nginx y reiniciar el servicio aparece el siguiente error:
+
+\begin{verbatim}
+nginx: [emerg] could not build the server_names_hash, you should increase server_names_hash_bucket_size: 32
+\end{verbatim}
+
+Al parecer, nginx está configurado por defecto para usar subdominios de 32
+caracteres como máximo. Si su dominio tiene más caracteres, deberá editar el
+fichero \texttt{/etc/nginx/nginx.conf} y descomentar la siguiente línea dentro
+del bloque \texttt{http}:
+
+\begin{verbatim}
+server_names_hash_bucket_size 64;
+\end{verbatim}
+
+Tras eso, reinicie el servicio y el problema debería desaparecer.
+
+
+
+\subsection{Mejora del rendimiento}
 
 La configuración por defecto de \textbf{RabbitMQ} hace que consuma mucha memoria
 y puede llegar a resultar un problema en sistemas con recursos limitados, como

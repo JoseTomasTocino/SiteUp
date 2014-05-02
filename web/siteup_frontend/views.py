@@ -271,12 +271,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 if not check.is_active:
                     check.template_data.active_class = 'inactive'
 
-
                 # check.template_data.status = 0 if check.last_status and check.last_status.status == 0 else 1
-                # check.template_data.status_class = 'check-down' if check.template_data.status and check.template_data.status != 0 else ''
+                check.template_data.status_class = 'check-down' if check.template_data.status and check.template_data.status != 0 else ''
                 # check.template_data.active_class = 'inactive' if not check.is_active else ''
-
-                print check.title, check.last_status
 
         return context
 
