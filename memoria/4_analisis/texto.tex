@@ -41,6 +41,11 @@ chequeos.
 \item[Identificador Android] Identificador único del dispositivo Android del usuario.
 \end{description}
 
+\textbf{Relaciones}
+\begin{itemize}
+\item Un \textbf{usuario} puede crear \textbf{grupos de chequeos}.
+\end{itemize}
+
 \subsection{Grupo de chequeos}
 
 Representa a una agrupación de chequeos relacionados con los que operar de forma
@@ -49,6 +54,13 @@ conjunta.
 \begin{description}
 \item[Título] Título para identificar al grupo de chequeos.
 \end{description}
+
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Un \textbf{grupo de chequeos} pertenece a un \textbf{usuario}.
+\item Un \textbf{grupo de chequeos} agrupa un conjunto de \textbf{chequeos}.
+\end{itemize}
 
 \subsection{Chequeo}
 
@@ -61,6 +73,15 @@ Representa un chequeo o punto de vigilancia sobre un servicio remoto.
 \item[Notificar por correo] Indica si los cambios de estado del chequeo deben notificarse por correo electrónico.
 \item[Notificar por Android] Indica si los cambios de estado del chequeo deben notificarse por la aplicación Android.
 \end{description}
+
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Un \textbf{chequeo} pertenece a un \textbf{grupo}.
+\item Un \textbf{chequeo} lanza periódicamente \textbf{tareas de chequeo}.
+\item De la ejecución de un \textbf{chequeo} se generan \textbf{registros de chequeo}.
+\item De los cambios de estado en un \textbf{chequeo} se generan \textbf{registros de estado de chequeo}.
+\end{itemize}
 
 \subsection{Registro de chequeo}
 
@@ -77,6 +98,35 @@ Representa el resultado de la ejecución de un chequeo en un momento dado.
 \item[Información adicional] Datos extra en caso de que el estado no sea \textit{Up}.
 \end{description}
 
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Es generado por una \textbf{tarea de chequeo} y pertenece a un \textbf{chequeo}.
+\item Puede dar lugar al registro de un \textbf{estado de chequeo}.
+\end{itemize}
+
+
+\subsection{Estado de chequeo}
+
+Representa un cambio de estado de un chequeo, detectado tras analizar un registro de chequeo.
+
+\begin{description}
+\item[Fecha de inicio] La fecha y hora en la que el chequeo entró en este estado.
+\item[Fecha de fin] La fecha y hora en la que el chequeo salió de este estado.
+\item[Estado] Definición del estado del chequeo. El estado puede ser
+  \textit{Up}, que indica que el objetivo está funcionando; \textit{Down}, que
+  indica que el objetivo no está funcionando correctamente; y \textit{Error},
+  que indica que hubo un problema lanzando el chequeo.
+\item[Información adicional] Información adicional sobre el estado.
+\end{description}
+
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Un \textbf{estado de chequeo} pertenece a un \textbf{chequeo}, y se genera cuando en un \textbf{registro de
+    chequeo} y se detecta un cambio de estado.
+\end{itemize}
+
 \subsection{Chequeo - Ping}
 
 Representa un chequeo mediante paquetes ICMP.
@@ -89,6 +139,12 @@ Representa un chequeo mediante paquetes ICMP.
 \item[Tiempo máximo] Tiempo de respuesta máximo permitido.
 \end{description}
 
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Extiende a un \textbf{chequeo}
+\end{itemize}
+
 \subsection{Chequeo - Port}
 
 Representa un chequeo de un puerto en un servidor remoto.
@@ -99,6 +155,13 @@ Representa un chequeo de un puerto en un servidor remoto.
 \item[Contenido de respuesta] \textit{(opcional)} Cadena de caracteres que
   deberá estar presente en la respuesta obtenida de la máquina remota.
 \end{description}
+
+\textbf{Relaciones}
+
+\begin{itemize}
+\item Extiende a un \textbf{chequeo}
+\end{itemize}
+
 
 \subsection{Chequeo - DNS}
 
@@ -121,7 +184,11 @@ Representa un chequeo mediante peticiones HTTP sobre un host remoto.
   respuesta obtenida.
 \end{description}
 
+\textbf{Relaciones}
 
+\begin{itemize}
+\item Extiende a un \textbf{chequeo}
+\end{itemize}
 
 \section{Modelo de casos de uso}
 

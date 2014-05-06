@@ -376,6 +376,128 @@ provee el sistema operativo para acceder a las funciones del dispositivo y demá
 servicios, como la comunicación por red, acceso a datos del usuario, lectura y
 escritura de ficheros en el dispositivo, etcétera.
 
+\section{Diseño detallado de componentes}
+\label{sec:diseno-detallado-componentes}
+
+En esta sección se detalla el diseño concreto de algunos componentes de la
+aplicación, especificando las clases involucradas y el flujo de mensajes entre
+ellas.
+
+En particular, se han elegido el proceso de \textbf{lanzamiento y notificación
+  de un chequeo} por ser el que mayor importancia y complejidad tiene.
+
+\subsection{Lanzamiento y notificación de un chequeo}
+
+El proceso de lanzamiento y notificación de un chequeo es un proceso que
+involucra bastantes elementos y supone un componente esencial en la plataforma
+web. En la figura~\ref{fig:secuencia-check} se puede observar el flujo de
+mensajes entre los diferentes elementos.
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[angle=90, width=0.65\textwidth]{5_diseno/diag_secuencia_check}
+  \caption{Diagrama de secuencia del proceso de lanzamiento de un chequeo}    
+  \label{fig:secuencia-check}
+\end{figure}
+
+En particular, el proceso que se sigue es el siguiente. En primer lugar, desde
+el módulo \texttt{siteup/celery} se crea una app de \textbf{Celery}, que revisa
+los módulos de la aplicación y \textit{descubre} las tareas. En particular,
+encuentra tareas en los módulos \texttt{siteup\_checker/tasks} y
+\texttt{siteup\_checker/tasks\_notification}. 
+
+\begin{pythoncode}
+app = Celery('siteup')
+
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS) 
+\end{pythoncode}
+
+Este proceso se produce una vez al lanzar el servidor en
+producción, por lo que no se ha reflejado en el diagrama de secuencia.
+
+Una vez dadas de alta las tareas, Celery cuenta con un \textbf{scheduler} que
+ejecuta las tareas periódicas que haya encontrado en el proceso de
+descubrimiento anterior. Como se ha mencionado, las tareas de SiteUp se definen
+en los módulos \texttt{siteup\_checker/tasks} y
+\texttt{siteup\_checker/tasks\_notification}. Las tareas periódicas se definen
+en forma de función \textit{decorada} con una cabecera que indica su
+periodicidad, por ejemplo:
+
+\begin{pythoncode}
+@periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
+def enqueue_checks():
+    # ...  
+\end{pythoncode}
+
+Precisamente la tarea \texttt{enqueue\_checks} es la principal. Se encarga de
+revisar los chequeos dados de alta en el sistema y llamar al método
+\texttt{run\_check} de cada uno de ellos. Este método se define en la clase base
+\texttt{BaseCheck} de la que heredan todos los modelos, y delega cierta
+funcionalidad a cada check particular según su tipo. Una de las funciones
+comunes a todos los tipos de chequeo es llamar a la función
+\texttt{should\_run\_check}, que revisa si el chequeo debe ejecutarse o no
+atendiendo a varias razones:
+
+\begin{itemize}
+\item Si ha sido recién creado (se fuerza el chequeo).
+\item Tiempo desde el último chequeo (según la variable
+  \texttt{last\_log\_datetime}).
+\item Chequeo activado o desactivado (según la variable \texttt{is\_active} del
+  chequeo).
+\end{itemize}
+
+Si la verificación es positiva, el chequeo hace uso del módulo
+\texttt{siteup\_checker.monitoring}, que contiene los procedimientos que llevan
+a cabo las operaciones de chequeo, según el tipo. Por ejemplo, el chequeo
+mediante ping lo lleva a cabo la función \texttt{check\_ping} dentro del módulo
+\texttt{siteup\_checker.monitoring.ping}.
+
+El procedimiento de chequeo lleva a cabo el proceso según sea necesario, y
+devuelve un resultado que siempre cuenta con los siguientes campos:
+
+\begin{description}
+\item[valid] Booleano que indica si el chequeo se ha podido llevar a cabo o por
+  el contrario ha habido un error en el lanzamiento (un error del servidor de
+  despliegue, por ejemplo).
+\item[status] Entero que indica el estado del chequeo:
+  \begin{description}
+  \item[0] Chequeo válido, objetivo correcto.
+  \item[1] Chequeo válido, objetivo caído.
+  \item[2] Chequeo inválido.
+  \end{description}
+\item[status\_extra] Información adicional sobre el chequeo.
+\end{description}
+
+El resultado es devuelto al método \texttt{run\_check}, y éste se encarga de
+generar un registro de chequeo, creando una instancia del modelo
+\texttt{CheckLog} con la información obtenida. 
+
+Al crear el \texttt{CheckLog} se llama al método \texttt{update\_status} del
+chequeo. Éste se encarga de revisar los últimos registros generados. Si detecta
+que hay un cambio de estado (esto es, que el objetivo vigilado tenía previamente
+un estado y tras los últimos chequeos ha cambiado), se inicia el proceso de
+estado y notificación. En primer lugar, se crea una instancia de
+\texttt{CheckStatus}, que guarda información sobre el nuevo estado. 
+
+En segundo lugar, se lanza el proceso de notificación. Para ello, se llama al
+procedimiento \texttt{enqueue\_notifications} dentro del módulo
+\texttt{siteup\_checker.tasks\_notification}, que recibe el chequeo y el nuevo
+estado. Desde el procedimiento se llama a la función
+\texttt{send\_notification\_email}, que lee de la base de datos el email de
+usuario y envía la notificación por correo electrónico.
+
+También se llama a la función \texttt{send\_notification\_android}. Ésta, en
+primer lugar, lee de la base de datos la información del usuario, almacenada en
+el modelo \texttt{UserExtra}, y extra el número de registro del dispositivo, si
+hay alguno. Seguidamente, se genera la carga de datos (\textit{payload}) que se
+va a enviar a la aplicación mediante la función
+\texttt{prepare\_notification\_android}, y finalmente se envía a los servidores
+del servicio de Google Cloud Messaging, utilizando la clave de API establecida
+en la configuración (véase la sección
+\textit{\nameref{subsec:instalacion-credenciales}} del manual de instalación).
+
+Tras ello, el procedimiento de chequeo se habrá completado.
 
 \section{Diseño físico de datos}
 \label{sec:diseno-fisico-datos}
@@ -427,6 +549,13 @@ Sus principales campos son:
 \item \texttt{email} - Dirección de correo electrónico.
 \end{itemize}
 
+Relaciones:
+
+\begin{description}
+\item[Usuario - CheckGroup] 1:N, relación fuerte, el usuario es la entidad fuerte.
+\item[Usuario - UserExtra] 1:1, relación fuerte, el usuario es la entidad fuerte.
+\end{description}
+
 \subsection{UserExtra}
 
 Este modelo guarda información adicional sobre los usuarios, evitando así tener
@@ -441,10 +570,11 @@ Sus principales campos son:
   Android obtenido a través de Google Play Services.
 \end{itemize}
 
-Sus relaciones son:
-\begin{itemize}
-\item Cada instancia de \textit{UserExtra} pertenece a un \textit{User}.
-\end{itemize}
+Relaciones:
+
+\begin{description}
+\item[Usuario - UserExtra] 1:1, relación fuerte, el usuario es la entidad fuerte.
+\end{description}
 
 
 \subsection{CheckGroup}
@@ -455,11 +585,12 @@ chequeos. Todos los chequeos deben pertenecer a un grupo.
 El campo principal de este modelo es \texttt{title}, que guarda una cadena con
 el título del grupo.
 
-Sus relaciones son:
-\begin{itemize}
-\item Un \textit{CheckGroup} pertenece a un \textit{User}.
-\item Un \textit{CheckGroup} puede tener 0 o más chequeos.
-\end{itemize}
+Relaciones:
+
+\begin{description}
+\item[Usuario - CheckGroup] 1:N, relación fuerte, el usuario es la entidad fuerte.
+\item[CheckGroup - BaseCheck] 1:N, relación fuerte, el grupo es la entidad fuerte.
+\end{description}
 
 \subsection{BaseCheck}
 
@@ -486,12 +617,14 @@ Sus principales campos son:
 Las relaciones de este modelo (representadas en la base de datos a través de las
 tablas de las clases herederas son las siguientes:
 
-\begin{itemize}
-\item Un chequeo pertenece a un \textit{CheckGroup}.
-\item Un chequeo tiene 0 o más registros de chequeo (\textit{CheckLog}).
-\item Un chequeo tiene 0 o más registros de estado (\textit{CheckStatus}).
-\item Un chequeo tiene 0 o 1 registro de estado actual (\textit{CheckStatus}).
-\end{itemize}
+Relaciones:
+
+\begin{description}
+\item[CheckGroup - BaseCheck] 1:N, relación fuerte, el grupo es la entidad fuerte.
+\item[BaseCheck - CheckLog] 1:N, relación fuerte, el \textit{BaseCheck} es la entidad fuerte.
+\item[BaseCheck - CheckStatus] 1:N, relación fuerte, el \texttt{BaseCheck} es la entidad fuerte.
+\item[BaseCheck - CheckStatus] 1:1, relación fuerte, el \texttt{BaseCheck} es la entidad fuerte.
+\end{description}
 
 \subsection{DnsCheck}
 
@@ -573,9 +706,10 @@ Sus principales campos son:
 
 Sus relaciones son:
 
-\begin{itemize}
-\item Un \textit{CheckLog} pertenece a un chequeo.
-\end{itemize}
+\begin{description}
+\item[BaseCheck - CheckLog] 1:N, relación fuerte, el \textit{BaseCheck} es la entidad fuerte.
+\end{description}
+
 
 \subsection{CheckStatus}
 
@@ -602,9 +736,11 @@ Los campos principales de este modelo son:
 
 Sus relaciones son:
 
-\begin{itemize}
-\item Un \textit{CheckStatus} pertenece a un chequeo.
-\end{itemize}
+\begin{description}
+\item[BaseCheck - CheckLog] 1:N, relación fuerte, el \textit{BaseCheck} es la entidad fuerte.
+\item[BaseCheck - CheckStatus] 1:N, relación fuerte, el \texttt{BaseCheck} es la entidad fuerte.
+\item[BaseCheck - CheckStatus] 1:1, relación fuerte, el \texttt{BaseCheck} es la entidad fuerte. 
+\end{description}
 
 \subsection{Session}
 
