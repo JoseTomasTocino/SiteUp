@@ -38,11 +38,11 @@ class CheckStatusTestCase(TestCase):
         self.h1 = HttpCheck.objects.get()
 
         # There should 1 CheckLog and 1 CheckStatus associated to the Check
-        self.assertEqual(len(CheckStatus.objects.all()), 1)
-        self.assertEqual(len(CheckLog.objects.all()), 1)
+        self.assertEqual(CheckStatus.objects.count(), 1)
+        self.assertEqual(CheckLog.objects.count(), 1)
         self.assertIsNotNone(self.h1.last_status)
-        self.assertEqual(len(self.h1.statuses.all()), 1)
-        self.assertEqual(len(self.h1.logs.all()), 1)
+        self.assertEqual(self.h1.statuses.count(), 1)
+        self.assertEqual(self.h1.logs.count(), 1)
 
         # Change the target so now it fails
         self.h1.target='http://josetomastocinoasd.com'
@@ -50,20 +50,24 @@ class CheckStatusTestCase(TestCase):
 
         # Trigger the check enough times to raise a new CheckStatus
         for i in range(self.h1.consecutive_logs_for_failure):
-            self.assertEqual(len(CheckStatus.objects.all()), 1)
+            self.assertEqual(CheckStatus.objects.count(), 1)
             self.h1.run_check(force=True)
-            self.assertEqual(len(self.h1.logs.all()), i + 2)
+            self.assertEqual(self.h1.logs.count(), i + 2)
 
         logger.info(self.h1.consecutive_logs_for_failure)
 
         # Now there should be TWO CheckStatus objects
         self.h1 = HttpCheck.objects.get()
-        self.assertEqual(len(self.h1.statuses.all()), 2)
-        self.assertEqual(len(CheckStatus.objects.all()), 2)
+        self.assertEqual(self.h1.statuses.count(), 2)
+        self.assertEqual(CheckStatus.objects.count(), 2)
 
-        self.h1.delete()
-        self.assertEqual(len(CheckStatus.objects.all()), 0)
-        self.assertEqual(len(CheckLog.objects.all()), 0)
+        User.objects.get().delete()
+
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(CheckGroup.objects.count(), 0)
+        self.assertEqual(HttpCheck.objects.count(), 0)
+        self.assertEqual(CheckLog.objects.count(), 0)
+        self.assertEqual(CheckStatus.objects.count(), 0)
 
 
 
