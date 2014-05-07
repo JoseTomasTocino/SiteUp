@@ -1,0 +1,26 @@
+{
+  "name": "dragdealer",
+  "description": "Drag-based JavaScript component, embracing endless UI solutions",
+  "homepage": "http://skidding.github.io/dragdealer",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/skidding/dragdealer.git"
+  },
+  "main": "src/dragdealer.js",
+  "ignore": [
+    "demo/*",
+    "lib/*",
+    "index.html",
+    "sauce_connect.log*"
+  ],
+  "_release": "5cef36b6b6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "5cef36b6b68d47f5d09e471238c5cc64ece6ca2d"
+  },
+  "_source": "git://github.com/yahyaKacem/dragdealer.git",
+  "_target": "*",
+  "_originalSource": "dragdealer",
+  "_direct": true
+}

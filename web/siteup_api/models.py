@@ -170,6 +170,11 @@ class BaseCheck(models.Model):
         help_text=_("In minutes. How often the check should be triggered.")
     )
 
+    consecutive_logs_for_failure = models.PositiveSmallIntegerField(
+        default=2,
+        help_text=_("Number of consecutive checks to consider a status change.")
+    )
+
     notify_email = models.BooleanField(
         default=True,
         help_text=_("Notify changes of the status of this check via email.")
@@ -205,11 +210,11 @@ class BaseCheck(models.Model):
 
 
             # We'll only trigger the new status if there have been some consecutive logs with the same status
-            last_n_logs = self.logs.all().order_by('-date')[:settings.CONSECUTIVE_LOGS_FOR_FAILURE]
+            last_n_logs = self.logs.all().order_by('-date')[:self.consecutive_logs_for_failure]
             last_n_logs_statuses = (x.status for x in last_n_logs)
 
             # If the N last logs share the same status OR there was no previous status
-            if not self.last_status or (len(last_n_logs) == settings.CONSECUTIVE_LOGS_FOR_FAILURE and len(set(last_n_logs_statuses)) == 1):
+            if not self.last_status or (len(last_n_logs) == self.consecutive_logs_for_failure and len(set(last_n_logs_statuses)) == 1):
 
                 oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 

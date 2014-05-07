@@ -235,3 +235,26 @@ $(window).load(function()
     // Force show first tab
     $(".tabs-header a").eq(0).click();
 });
+
+$('.drag-number-widget').each(function(i, e) {
+    var theDealer = $(this)[0];
+    var $target = $("#" + $(this).data('target'));
+    var min = parseInt($(this).data('min'));
+    var max = parseInt($(this).data('max'));
+    var stepVal = parseInt($(this).data('steps'));
+
+    console.log("TARGET:", $target);
+    console.log("TARGET VAL:", $target.val());
+    var curVal = (parseInt($target.val()) - min)  / (max - min);
+
+    var d = new Dragdealer(theDealer, {
+        steps: stepVal,
+        animationCallback: function(x, y) {
+            var value = Math.round(min + x * (max - min));
+            $(theDealer).find('.handle').text(value);
+            $target.val(value);
+        }
+    });
+
+    d.setValue(curVal, 0, true);
+});

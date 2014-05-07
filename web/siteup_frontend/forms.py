@@ -158,34 +158,59 @@ class ChangePasswordForm(BaseForm):
 
 
 #############################################################################
+from django.utils.safestring import mark_safe
+
+class DragNumberWidget(forms.Widget):
+
+    def render(self, name, value, attrs=None):
+        print "VALUE", value
+
+        t = u"""
+        <div class="drag-number-widget dragdealer"
+            data-steps="{steps}"
+            data-max="{max}"
+            data-min="{min}"
+            data-target="{id}">
+          <div class="handle">drag me</div>
+          <input type="hidden" id="{id}" name="{name}" value="{value}">
+        </div>""".format(
+            name=name,
+            value=value,
+            id=attrs['id'],
+            min=self.attrs.get('min', 1),
+            max=self.attrs.get('max', 10),
+            steps=self.attrs.get('steps', 10))
+        return mark_safe(t)
 
 class CheckForm(BaseModelForm):
     class Meta:
         exclude = ['last_log_datetime', 'is_active', 'group']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4})
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'check_interval': DragNumberWidget(),
+            'consecutive_logs_for_failure': DragNumberWidget(),
         }
 
 class PingCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PingCheck
-        fields = ['target', 'title', 'description', 'check_interval', 'notify_email', 'notify_android', 'should_check_timeout', 'timeout_value']
+        fields = ['target', 'title', 'description', 'check_interval', 'consecutive_logs_for_failure', 'notify_email', 'notify_android', 'should_check_timeout', 'timeout_value']
 
 class DnsCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.DnsCheck
-        fields = ['title', 'description', 'target', 'record_type', 'resolved_address', 'check_interval', 'notify_email', 'notify_android']
+        fields = ['title', 'description', 'target', 'record_type', 'resolved_address', 'check_interval', 'consecutive_logs_for_failure','notify_email', 'notify_android']
 
 
 class PortCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.PortCheck
-        fields = ['title', 'description', 'target', 'target_port', 'response_check_string', 'check_interval', 'notify_email', 'notify_android']
+        fields = ['title', 'description', 'target', 'target_port', 'response_check_string', 'check_interval', 'consecutive_logs_for_failure','notify_email', 'notify_android']
 
 
 class HttpCheckForm(CheckForm):
     class Meta(CheckForm.Meta):
         model = models.HttpCheck
-        fields = ['title', 'description', 'target', 'status_code', 'content_check_string', 'check_interval', 'notify_email', 'notify_android']
+        fields = ['title', 'description', 'target', 'status_code', 'content_check_string', 'check_interval', 'consecutive_logs_for_failure','notify_email', 'notify_android']
 
 
