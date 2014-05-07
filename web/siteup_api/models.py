@@ -208,7 +208,6 @@ class BaseCheck(models.Model):
         # If status has changed since last time (or there's no previous status)
         if not self.last_status or self.last_status.status != check_log.status:
 
-
             # We'll only trigger the new status if there have been some consecutive logs with the same status
             last_n_logs = self.logs.all().order_by('-date')[:self.consecutive_logs_for_failure]
             last_n_logs_statuses = (x.status for x in last_n_logs)
@@ -216,7 +215,11 @@ class BaseCheck(models.Model):
             # If the N last logs share the same status OR there was no previous status
             if not self.last_status or (len(last_n_logs) == self.consecutive_logs_for_failure and len(set(last_n_logs_statuses)) == 1):
 
-                oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
+                oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(
+                    self.title,
+                    self.pk,
+                    check_log.status,
+                    self.last_status.status if self.last_status else "unknown"))
 
                 # Save the new CheckStatus
                 s = CheckStatus()

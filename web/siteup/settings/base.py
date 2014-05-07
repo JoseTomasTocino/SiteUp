@@ -128,13 +128,13 @@ LOGGING = {
     'loggers': {
         'operations': {
             'handlers': ['operations_file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False
         },
 
         'debugging': {
             'handlers': ['debug_file', 'console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False
         },
 

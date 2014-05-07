@@ -26,6 +26,7 @@ class CheckStatusTestCase(TestCase):
         self.h1 = HttpCheck.objects.create(
             title='HTTP Test 1',
             group=g,
+            consecutive_logs_for_failure=4,
             target='http://josetomastocino.com'
         )
 
@@ -48,10 +49,12 @@ class CheckStatusTestCase(TestCase):
         self.h1.save()
 
         # Trigger the check enough times to raise a new CheckStatus
-        for i in range(settings.CONSECUTIVE_LOGS_FOR_FAILURE):
+        for i in range(self.h1.consecutive_logs_for_failure):
             self.assertEqual(len(CheckStatus.objects.all()), 1)
             self.h1.run_check(force=True)
             self.assertEqual(len(self.h1.logs.all()), i + 2)
+
+        logger.info(self.h1.consecutive_logs_for_failure)
 
         # Now there should be TWO CheckStatus objects
         self.h1 = HttpCheck.objects.get()
