@@ -46,6 +46,9 @@ class UserExtra(models.Model):
         null=True
     )
 
+    def __unicode__(self):
+        return u"Extra info for user {name} ({email})".format(name=self.user.username, email=self.user.email)
+
 
 ####################################################################################
 # Log related models
@@ -128,6 +131,12 @@ class CheckStatus(models.Model):
     # This is using a custom Model Manager
     objects = managers.CheckStatusManager()
 
+    def __unicode__(self):
+        if self.check is None:
+            return u"Orphan CheckStatus, status {status}".format(status=self.status)
+        else:
+            return u"CheckStatus for check '{check}', status {status}".format(check=self.check.title, status=self.status)
+
     def get_date_start(self):
         return self.date_start.isoformat()
 
@@ -139,6 +148,9 @@ class CheckStatus(models.Model):
 
     def get_duration(self):
         return timedelta_to_string(self.date_end - self.date_start + timedelta(seconds=1))
+
+    class Meta:
+        verbose_name_plural=u'Check statuses'
 
 
 ####################################################################################
@@ -524,7 +536,7 @@ class DnsCheck(BaseCheck):
         log.save()
 
     def __unicode__(self):
-        return _("DNS check to {}, register type '{}' should resolve to {}").format(self.target, self.record_type, self.resolved_address)
+        return _("DNS check to {}, record type '{}' should resolve to {}").format(self.target, self.record_type, self.resolved_address)
 
     class Meta:
         verbose_name = _("dns check")

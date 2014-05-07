@@ -30,7 +30,7 @@ class CheckStatusTestCase(TestCase):
             target='http://josetomastocino.com'
         )
 
-    def test_check_status_created(self):
+    def test_check_status_created_and_deleted(self):
         # Run check for first time
         self.h1.run_check(force=True)
 
@@ -60,5 +60,10 @@ class CheckStatusTestCase(TestCase):
         self.h1 = HttpCheck.objects.get()
         self.assertEqual(len(self.h1.statuses.all()), 2)
         self.assertEqual(len(CheckStatus.objects.all()), 2)
+
+        self.h1.delete()
+        self.assertEqual(len(CheckStatus.objects.all()), 0)
+        self.assertEqual(len(CheckLog.objects.all()), 0)
+
 
 

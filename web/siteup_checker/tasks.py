@@ -51,7 +51,7 @@ def enqueue_checks():
     logger.info(u"Enqueued %i checks" % len(active_checks))
 
 
-@periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
+@periodic_task(run_every=crontab(hour="*", minute="10", day_of_week="*"))
 def remove_old_logs():
     """
     Removes old CheckLog and CheckStatus objects
@@ -80,11 +80,18 @@ def remove_old_logs():
 
     statuses.delete()
 
+    # Delete orphan CheckStatuses. Don't know why they appear...
+    [x.delete() for x in CheckStatus.objects.all() if x.check is None]
+
+    [x.delete() for x in CheckLog.objects.all() if x.check is None]
+
+
+
 
 @periodic_task(run_every=crontab(hour="*", minute="*/10", day_of_week="*"))
 def collapse_logs():
     """
-    Collapses (averages) old enough logs.
+    Collapses (averages) old logs.
     """
 
     logger.info(u"Issued COLLAPSE_LOGS task")
