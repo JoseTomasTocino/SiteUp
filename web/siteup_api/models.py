@@ -569,3 +569,20 @@ class CheckGroup(models.Model):
         for check_type in CHECK_TYPES:
             check_type.objects.filter(group=self).update(is_active=False)
 
+
+
+################################################################
+# SIGNALS
+
+# There seems to be a bug when you delete an object. Django fails to delete
+# cascade objects related through a GenericForeignKey. Adding an empty signal
+# receiver seems to fix it. WAT?
+#
+# http://stackoverflow.com/questions/23528296/djangos-content-type-framework-does-not-trigger-cascade-delete
+
+from django.db.models.signals import pre_delete, post_delete
+from django.dispatch import receiver
+
+@receiver(pre_delete)
+def pre_delete_receiver(**kwargs):
+    pass
