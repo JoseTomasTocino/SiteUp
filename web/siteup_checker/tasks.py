@@ -15,6 +15,7 @@ from itertools import groupby
 
 from django.conf import settings
 
+
 @app.task
 def run_check(x):
     """
@@ -22,6 +23,7 @@ def run_check(x):
     """
 
     x.run_check()
+
 
 def enqueue_check(x):
     """
@@ -84,8 +86,6 @@ def remove_old_logs():
     [x.delete() for x in models.CheckStatus.objects.all() if x.check is None]
 
     [x.delete() for x in models.CheckLog.objects.all() if x.check is None]
-
-
 
 
 @periodic_task(run_every=crontab(hour="*", minute="*/10", day_of_week="*"))
@@ -158,7 +158,7 @@ def collapse_logs():
                 max_response_time = max((x.response_time for x in current_interval_logs))
 
                 # Build new time zeroing out the second digit of the minutes and the seconds
-                new_date = datetime.datetime.strptime( current_interval + "0:00", "%Y-%m-%dT%H:%M:%S" )
+                new_date = datetime.datetime.strptime(current_interval + "0:00", "%Y-%m-%dT%H:%M:%S")
 
                 # Save the new information in the first CheckLog of the interval
                 cl = current_interval_logs[0]
@@ -174,25 +174,3 @@ def collapse_logs():
 
                 # Reset the counter
                 current_interval_start = i
-
-
-
-
-"""
-
-Launch celery beat using:
-
-    celery beat -A siteup -l info
-
-And the worker using:
-
-    celery worker -A siteup -l info
-
-You can do it all in one single step using
-
-    celery worker -B -A siteup -l info
-
-More processes can be launched in a worker using -c 16
-"""
-
-

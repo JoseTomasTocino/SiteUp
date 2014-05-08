@@ -1,10 +1,10 @@
 import os
-
+import requests
+import json
 import logging
+
 logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
-
-import requests, json
 
 from siteup.celery import app
 
@@ -20,6 +20,7 @@ from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.template.defaultfilters import truncatechars
 from django.core.urlresolvers import reverse
+
 
 def enqueue_notification(check, check_status):
     """
@@ -56,7 +57,7 @@ def send_notification_email(check, check_status):
         "check_name": check.title,
         "new_status": "DOWN" if check_status.status != 0 else "UP",
         "status_date": check_status.date_start,
-        "check_details": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
+        "check_details": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk': check.pk, 'type': check.type_name()})]),
     })
 
     message_text = strip_tags(message_html)
@@ -84,7 +85,7 @@ def prepare_notification_android(check, check_status=None):
 
     content = {
         "message": message,
-        "url": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
+        "url": ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk': check.pk, 'type': check.type_name()})]),
     }
 
     send_notification_android(device_id, content)
@@ -109,6 +110,7 @@ def send_notification_android(device_id, content):
     }
 
     r = requests.post(GCM_ENDPOINT, data=json.dumps(data), headers=headers)
+
 
 @periodic_task(run_every=crontab(hour="0", minute="0", day_of_week="*"))
 def send_daily_reports():
@@ -150,15 +152,3 @@ def send_daily_reports():
         mail = EmailMultiAlternatives(subject, message_text, from_email, recipient_list)
         mail.attach_alternative(message_html, "text/html")
         mail.send()
-
-
-
-
-
-
-
-
-
-
-
-

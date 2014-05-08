@@ -1,11 +1,14 @@
+import dns.exception
+import dns.resolver
 import logging
 logger = logging.getLogger("debugging")
 
-import dns.exception, dns.resolver
-
 
 def check_dns(target, record_type, expected_address):
-    """Checks if a certain domain has a DNS record (of the proper type) that matches the expected address"""
+    """
+    Checks if a certain domain has a DNS record (of the proper type) that
+    matches the expected address.
+    """
 
     logger.info(u"Check DNS, target: %s, record_type: %s, expected_address: %s" % (target, record_type, expected_address))
 
@@ -33,13 +36,13 @@ def check_dns(target, record_type, expected_address):
 
     # On timeout, or any other problem, just return false
     except dns.resolver.NoAnswer as e:
-        return_obj['valid'] = False # TODO
+        return_obj['valid'] = False
 
     except dns.resolver.NXDOMAIN as e:
-        return_obj['valid'] = False # TODO
+        return_obj['valid'] = False
 
     except dns.resolver.DNSException as e:
-        return_obj['valid'] = False # TODO
+        return_obj['valid'] = False
 
     except Exception, e:  # TODO: add the proper exception type
         return_obj['valid'] = False

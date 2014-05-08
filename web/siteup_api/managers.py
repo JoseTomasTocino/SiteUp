@@ -5,6 +5,7 @@ logger = logging.getLogger("debugging")
 from django.db import models
 from django.db.models import Q
 
+
 class CheckStatusManager(models.Manager):
     """
     Manager for CheckStatus model.
@@ -60,10 +61,8 @@ class CheckLogManager(models.Manager):
         ret = CheckLogManager._with_extra(q)
         return ret
 
-
-
     @staticmethod
-    def _with_extra (q):
+    def _with_extra(q):
         """
         Computes and returns the average, min and max response time within the received CheckLog QuerySet.
         """
@@ -81,13 +80,12 @@ class CheckLogManager(models.Manager):
         # Return empty values if there are no good logs
         if q_len == 0:
             return {
-                'objs' : q,
+                'objs': q,
                 'avg_status': avg_status,
                 'avg_response_time': '',
                 'max_response_time': '',
                 'min_response_time': ''
             }
-
 
         # Isolate response times
         resp_times = [int(x.response_time) for x in q_ok]
@@ -96,11 +94,9 @@ class CheckLogManager(models.Manager):
         avg_response_time = sum(resp_times) / q_len
 
         return {
-            'objs' : q,
+            'objs': q,
             'avg_status': avg_status,
             'avg_response_time': avg_response_time,
             'max_response_time': max(resp_times),
             'min_response_time': min(resp_times)
         }
-
-

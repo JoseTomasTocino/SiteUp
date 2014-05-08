@@ -2,8 +2,10 @@ import socket
 import logging
 logger = logging.getLogger("debugging")
 
-def check_port(host, port_number, content = None):
+
+def check_port(host, port_number, content=None):
     logger.info(u"Port check, host: %s, port: %s, content: '%s'" % (host, port_number, content))
+
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(10)
 
@@ -12,19 +14,20 @@ def check_port(host, port_number, content = None):
         result = s.connect_ex((host, port_number))
     except Exception as e:
         logger.error(u"Error: %s" % e)
-        return { 'valid': False }
+        return {'valid': False}
 
     logger.info(u"Port check, connection errno: %i" % result)
 
     if result == 0:
-        ret_obj = { 'status_ok': True, 'valid': True }
+        ret_obj = {'status_ok': True, 'valid': True}
 
         if content:
             try:
                 recv_content = s.recv(512)
+
             except Exception as e:
                 logger.error(u"Error: %s" % e)
-                return { 'valid': False }
+                return {'valid': False}
 
             logger.info(u"Received: %s" % recv_content)
 
@@ -34,4 +37,4 @@ def check_port(host, port_number, content = None):
         return ret_obj
 
     else:
-        return { 'valid': False }
+        return {'valid': False}

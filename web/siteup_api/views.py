@@ -1,4 +1,5 @@
-import json, logging
+import json
+import logging
 logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
@@ -10,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import *
 from django.core.urlresolvers import reverse
+
 
 class CSRFExemptMixin(object):
     """
@@ -66,7 +68,7 @@ class LoginView(CSRFExemptMixin, View):
                     'title': check.title,
                     'description': check.description,
                     'status': 0 if check.last_status and check.last_status.status == 0 else 1,
-                    'detail_url': ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk':check.pk, 'type':check.type_name()})]),
+                    'detail_url': ''.join([settings.BASE_URL, reverse("view_check", kwargs={'pk': check.pk, 'type': check.type_name()})]),
                 })
 
             response['groups'].append(group_info)

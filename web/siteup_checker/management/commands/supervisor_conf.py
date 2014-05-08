@@ -1,7 +1,11 @@
+import sys
+import os
+import os.path
+import getpass
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
-import sys
-import os, os.path, getpass
+
 
 class Command(BaseCommand):
     help = 'Outputs the contents for the supervisor configuration file'

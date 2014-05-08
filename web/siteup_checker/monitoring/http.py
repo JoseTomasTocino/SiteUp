@@ -1,7 +1,7 @@
+import requests
 import logging
 logger = logging.getLogger("debugging")
 
-import requests
 
 def check_http_header(target, status_code=200):
     """Checks if a certain http URL returns the correct status code."""

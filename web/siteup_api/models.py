@@ -150,7 +150,7 @@ class CheckStatus(models.Model):
         return timedelta_to_string(self.date_end - self.date_start + timedelta(seconds=1))
 
     class Meta:
-        verbose_name_plural=u'Check statuses'
+        verbose_name_plural = u'Check statuses'
 
 
 ####################################################################################
@@ -226,7 +226,7 @@ class BaseCheck(models.Model):
             trigger_status_change = True
 
         # Check was down and has come up
-        elif self.last_status != new_status.status and new_status.status  == 0:
+        elif self.last_status.status != new_status.status and new_status.status == 0:
             trigger_status_change = True
 
         # There have been some consecutive logs with the DOWN status
@@ -241,7 +241,6 @@ class BaseCheck(models.Model):
             # If those N logs share the same state, trigger the change
             if len(last_n_logs) == self.consecutive_logs_for_failure and len(set(last_n_logs_statuses)) == 1:
                 trigger_status_change = True
-
 
         # If any of the previous conditions applies
         if trigger_status_change:
@@ -299,7 +298,7 @@ class BaseCheck(models.Model):
         return True
 
     def generic_url(self, action):
-        kwargs = { 'pk': self.id, 'type': self.type_name() }
+        kwargs = {'pk': self.id, 'type': self.type_name()}
         return reverse(action, kwargs=kwargs)
 
     def detail_url(self):
@@ -370,7 +369,7 @@ class PingCheck(BaseCheck):
                 # Check if response time is within boundaries
                 if self.should_check_timeout and int(check_result['avg']) > self.timeout_value:
                     log.status = 1
-                    log.status_extra = 'Ping max response time exceeded' # TODO: i18n these strings
+                    log.status_extra = 'Ping max response time exceeded'
 
             # Most pings were lost
             else:
@@ -404,7 +403,8 @@ class PingCheck(BaseCheck):
 class PortCheck(BaseCheck):
 
     target = models.CharField(
-        max_length=255, blank=False,
+        max_length=255,
+        blank=False,
         help_text=_("Should be a hostname or an IP"),
         validators=[validate_ip_or_hostname]
     )
@@ -415,7 +415,9 @@ class PortCheck(BaseCheck):
                     validators.MaxValueValidator(65535)]
     )
 
-    response_check_string = models.CharField(max_length=255, blank=True,
+    response_check_string = models.CharField(
+        max_length=255,
+        blank=True,
         verbose_name=_("Check for string"),
         help_text=_("Optionally, you can check if the response contains a certain string.")
     )
@@ -462,7 +464,6 @@ class HttpCheck(BaseCheck):
         max_length=255, blank=True,
         verbose_name=_("Check for string"),
         help_text=_("Optionally, you can check if the response contains a certain string"))
-
 
     def run_check(self, force=False):
         if not self.should_run_check() and not force:
@@ -567,6 +568,7 @@ CHECK_TYPES = [DnsCheck, PingCheck, PortCheck, HttpCheck]
 
 ###############################################################
 
+
 class CheckGroup(models.Model):
     """Group of related checks"""
     title = models.CharField(max_length=65,
@@ -589,11 +591,9 @@ class CheckGroup(models.Model):
         for check_type in CHECK_TYPES:
             check_type.objects.filter(group=self).update(is_active=False)
 
-
-
 ################################################################
 # SIGNALS
-
+#
 # There seems to be a bug when you delete an object. Django fails to delete
 # cascade objects related through a GenericForeignKey. Adding an empty signal
 # receiver seems to fix it. WAT?
@@ -602,6 +602,7 @@ class CheckGroup(models.Model):
 
 from django.db.models.signals import pre_delete, post_delete
 from django.dispatch import receiver
+
 
 @receiver(pre_delete)
 def pre_delete_receiver(**kwargs):

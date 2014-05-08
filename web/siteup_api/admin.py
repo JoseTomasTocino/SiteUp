@@ -10,7 +10,6 @@ class UserExtraAdmin(admin.ModelAdmin):
 admin.site.register(UserExtra, UserExtraAdmin)
 
 
-
 class CheckLogAdmin(admin.ModelAdmin):
     list_display = ('status', 'get_check_type', 'get_check_target', 'get_check_owner')
     search_fields = ['check__group__owner']
@@ -85,6 +84,3 @@ admin.site.register(DnsCheck, DnsCheckAdmin)
 class CheckGroupAdmin(admin.ModelAdmin):
     pass
 admin.site.register(CheckGroup, CheckGroupAdmin)
-
-
-
