@@ -210,27 +210,29 @@ class BaseCheck(models.Model):
 
     last_status = models.ForeignKey('CheckStatus', blank=True, null=True, on_delete=models.SET_NULL)
 
-    def update_status(self, new_status):
+    def update_status(self, check_log):
         """
         After a check log, this updates the CheckStatus accordingly.
         """
 
         # Get last log's date
-        self.last_log_datetime = new_status.date
+        self.last_log_datetime = check_log.date
 
         # The conditions to trigger a status change three
         trigger_status_change = False
 
         # Check has just been created
         if not self.last_status:
+            oplogger.info(u"NEW STATUS BECAUSE no last_status")
             trigger_status_change = True
 
         # Check was down and has come up
-        elif self.last_status.status != new_status.status and new_status.status == 0:
+        elif self.last_status.status != check_log.status and check_log.status == 0:
+            oplogger.info(u"NEW STATUS BECAUSE it went up and was down")
             trigger_status_change = True
 
         # There have been some consecutive logs with the DOWN status
-        elif self.last_status != new_status.status:
+        elif self.last_status.status != check_log.status:
 
             # The number of previous logs to consider is defined by the user on a per-check basis
             last_n_logs = self.logs.all().order_by('-date')[:self.consecutive_logs_for_failure]
@@ -240,6 +242,7 @@ class BaseCheck(models.Model):
 
             # If those N logs share the same state, trigger the change
             if len(last_n_logs) == self.consecutive_logs_for_failure and len(set(last_n_logs_statuses)) == 1:
+                oplogger.info(u"NEW STATUS BECAUSE it went up and was down")
                 trigger_status_change = True
 
         # If any of the previous conditions applies
@@ -249,23 +252,23 @@ class BaseCheck(models.Model):
             oplogger.info(u"STATUS_CHANGE: {} ({}), new status is {}, last status was {}".format(
                 self.title,
                 self.pk,
-                new_status.status,
+                check_log.status,
                 self.last_status.status if self.last_status else "unknown"))
 
             # Save the new CheckStatus
             s              = CheckStatus()
-            s.status       = new_status.status
-            s.status_extra = new_status.status_extra
-            s.date_start   = new_status.date
+            s.status       = check_log.status
+            s.status_extra = check_log.status_extra
+            s.date_start   = check_log.date
             s.check        = self
             s.save()
 
             # If there was a previous status, update its date_end and close it, and issue notification
-            if self.last_status and self.last_status.status != new_status.status:
-                self.last_status.date_end = new_status.date
+            if self.last_status and self.last_status.status != check_log.status:
+                self.last_status.date_end = check_log.date
                 self.last_status.save()
 
-                oplogger.info(u"ENQUEUED_NOTIFICATION: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, new_status.status, self.last_status.status if self.last_status else "unknown"))
+                oplogger.info(u"ENQUEUED_NOTIFICATION: {} ({}), new status is {}, last status was {}".format(self.title, self.pk, check_log.status, self.last_status.status if self.last_status else "unknown"))
 
                 # Also send notification
                 enqueue_notification(self, s)

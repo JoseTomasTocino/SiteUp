@@ -89,4 +89,22 @@ class CheckStatusTestCase(TestCase):
         self.assertEqual(CheckStatus.objects.count(), 0)
 
 
+    def test_consecutive_positive(self):
+        self.assertEqual(self.h1.statuses.count(), 0)
+        self.assertIsNone(self.h1.last_status)
+        self.assertEqual(CheckStatus.objects.count(), 0)
 
+        self.h1.run_check(force=True)
+        self.h1 = HttpCheck.objects.get()
+        self.assertEqual(self.h1.statuses.count(), 1)
+        self.assertEqual(CheckStatus.objects.count(), 1)
+
+        self.h1.run_check(force=True)
+        self.h1 = HttpCheck.objects.get()
+        self.assertEqual(self.h1.statuses.count(), 1)
+        self.assertEqual(CheckStatus.objects.count(), 1)
+
+        self.h1.run_check(force=True)
+        self.h1 = HttpCheck.objects.get()
+        self.assertEqual(self.h1.statuses.count(), 1)
+        self.assertEqual(CheckStatus.objects.count(), 1)
