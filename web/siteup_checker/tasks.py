@@ -81,9 +81,9 @@ def remove_old_logs():
     statuses.delete()
 
     # Delete orphan CheckStatuses. Don't know why they appear...
-    [x.delete() for x in CheckStatus.objects.all() if x.check is None]
+    [x.delete() for x in models.CheckStatus.objects.all() if x.check is None]
 
-    [x.delete() for x in CheckLog.objects.all() if x.check is None]
+    [x.delete() for x in models.CheckLog.objects.all() if x.check is None]
 
 
 

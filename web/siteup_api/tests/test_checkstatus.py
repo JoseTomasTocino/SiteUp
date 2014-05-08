@@ -61,6 +61,19 @@ class CheckStatusTestCase(TestCase):
         self.assertEqual(self.h1.statuses.count(), 2)
         self.assertEqual(CheckStatus.objects.count(), 2)
 
+        # Fix the check
+        self.h1.target='http://josetomastocino.com'
+        self.h1.save()
+
+        # Launch the check, the CheckStatus creation should be immediate
+        self.h1.run_check(force=True)
+
+        # Count the elements
+        self.h1 = HttpCheck.objects.get()
+        self.assertEqual(self.h1.statuses.count(), 3)
+        self.assertEqual(CheckStatus.objects.count(), 3)
+
+        # Check proper deletion of related elements
         User.objects.get().delete()
 
         self.assertEqual(User.objects.count(), 0)
