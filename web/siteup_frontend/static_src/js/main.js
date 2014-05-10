@@ -46,21 +46,33 @@ function buildGraphD3(graphName, graphData) {
       ["%Y", function() { return true; }]
     ]);
 
-    // Init X scale
+    // Init X scale3
+    // d3.extent returns minimum and maximum
+
     x = d3.time.scale()
         .range([0, width])
         .domain(d3.extent(data, function(d) { return d[0]; }));
 
-    x.ticks(9);
+    //x.ticks(2);
 
     xAxis = d3.svg.axis()
             .scale(x)
             .tickFormat(format)
+            .ticks(8)
             .orient("bottom");
 
     // Init Y scale
     if (graphData['type'] == 'pingcheck') {
         yDomain = d3.extent(data, function(d) { return d[1]; });
+
+        // When the graph only has one value, the domain min and max are the same
+        // Artificially adding some "padding" keeps the graph cool
+
+        if (yDomain[0] == yDomain[1]) {
+            yDomain[0] -= 5;
+            yDomain[1] += 50;
+        }
+
     } else {
         yDomain = [-0.25, 1.25];
     }
@@ -68,12 +80,6 @@ function buildGraphD3(graphName, graphData) {
     y = d3.scale.linear()
         .range([height, 0])
         .domain(yDomain);
-
-    // Verify the timespan
-
-
-
-    console.log('DRAW');
 
     if (graphData['type'] == 'pingcheck') {
         // Init Y axis
@@ -242,9 +248,6 @@ $('.drag-number-widget').each(function(i, e) {
     var min = parseInt($(this).data('min'));
     var max = parseInt($(this).data('max'));
     var stepVal = parseInt($(this).data('steps'));
-
-    console.log("TARGET:", $target);
-    console.log("TARGET VAL:", $target.val());
     var curVal = (parseInt($target.val()) - min)  / (max - min);
 
     var d = new Dragdealer(theDealer, {
