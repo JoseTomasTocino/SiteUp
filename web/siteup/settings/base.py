@@ -66,7 +66,7 @@ if not os.path.isdir(db_folder):
 # LANGUAGE_CODE = 'es-es'
 LANGUAGE_CODE = 'en-US'
 
-TIME_ZONE = 'Europe/Madrid'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

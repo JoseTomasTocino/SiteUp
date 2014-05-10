@@ -3,11 +3,15 @@ from fabric.api import local, settings, abort, run, cd, env
 from fabric.contrib.console import confirm
 
 env.user = 'omegote'
-env.hosts = ['maquinita']
-
-code_dir = '/srv/siteup.josetomastocino.com/siteup'
+env_code_dirs = {
+    'maquinita': '/srv/siteup.josetomastocino.com/siteup',
+    'maquinita2': '/srv/siteup',
+}
+env.hosts = env_code_dirs.keys()
 
 def build_supervisor_conf():
+    code_dir = env_code_dirs[env.host]
+
     with cd(code_dir):
         with prefix('workon siteup'):
             run("web/manage.py supervisor_conf")
@@ -16,11 +20,15 @@ def build_supervisor_conf():
 
 
 def install():
+    code_dir = env_code_dirs[env.host]
+
     with cd(code_dir):
         with prefix('workon siteup'):
             run("mkdir -p logs")
 
 def deploy():
+    code_dir = env_code_dirs[env.host]
+
     with cd(code_dir):
         with prefix('workon siteup'):
             run("git checkout .")
@@ -33,6 +41,8 @@ def deploy():
 
 
 def pull():
+    code_dir = env_code_dirs[env.host]
+
     with cd(code_dir):
         with prefix('workon siteup'):
             run("git checkout .")
