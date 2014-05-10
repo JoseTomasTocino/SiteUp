@@ -16,14 +16,16 @@ def check_ping(target):
 
     try:
         # Launch ping process
-        process = subprocess.Popen(["ping", "-c3", "-w2", target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen(["ping", "-c3", "-W2", target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Get the output
         ping_raw_response, ping_raw_error = process.communicate()
 
     except Exception as e:
         # There was a problem executing the ping command, log the error
+        logger.error("PING PROCESS ERROR")
         logger.error(e)
+        logger.error("END PING PROCESS ERROR")
 
         return {'valid': False}
 
@@ -53,7 +55,10 @@ rtt .* = \s+                         # Separator
 
     # If it doesn't match (due to an error)
     if not results:
-        logger.error("PING ERROR" + ping_raw_response)
+        logger.error("PING OUTPUT ERROR, follows response and error output")
+        logger.error(ping_raw_response)
+        logger.error(ping_raw_error)
+        logger.error("END OF PING OUTPUT ERROR")
 
         # Most usual kind of error is bad host
         if "unknown host" in ping_raw_response:
