@@ -27,7 +27,7 @@ def check_ping(target):
         logger.error(e)
         logger.error("END PING PROCESS ERROR")
 
-        return {'valid': False}
+        return {'valid': False, 'error': "Couldn't launch process"}
 
     # Compile regular expression to parse ping's output
     matcher = re.compile(r"""
@@ -62,9 +62,9 @@ rtt .* = \s+                         # Separator
 
         # Most usual kind of error is bad host
         if "unknown host" in ping_raw_response:
-            return {'valid': False, 'error': 'unknown host'}
+            return {'valid': False, 'error': 'Unknown host'}
         else:
-            return {'valid': False}
+            return {'valid': False, 'error': 'Unknown error'}
 
     # Get fields
     results = results.groupdict()

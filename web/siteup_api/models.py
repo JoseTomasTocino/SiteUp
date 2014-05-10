@@ -384,10 +384,7 @@ class PingCheck(BaseCheck):
             log.status = 2
 
             # Check for most common type of error
-            if 'error' in check_result and check_result['error'] == 'unknown host':
-                log.status_extra = 'Incorrect host'
-            else:
-                log.status_extra = 'Problem launching Ping'
+            log.status_extra = check_result['error']
 
         logger.info('Save CheckLog, status %i, response_time %i, status_extra "%s"' % (log.status, log.response_time, log.status_extra))
         log.save()
