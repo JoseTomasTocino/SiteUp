@@ -4,20 +4,20 @@ logger = logging.getLogger("debugging")
 
 from django.core import validators
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class ValidateAnyOf(object):
-    """Receives a list of validators for a model field, and checks
-    if ANY of those validators passes. Raises ValidationError otherwise."""
+    """
+    Receives a list of validators for a model field, and checks
+    if ANY of those validators passes. Raises ValidationError otherwise.
+    """
 
     def __init__(self, validators, message=None):
         self.validators = validators
         self.message = message
 
     def __call__(self, value):
-        messages = []
-        params = {}
         errors = []
 
         for validator in self.validators:
@@ -55,16 +55,4 @@ def validate_hostname(hostname):
 validate_ip_or_hostname = ValidateAnyOf(validators=[validate_hostname, validators.validate_ipv46_address],
                                         message=_("Target should be a valid IP or hostname"))
 
-    # try:
-    #     # Check if it's an IP
-    #     validators.validate_ipv46_address(value)
-    #     target_ok = True
-    # except ValidationError:
-    #     # Check if it's a hostname
-    #     hostname_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-    #     target_ok = re.match(hostname_regex, value)
 
-    # if not target_ok:
-    #     raise ValidationError('Target should be an IP or a valid hostname')
-    # else:
-    #     raise ValidationError('lolwut ' + value)

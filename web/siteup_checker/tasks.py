@@ -7,11 +7,7 @@ from celery.decorators import periodic_task
 from siteup.celery import app
 from siteup_api import models
 
-from time import sleep
-from random import randrange
-
 import datetime
-from itertools import groupby
 
 from django.conf import settings
 

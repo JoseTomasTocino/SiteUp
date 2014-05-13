@@ -1,6 +1,7 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), '..'))
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.dirname(__file__)), '..'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -91,7 +92,8 @@ LOGGING = {
 
     'formatters': {
         'standard': {
-            'format': '%(levelname)s - %(filename)s:%(lineno)d - %(message)s'   # %(asctime)s -
+            # %(asctime)s -
+            'format': '%(levelname)s - %(filename)s:%(lineno)d - %(message)s'
         },
 
         'medium': {
@@ -139,15 +141,15 @@ LOGGING = {
         },
 
         'django': {
-            'handlers':['console'],
+            'handlers': ['console'],
             'propagate': True,
-            'level':'WARN',
+            'level': 'WARN',
         },
 
         'django.request': {
-            'handlers':['console'],
+            'handlers': ['console'],
             'propagate': True,
-            'level':'WARN',
+            'level': 'WARN',
         },
 
         'django.db.backends': {
@@ -156,8 +158,8 @@ LOGGING = {
             'propagate': False,
         },
 
-        '' : {
-            'handlers' : ['console'],
+        '': {
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False
         },
@@ -209,17 +211,18 @@ CHECKLOG_EXPIRATION_TIME = timedelta(days=30)
 # The same for CheckStatus objects
 CHECKSTATUS_EXPIRATION_TIME = timedelta(days=365)   # A year
 
-# # Each collapse level has:
-# # - ID
-# # - timedelta that indicates how old logs must be to be collapsed
-# # - timedelta that indicates the interval of logs to collapse
+# Each collapse level has:
+# - ID
+# - timedelta that indicates how old logs must be to be collapsed
+# - timedelta that indicates the interval of logs to collapse
 
 # CHECKLOG_COLLAPSE_LEVELS = (
-#     (1, timedelta(hours=24), timedelta(minutes=30)), # Collapse 1-minute interval to 30-minute-interval
-#     (2, timedelta(hours=7 * 24), timedelta(hours=2)) # Collapse 30-minute-interval to 2-hour-interval
+# (1, timedelta(hours=24), timedelta(minutes=30)), # Collapse 1-minute interval to 30-minute-interval
+# (2, timedelta(hours=7 * 24), timedelta(hours=2)) # Collapse 30-minute-interval to 2-hour-interval
 # )
 
-# In hours. Logs older than this will get first level collapsing (1 min -> 30 min)
+# In hours. Logs older than this will get first level collapsing (1 min ->
+# 30 min)
 CHECKLOG_COLLAPSE_TIME_1 = 24
 
 # CELERY Settings
@@ -243,6 +246,7 @@ INSTALLED_APPS += ('debug_toolbar',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
 
 def show_toolbar(request):
     if request.user and request.user.username == "jose":

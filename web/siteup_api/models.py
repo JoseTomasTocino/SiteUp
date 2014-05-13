@@ -3,17 +3,14 @@ logger = logging.getLogger("debugging")
 oplogger = logging.getLogger("operations")
 
 from itertools import chain
-import re
 from datetime import datetime, timedelta
 
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext, ugettext_lazy as _
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from django.core import validators
 
@@ -600,7 +597,7 @@ class CheckGroup(models.Model):
 #
 # http://stackoverflow.com/questions/23528296/djangos-content-type-framework-does-not-trigger-cascade-delete
 
-from django.db.models.signals import pre_delete, post_delete
+from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
 

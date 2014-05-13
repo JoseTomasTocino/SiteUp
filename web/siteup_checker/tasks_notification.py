@@ -12,14 +12,12 @@ from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 
 from django.contrib.auth.models import User
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.template.defaultfilters import truncatechars
-from django.core.urlresolvers import reverse
 
 
 def enqueue_notification(check, check_status):
@@ -52,7 +50,7 @@ def send_notification_email(check, check_status):
 
     from_email = "siteup.pfc@gmail.com"
     recipient_list = [check.group.owner.email]
-    subject = _('[SiteUp] Status report of "{}"').format(check.title[:30] + "...")
+    subject = '[SiteUp] Status report of "{}"'.format(check.title[:30] + "...")
     message_html = render_to_string('email_status_report.html', {
         "check_name": check.title,
         "new_status": "DOWN" if check_status.status != 0 else "UP",
@@ -109,7 +107,7 @@ def send_notification_android(device_id, content):
         "data": content
     }
 
-    r = requests.post(GCM_ENDPOINT, data=json.dumps(data), headers=headers)
+    requests.post(GCM_ENDPOINT, data=json.dumps(data), headers=headers)
 
 
 @periodic_task(run_every=crontab(hour="0", minute="0", day_of_week="*"))
@@ -145,7 +143,7 @@ def send_daily_reports():
         # Build the email
         from_email = "siteup.pfc@gmail.com"
         recipient_list = [user.email]
-        subject = _('[SiteUp] Daily status report')
+        subject = '[SiteUp] Daily status report'
         message_html = render_to_string('email_daily_report.html', context)
         message_text = strip_tags(message_html)
 

@@ -1,11 +1,13 @@
 from datetime import datetime
 
 from django.core import mail
+from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 
 from siteup_api.models import *
 from siteup_checker.tasks_notification import send_notification_email
+
 
 @override_settings(TEST_RUNNER='djcelery.contrib.test_runner.CeleryTestSuiteRunner')
 class TestEmailNotification(TestCase):
@@ -29,7 +31,7 @@ class TestEmailNotification(TestCase):
         )
 
         self.ls = CheckStatus.objects.create(
-            status = 1,
+            status=1,
             date_start=datetime.now(),
             check=self.h1
         )
@@ -47,5 +49,4 @@ class TestEmailNotification(TestCase):
         send_notification_email(self.h1, self.h1.last_status)
 
         self.assertEqual(len(mail.outbox), 1)
-
 
