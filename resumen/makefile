@@ -1,10 +1,11 @@
 NOM = resumen
 DOC = $(NOM).tex
 
-PDF = pdflatex
+PDF = pdflatex --shell-escape
 BIB = bibtex
-LATEX = latex
+LATEX = latex --shell-escape
 DVI = dvipdf
+
 
 # Por defecto: compila usando BibTeX para las referencias bibliográficas
 pdf-bib: 
