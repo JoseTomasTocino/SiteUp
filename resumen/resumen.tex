@@ -1,5 +1,7 @@
 \documentclass[a4paper,12pt]{article}
 
+\pdfminorversion=4
+
 \usepackage[left=2.5cm,top=2.5cm,right=2.5cm,bottom=2.5cm]{geometry}
 
 \usepackage[T1]{fontenc}
@@ -105,12 +107,6 @@
 
 % \vspace{0.5cm}
 
-
-
-
-
-\tableofcontents
-
 \section{Introducción}
 
 \subsection{Contexto y motivación}
@@ -144,12 +140,12 @@ que propone el proyecto \textbf{SiteUp}.
 \subsection{Objetivos}
 Los principales objetivos a alcanzar con \textbf{SiteUp} son los siguientes:
 
-\begin{figure}[hbt]
-  \centering
-  \includegraphics[width=0.3\textwidth]{logo}
-  \caption{Logotipo de SiteUp}
-  \label{fig:logotipo}
-\end{figure}
+% \begin{figure}[hbt]
+%   \centering
+%   \includegraphics[width=0.3\textwidth]{logo}
+%   \caption{Logotipo de SiteUp}
+%   \label{fig:logotipo}
+% \end{figure}
 
 \begin{itemize}
 
@@ -165,37 +161,40 @@ Los principales objetivos a alcanzar con \textbf{SiteUp} son los siguientes:
   recibir notificaciones instantáneas provenientes de la aplicación web con
   información de sus chequeos.
 
-\item Investigar y conocer los vectores de vigilancia usados habitualmente para
-  monitorizar servicios de Internet.
-\item Ampliar mis conocimientos sobre desarrollo web en general y las
-  tecnologías de \textit{back-end} en particular.
-\item Adquirir soltura en el uso del lenguaje de programación Python en entornos
-  web.
-\item Obtener una base de conocimientos sobre el desarrollo de aplicaciones
-  sobre la plataforma móvil Android.
-\item Utilizar un enfoque de análisis, diseño y codificación orientado
-  a objetos, de una forma lo más clara y modular posible, para
-  permitir ampliaciones y modificaciones sobre la aplicación por
-  terceras personas.
-\item Hacer uso de herramientas básicas en el desarrollo de software,
-  como son los sistemas de control de versiones para llevar
-  un control realista del desarrollo del software, así como hacer de
-  las veces de sistema de copias de seguridad.
-
 \end{itemize}
 
 \subsection{Planificación}
 El proyecto se ha desarrollado siguiendo un calendario basado en fases,
-utilizando un modelo de desarrollo iterativo incremental. El calendario
-planificado es visible en el diagrama de Gantt (figura~\ref{fig:gantt} en la
-página~\pageref{fig:gantt}).
+utilizando un modelo de desarrollo iterativo incremental. En la
+tabla~\ref{tab:estimacion_tiempo} se presenta a continuación una comparación por
+fases de los plazos estimados frente a los plazos reales tras la conclusión del
+proyecto.
 
-\begin{figure}[htp]
+\begin{table}[hbtp]
   \centering
-  \includegraphics[width=0.9\textwidth]{imagen_diagrama_gantt}
-  \caption{Diagrama Gantt}
-  \label{fig:gantt}
-\end{figure}
+  \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Fase} & \textbf{Plazo estimado} & \textbf{Plazo real} \\
+    \hline
+    Planificación & 4 días & 5 días \\
+    \hline
+    Aprendizaje preeliminar & 15 días & 13 días \\
+    \hline
+    Módulo de chequeo & 10 días & 14 días \\
+    \hline
+    Plataforma web & 30 dias & 38 días \\
+    \hline
+    Motor de tareas & 14 días & 12 días \\
+    \hline 
+    Aplicación Android & 21 días & 19 días \\
+    \hline
+    Edición de la documentación & 28 días & 18 días \\
+    \hline
+  \end{tabular}
+  \caption{Comparación de la estimación con los tiempos reales}
+  \label{tab:estimacion_tiempo}
+\end{table}
+
 
 \subsubsection{Primera iteración: adquisición de conocimientos y elicitación de requisitos}
 
@@ -258,14 +257,16 @@ plataforma móvil \textbf{Android}.
 
 \subsection{Plataforma web}
 
-El principal producto de SiteUp es la plataforma web de vigilancia, que ofrece
+El principal producto de SiteUp es la plataforma web de vigilancia, cuya
+pantalla principal puede verse en la figura~\ref{fig:detalle_dashboard}. Ofrece
 numerosas funcionalidades para los usuarios, previo registro en la aplicación en
 línea, a través de los \textbf{chequeos}, los elementos principales de la
-aplicación. 
+aplicación.
 
 Se trata de puntos de vigilancia de cuatro tipos distintos que permiten
-monitorizar multitud de aspectos distintos de un servicio web. A continuación se
-describen cada uno de los tipos de chequeo incluidos en el sistema.
+monitorizar multitud de aspectos distintos de un servicio en la web. A
+continuación se describen cada uno de los tipos de chequeo incluidos en el
+sistema.
 
 \begin{figure}[t]
   \centering
@@ -308,19 +309,21 @@ describen cada uno de los tipos de chequeo incluidos en el sistema.
 
 
 En \textbf{SiteUp}, el usuario puede crear chequeos de los tipos mencionados,
-indicando los datos detallados. Entre ellos se encuentra el \textbf{intervalo de
-  chequeo}, que expresa la frecuencia a la que debe ejecutarse el chequeo. Lo
-más habitual es utilizar un intervalo de un minuto (el mínimo disponible), de
-forma que el chequeo se ejecute lo más frecuentemente posible.
+indicando los datos a través de un formulario como el de la
+figura~\ref{fig:formulario_detalle_chequeo}. Entre los datos a incluir se
+encuentra el \textbf{intervalo de chequeo}, que expresa la frecuencia a la que
+debe ejecutarse el chequeo. Lo más habitual es utilizar un intervalo de un
+minuto (el mínimo disponible), de forma que el chequeo se ejecute lo más
+frecuentemente posible.
 
-Otra propiedad importante es la \textbf{sensibilidad} de un chequeo. Este valor
-permite al usuario establecer el número de chequeos necesarios para que el
-sistema considere que un chequeo está en un estado de error. Esto es útil, por
-ejemplo, al tratar con servidores que, a veces, dejan de responder
-momentáneamente sin llegar a estar fuera de línea. En esos casos se pone un
-nivel de sensibilidad de varios chequeos, de forma que el motor de
-\textbf{SiteUp} sólo se considere un estado de error si el sistema detecta que
-la máquina remota ha fallado varias veces consecutivas.
+Otra propiedad importante es la \textbf{sensibilidad}. Este valor permite al
+usuario establecer el número de comprobaciones necesarias para que el sistema
+considere que un chequeo está en un estado de error. Esto es útil, por ejemplo,
+al tratar con servidores que, a veces, dejan de responder momentáneamente sin
+llegar a estar fuera de línea. En esos casos se pone un nivel de sensibilidad de
+varios chequeos, de forma que el motor de \textbf{SiteUp} sólo se considere un
+estado de error si el sistema detecta que la máquina remota ha fallado varias
+veces consecutivas.
 
 Los chequeos pueden \textbf{activarse o desactivarse} de forma temporal. Esto es
 útil en situaciones en las que sea necesario hacer cambios en los detalles del
@@ -336,7 +339,8 @@ Por último, una vez que un chequeo se ha creado adecuadamente y está siendo
 ejecutado por la plataforma, \textbf{SiteUp} ofrece una \textbf{pantalla de
   detalle} con gráficas detalladas del estado del chequeo para las últimas 24
 horas, para la última semana y el último mes, con un informe detallado de los
-cambios de estado detectados.
+cambios de estado detectados. La figura~\ref{fig:detalle_chequeo} muestra una
+captura de la pantalla de detalle de un chequeo.
 
 \subsubsection{Otras funcionalidades}
 
@@ -386,9 +390,12 @@ Android, en la conocida como \textit{bandeja de notificaciones}. Éstas serán
 fácilmente identificables gracias al uso del logotipo de \textbf{SiteUp} y el
 texto informativo.
 
+En la figura~\ref{fig:cliente_android} se pueden observar algunas capturas del
+cliente para Android. 
+
 % \FloatBarrier
 
-\section{Diseño e implementación}
+\section{Desarrollo del sistema}
 
 \begin{figure}[htbp]
   \centering
@@ -431,8 +438,8 @@ continuación:
   \textbf{Celery}~\cite{celery} se encarga de listar y lanzar, de forma
   periódica, los chequeos que deban ejecutarse. Para ello, emite unas
   \textit{tareas} que son ejecutadas asíncronamente. El código para realizar los
-  chequeos se encuentra en el modularizado dentro del paquete
-  \texttt{siteup\_checker}, parte de \textbf{SiteUp}. Según el desenlace de cada
+  chequeos se encuentra modularizado dentro del paquete
+  \texttt{siteup\_checker}, parte de \textbf{SiteUp}. Según el resultado de cada
   chequeo, este mismo módulo se encarga de enviar notificaciones mediante correo
   electrónico o a la aplicación Android mediante el servicio \textbf{Google
     Cloud Messaging}~\cite{gcm}.
@@ -493,93 +500,61 @@ rtt .* = \s+                         # Separator
 results = matcher.match(ping_raw_response)
 \end{pythoncode}
 
+\subsection{Verificación y pruebas}
 
-% \section{Implementación}
-% Durante el desarrollo del proyecto surgieron numerosas cuestiones y decisiones
-% de implementación. A continuación se presenta una selección de las que más
-% interés han generado. En la memoria del proyecto se desarrollan en mayor
-% extensión.
+Para comprobar la correcta ejecución del software se han llevado a cabo varios
+procesos de verificación y baterías de pruebas a distintos niveles, tanto de
+manera autónoma como manualmente.
 
-% \subsection{Implementación del analizador básico}
-% La creación del analizador básico de notas era crucial para el buen transcurso
-% del resto del proyecto, por lo que fue uno de los objetivos que antes se
-% abordaron. El desarrollo se dividió en dos partes. Por un lado, había que
-% iniciar la captura de audio, lanzando el subsistema de sonido y empezando a
-% capturar datos. Por otro lado, se tenía que hacer el análisis de los datos
-% leídos para determinar qué nota se estaba tocando.
+\subsubsection{Pruebas funcionales}
 
-% La gestión del subsistema de audio se hizo mediante la \textit{Simple API} de
-% PulseAudio, la biblioteca de audio que se empleó en oFlute. Se utilizó para la
-% configuración y creación de un flujo de audio de entrada que permitiera captar,
-% muestrear y samplear el sonido del micrófono, ofreciéndolo en forma de datos en
-% punto flotante en un búffer.
+Se ha llevado a cabo un gran número de pruebas funcionales, que tratan de
+comprobar el correcto funcionamiento de las funciones del
+software. Principalmente se han realizado \textbf{pruebas unitarias} y
+\textbf{de integración} haciendo uso de las capacidades de testing que provee el
+framework de Django, apoyándose a la vez en servicios de terceros para
+comprobar, por ejemplo, el correcto funcionamiento de las conexiones HTTP.
 
-% El siguiente paso fue el análisis del audio capturado. Para ello, utilizamos la
-% Transformada Rápida de Fourier mediante su implementación en la biblioteca
-% KissFFT. De forma iterativa, se iba analizando el búffer de sonido cada vez que
-% éste se llenaba, dando lugar a una aproximación de la frecuencia fundamental
-% capturada y, por ende, la nota que se estaba interpretando con la flauta.
+Por otro lado, se fueron lanzando \textbf{pruebas de sistema} durante cada una
+de las iteraciones del desarrollo, utilizando un entorno virtual con un servidor
+de pruebas y software de \textit{throttling} de red para simular condiciones de
+red adversas que se asemejasen a entornos reales.
 
-% Una vez implementado y probado el sistema, se dió por bueno el analizador y se
-% siguió construyendo el resto de la aplicación
+Finalmente, se utilizó un servidor real, ubicado en Alemania, en el que se
+desplegó el producto para llevar a cabo \textbf{pruebas de aceptación}. El
+servidor ha permanecido online desde mediados del mes de febrero hasta la fecha,
+recibiendo las actualizaciones del software según se iba desarrollando y
+funcionando de manera regular.
 
-% \subsection{Carga y uso de fuentes TrueType en Gosu}
-% La biblioteca principal utilizada en la implementación del proyecto es Gosu, una
-% librería de desarrollo de videojuegos 2D, multi-plataforma y con numerosas
-% características. Desafortunadamente, no era posible utilizar fuentes TrueType
-% cuando se utilizaba la biblioteca en GNU/Linux.
+\subsubsection{Pruebas no funcionales}
 
-% Utilizando los conocimientos de otra popular biblioteca, SDL, se consiguió
-% implementar un sistema para cargar y usar fuentes TrueType en Gosu de forma
-% eficiente. Esta implementación finalmente acabó formando parte oficial de la
-% biblioteca Gosu.
+Con objeto de verificar aspectos del proyecto más allá de su funcionalidad, las
+pruebas no funcionales cubrieron bastantes frentes distintos. En particular:
 
-% \subsection{Animaciones dinámicas}
-% Una de las decisiones iniciales de diseño fue la de hacer la interfaz gráfica de
-% usuario lo más atractiva posible, intentando utilizar gráficos amigables y, en
-% la medida de lo posible, animaciones y efectos dinámicos.
+\begin{itemize}
+\item Se llevaron a cabo pruebas de \textbf{seguridad}, centradas principalmente
+  en verificar que la información de los usuarios y las áreas privadas del sitio
+  web eran seguras.
 
-% Con esto, se tornaba necesario crear un sistema de animaciones lo más versátil
-% posible, de forma que dotar a los elementos de la interfaz de movimiento fuera
-% un proceso sencillo. 
+\item Las pruebas de \textbf{fiabilidad} verificaron que la disponibilidad del
+  servicio era la correcta y que los chequeos se lanzaban dentro de un margen de
+  tiempo apropiado.
 
-% Para satisfacer este objetivo se ideó una serie de clases de animación que
-% permiten animar las propiedades de los objetos de manera muy sencilla. Mediante
-% el uso de las ecuaciones de animación de Robert Penner, el sistema creado cuenta
-% con un gran número de opciones y diferentes formas de movimiento, según el tipo
-% de función utilizada para calcular los valores: cuadrático, cúbico, etcétera.
+\item Mediante pruebas de \textbf{accesibilidad} se comprobó que la plataforma
+  web era accesible desde cualquier clase de dispositivo móvil con acceso a
+  internet. Así, se llegó a probar la funcionalidad desde más de 8 dispositivos
+  distintos, obteniendo resultados favorables en todos los casos.
 
-% Gracias a este sistema, la interfaz de usuario de oFlute cuenta con un gran
-% dinamismo y vistosidad.
+\end{itemize}
 
-% \subsection{Gestión de estados}
-% La gestión de estados es uno de los retos principales a la hora de desarrollar
-% un videojuego. Es necesario contar un sistema de gestión de estados robusto, que
-% permita pasar de un estado a otro de forma sencilla, sin errores, y manteniendo
-% información entre transiciones si fuera necesario.
+\subsubsection{Verificación de la calidad del código}
 
-% En el caso de oFlute, se creó un gestor de estados que permitió modularizar
-% fácilmente el programa, haciendo una clara división entre secciones y
-% facilitando la transición entre ellas. Además, mediante pruebas exhaustivas y el
-% uso de herramientas de depuración, el gestor está implementado de forma que la
-% carga y descarga de estados sea limpia y sin errores, evitando fugas de memoria.
-
-% \subsection{Internacionalización}
-% Durante el desarrolllo del proyecto surgió la necesidad de preparar el proyecto
-% para su traducción. Inicialmente se optó por utilizar un sistema propio de
-% traducción, basado en un script en Python y en una pequeña clase que generaba un
-% diccionario según el idioma elegido. Sin embargo, esta opción resultó
-% ineficiente y, sobre todo, alejada del resto de soluciones estándar a la hora de
-% traducción de proyectos. 
-
-% Por ello, se decidió investigar sobre las tecnologías de traducción más
-% utilizadas en el panorama del software libre, y finalmente se optó por
-% \textbf{GNU Gettext}~\cite{refgettext}. Para afianzar los conocimientos y
-% facilitar el aprendizaje a otros desarrolladores, se editó un conciso manual
-% sobre internacionalización de proyectos, presente como apéndice en la memoria del proyecto fin de
-
-
-
+En la medida de lo posible se ha seguido la guía de estilo oficial de Python,
+expuesta en el documento oficial PEP8~\cite{pep8} por el propio creador del
+lenguaje, Guido van Rossum. Para reforzar el seguimiento de estas buenas
+prácticas de código se ha hecho uso de herramientas de verificación automática,
+que comprueban que el código se ajuste a las convenciones de nombrado, sintaxis
+y otras recomendaciones presentes en el citado documento.
 
 
 \section{Conclusiones y difusión}
@@ -605,11 +580,30 @@ objetivos a cumplir. En particular:
   aplicación móvil para el sistema operativo Android desarrollada a tal
   efecto. Actualmente la aplicación se encuentra disponible en la forja de
   código~\cite{forja} y en un futuro lo estará en el Google Play Store.
+
+
+% \item Investigar y conocer los vectores de vigilancia usados habitualmente para
+%   monitorizar servicios de Internet.
+% \item Ampliar mis conocimientos sobre desarrollo web en general y las
+%   tecnologías de \textit{back-end} en particular.
+% \item Adquirir soltura en el uso del lenguaje de programación Python en entornos
+%   web.
+% \item Obtener una base de conocimientos sobre el desarrollo de aplicaciones
+%   sobre la plataforma móvil Android.
+% \item Utilizar un enfoque de análisis, diseño y codificación orientado
+%   a objetos, de una forma lo más clara y modular posible, para
+%   permitir ampliaciones y modificaciones sobre la aplicación por
+%   terceras personas.
+% \item Hacer uso de herramientas básicas en el desarrollo de software,
+%   como son los sistemas de control de versiones para llevar
+%   un control realista del desarrollo del software, así como hacer de
+%   las veces de sistema de copias de seguridad.
+
 \end{itemize}
 
 La compleción total de los objetivos funcionales también pone de manifiesto que
 se han alcanzado satisfactoriamente los objetivos transversales y personales
-dispuestos en el inicio. Se han afianzado fuertemente los conocimientos de
+que se presentaron. Se han afianzado fuertemente los conocimientos de
 desarrollo web en general y con Django en particular hasta un nivel de
 competencia suficiente para servir como baza en la búsqueda laboral. Además,
 SiteUp ha servido satisfactoriamente como primera incursión en el mundo del
@@ -617,11 +611,11 @@ desarrollo de aplicaciones Android.
 
 \subsection{Conclusiones personales}
 
-SiteUp es uno de los pocos proyectos personales que han surgido para suplir una
-\textbf{necesidad} real y específica y que, al término del desarrollo, han
-conseguido su objetivo. La idea inicial ha servido como eje motor del proyecto
-en todo momento. Si se diese la situación presentada en el inicio, el proyecto
-SiteUp sería capaz de detectar el problema e informar en consecuencia.
+SiteUp es un proyecto personal que ha surgido para suplir una \textbf{necesidad}
+real y específica y que, al término del desarrollo, ha conseguido su
+objetivo. La idea inicial ha servido como eje motor del proyecto en todo
+momento. Si se diese la situación presentada en el inicio, el proyecto SiteUp
+sería capaz de detectar el problema e informar en consecuencia.
 
 
 \subsubsection{Lecciones aprendidas}
@@ -661,117 +655,6 @@ cuenta e integrando.
 El jurado del premio local decidió nombrar a SiteUp ganador del premio al
 \textit{Mejor Proyecto Innovador de Software Libre}~\cite{cusl-local}.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{logo_cusl}
-  \caption{Logotipo VIII CUSL}
-\end{figure}
-
-% \subsection{Posibles mejoras}
-% Hay un gran número de posibles mejoras y extensiones de la funcionalidad de
-% oFlute, en unos casos descubiertas de forma personal y en otros casos aportadas
-% por terceras personas. Algunas de las más interesantes son las siguientes:
-% \begin{itemize}
-% \item Extensión del sistema de lecciones para permitir lecciones de varios
-%   pasos, así como integrar las lecciones con el analizador de audio para
-%   comprobar los conocimientos in-situ.
-% \item Mejora de la jugabilidad del sistema de canciones, añadiendo bonus y
-%   puntos extra.
-% \item Intentar extender el sistema a otros instrumentos o a la voz humana.
-% \item Portar el videojuego a la plataforma Windows.
-% \end{itemize}
-
-% \subsection{Conclusiones personales}
-
-% oFlute ha sido el proyecto más longevo al que me he enfrentado hasta ahora. A
-% pesar de tener conciencia de la envergadura del mismo desde el principio, el
-% tiempo para completarlo ha superado todas mis expectativas, sobre todo en lo que
-% a documentación se refiere. 
-
-% Gracias a oFlute he aprendido las técnicas básicas de la programación de audio,
-% sobre todo en la parte técnica más que teórica. Es esta parte teórica, sobre
-% todo la de análisis, la que me gustaría reforzar en un futuro, ahora que cuento
-% con las bases para conseguirlo. Los videojuegos relacionados con el audio
-% son un nicho aún poco explorado y que puede dar muchas satisfacciones, sobre
-% todo cuando el producto se orienta a un público joven.
-
-% Por otro lado, oFlute también me ha ayudado a aprender a usar bastantes
-% tecnologías auxiliares, en algunos casos meras herramientas que han facilitado
-% el trabajo y, en otros casos, elementos que resultaron ser de inestimable ayuda
-% e imprescindible uso al término del proyecto.
-
-% Una de estas tecnologías es \textbf{Boost}~\cite{boost}, un conjunto de
-% bibliotecas para C++ que amplían en gran medida la biblioteca estándar del
-% lenguaje. Un amplio número de componentes de Boost formarán parte del nuevo
-% estándar C++0x, por lo que me ha servido para ponerme al día en las novedades
-% que están por llegar.
-
-% Al tratarse de la principal biblioteca utilizada durante el desarrollo, oFlute
-% me ha provisto de un profundo conocimiento de \textbf{Gosu}~\cite{gosu},
-% permitiéndome implementar videojuegos con mucha más fluidez y labrándome un
-% pequeño \textit{framework} personal que utilizar de base en próximos
-% proyectos. 
-
-% Otra de las tecnologías que he aprendido ha sido \textbf{GNU Gettext}, que ha
-% servido para internacionalizar el proyecto. Aunque inicialmente se pensó en
-% utilizar una solución propia para la internacionalización el proyecto,
-% posteriormente se decidió usar esta tecnología, ampliamente conocida y
-% utilizada.
-
-% \subsection{Difusión}
-
-% \subsubsection{Conocimiento generado}
-
-% Además de servir como recurso para el correcto transcurso del proyecto, los
-% conocimientos adquiridos me permitieron, en numerosos casos, generar
-% documentación adicional e impartir talleres relacionados las tecnologías
-% previamente mencionadas.
-
-% En cuanto a Boost, se llevó a cabo un taller durante los \textit{Cursos de
-%   Verano de la OSLUCA}~\cite{cursosverano}, en el que se explicaron las partes
-% más importantes de esta colección de bibliotecas, con numerosos ejemplos de
-% muchas de ellas. Toda la documentación es libre~\cite{materialesCursoBoost}.
-
-% Por otro lado, impartí un taller~\cite{tallergosu} sobre la biblioteca Gosu en
-% colaboración con la ADVUCA~\cite{advuca}, cuya afluencia superó las 50
-% personas. Los materiales pueden descargarse
-% libremente~\cite{tallergosumateriales}.
-
-% Por último, tras la aplicación de GNU Gettext en oFlute, escribí una guía
-% concisa sobre traducción de proyectos con esta herramienta, que se puede
-% encontrar en uno de los apéndices de la memoria, así como de forma online en la
-% url \url{http://hdl.handle.net/10498/10772}.
-
-
-% \subsubsection{Freegemas}
-
-% Uno de los proyectos \textit{``hijos''} de oFlute ha sido
-% \textbf{Freegemas}~\cite{freegemas}, un clon libre del popular juego tipo puzzle
-% \textit{Bejeweled}. Freegemas es multiplataforma, funciona tanto en GNU/Linux
-% como en Windows, y además forma parte oficial de Guadalinex~\cite{guadalinex},
-% por lo que es posible encontrarlo en los repositorios oficiales.
-
-% Además, Freegemas sirvió como base para una serie de tres artículos que
-% publiqué, junto al director del presente PFC, en la revista Linux
-% Magazine~\cite{linuxmagazine} sobre desarrollo de videojuegos en C++. Es posible
-% encontrar estos artículos en el archivo de la
-% revista~\cite{refarticulo1}~\cite{refarticulo2}~\cite{refarticulo3} bajo una
-% licencia Creative Commons.
-
-% \subsubsection{IV Concurso Universitario de Software Libre}
-
-% Por otro lado, gracias a oFlute tuve la oportunidad de participar en el IV
-% Concurso Universitario de Software Libre~\cite{cusl}. En el transcurso del
-% concurso formé parte de una comunidad muy unida, en la que reinó el apoyo y la
-% ayuda entre los concursantes. La final del concurso se celebró en la Escuela
-% Superior de Ingeniería de Cádiz, en la que oFlute obtuvo una mención
-% especial~\cite{cusl2}.
-
-% Previa a la final nacional tuvo lugar la fase local del concurso, en el que el
-% proyecto también recibió un accésit al mejor proyecto de
-% innovación~\cite{cusllocal}.
-
-\pagebreak
 
 \bibliographystyle{hispa-annote}
 \bibliography{bibliografia}
