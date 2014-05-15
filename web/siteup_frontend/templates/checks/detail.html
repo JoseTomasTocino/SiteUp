@@ -174,6 +174,19 @@
                     </tbody>
                 </table>
 
+                <h3>
+                    {% trans "Exporting options" %}
+                </h3>
+
+                <div class="check-export-options">
+                    <a href="{{ check.export_logs_url }}?period={{ period.code }}" class="button">
+                        Export check logs as JSON
+                    </a>
+                    <a href="{{ check.export_statuses_url }}?period={{ period.code }}" class="button">
+                        Export check events as JSON
+                    </a>
+                </div>
+
             </div> {# .tabs-content #}
 
         {% endfor %}

@@ -316,6 +316,12 @@ class BaseCheck(models.Model):
     def disable_url(self):
         return self.generic_url('disable_check')
 
+    def export_logs_url(self):
+        return self.generic_url('export_check_logs')
+
+    def export_statuses_url(self):
+        return self.generic_url('export_check_statuses')
+
     def unique_name(self):
         return self.__class__.__name__.lower() + str(self.pk)
 

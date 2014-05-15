@@ -7,9 +7,6 @@ from siteup_frontend import views as fe_views
 from siteup_api import views as api_views
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'siteup.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
     url(r'^api/login$', api_views.LoginView.as_view(), name='api_login'),
 
@@ -37,16 +34,14 @@ urlpatterns = patterns('',
 
     url(r'^groups/(?P<pk>\d{1,})/addcheck/$', fe_views.ChooseCheckTypeTemplateView.as_view(), name="new_check"),
     url(r'^groups/(?P<pk>\d{1,})/addcheck/(?P<type>\w{1,})/$', fe_views.CheckCreateView.as_view(), name="new_check_next"),
-    # url(r'^groups/(?P<pk>\d{1,})/addpingcheck', fe_views.PingCheckCreateView.as_view(), name="new_ping_check"),
-    # url(r'^groups/(?P<pk>\d{1,})/adddnscheck', fe_views.DnsCheckCreateView.as_view(), name="new_dns_check"),
-    # url(r'^groups/(?P<pk>\d{1,})/addportcheck', fe_views.PortCheckCreateView.as_view(), name="new_port_check"),
-    # url(r'^groups/(?P<pk>\d{1,})/addhttpcheck', fe_views.HttpCheckCreateView.as_view(), name="new_http_check"),
 
     url(r'^checks/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDetailView.as_view(), name="view_check"),
     url(r'^checks/edit/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckUpdateView.as_view(), name="edit_check"),
     url(r'^checks/delete/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDeleteView.as_view(), name="delete_check"),
     url(r'^checks/enable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckEnableView.as_view(), name="enable_check"),
     url(r'^checks/disable/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckDisableView.as_view(), name="disable_check"),
+    url(r'^checks/export_logs/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckExportLogsView.as_view(), name="export_check_logs"),
+    url(r'^checks/export_statuses/(?P<type>\w{1,})/(?P<pk>\d{1,})/$', fe_views.CheckExportStatusesView.as_view(), name="export_check_statuses"),
 
     url(r'^captcha/', include('captcha.urls')),
 

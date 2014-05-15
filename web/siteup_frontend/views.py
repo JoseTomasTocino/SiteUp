@@ -29,6 +29,7 @@ from siteup_api import models
 ############################################################################
 # MY MIXINS
 
+
 class DeleteMessageMixin(object):
     """
     Displays a flash message after an object has been deleted in a DeleteView.
@@ -50,6 +51,7 @@ class DeleteMessageMixin(object):
         return HttpResponseRedirect(self.get_success_url())
 
 ############################################################################
+
 
 class HomeView(TemplateView):
     """
@@ -121,7 +123,7 @@ class SignupView(FormView):
         oplogger.info(u"USER_SIGNUP: User '{}' was created".format(user.username))
 
         # Create the extra info model
-        user_extra = models.UserExtra.objects.create(
+        models.UserExtra.objects.create(
             user=user,
             send_report=True
         )
@@ -277,6 +279,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         return context
 
+
 @login_required
 def get_dashboard_graph_data(request, check_type, check_id):
 
@@ -375,10 +378,6 @@ class GroupDeleteView(LoginRequiredMixin, DeleteMessageMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(GroupDeleteView, self).get_context_data(**kwargs)
-        context['back_to'] = reverse_lazy('dashboard')
-
-    def get_context_data(self, **kwargs):
-        context = super(GroupDeleteView, self).get_context_data(**kwargs)
         context["back_to"] = reverse_lazy("dashboard")
 
         return context
@@ -452,7 +451,9 @@ class GenericCheckViewMixin(object):
         self.model_class_cache = None
 
     def get_model_class(self):
-        """Returns the model class according to the `type` parameter passed via URL"""
+        """
+        Returns the model class according to the `type` parameter passed via URL
+        """
 
         # Get the actual model class using the ContentType framework
         if not self.model_class_cache:
@@ -465,6 +466,9 @@ class GenericCheckViewMixin(object):
         return self.model_class_cache
 
     def get_queryset(self):
+        """
+        Limits the queryset to the elements owned by the logged user.
+        """
         return self.get_model_class().objects.filter(group__owner=self.request.user)
 
     def get_form_class(self):
@@ -482,7 +486,7 @@ class CheckCreateView(GenericCheckViewMixin, LoginRequiredMixin, CreateView):
 
         context = super(CheckCreateView, self).get_context_data(**kwargs)
         verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
-        context["form_title"] = _("Create new %(checktype)s") % { 'checktype': verbose_name }
+        context["form_title"] = _("Create new %(checktype)s") % {'checktype': verbose_name}
         context["form_submit"] = _("Create check")
 
         return context
@@ -525,7 +529,7 @@ class CheckUpdateView(GenericCheckViewMixin, LoginRequiredMixin, UpdateView):
         context = super(CheckUpdateView, self).get_context_data(**kwargs)
 
         verbose_name = self.get_model_class()._meta.verbose_name.capitalize()
-        context["form_title"] = _("Update %(checktype)s") % { 'checktype': verbose_name }
+        context["form_title"] = _("Update %(checktype)s") % {'checktype': verbose_name}
         context["form_submit"] = _("Update check")
         context["back_to"] = self.get_success_url()
 
@@ -557,9 +561,10 @@ class CheckDeleteView(GenericCheckViewMixin, LoginRequiredMixin, DeleteMessageMi
         if back_to in (None, 'dashboard'):
             context['back_to'] = reverse_lazy('dashboard')
         elif back_to == 'detail':
-            context['back_to'] =  self.get_object().detail_url()
+            context['back_to'] = self.get_object().detail_url()
 
         return context
+
 
 class CheckEnableView(GenericCheckViewMixin, LoginRequiredMixin, View):
 
@@ -590,16 +595,19 @@ class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
         periods = [
             {
                 'title': 'Last 24 hours',
+                'code': 'last_24',
                 'logs': self.object.logs.in_period(check_type=self.object.type_name, hours=24),
                 'statuses': self.object.statuses.in_period(hours=24)
             },
             {
                 'title': 'Last week',
+                'code': 'last_week',
                 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=7),
                 'statuses': self.object.statuses.in_period(days=7)
             },
             {
                 'title': 'Last month',
+                'code': 'last_month',
                 'logs': self.object.logs.in_period(check_type=self.object.type_name, days=30),
                 'statuses': self.object.statuses.in_period(days=30)
             },
@@ -608,3 +616,71 @@ class CheckDetailView(GenericCheckViewMixin, LoginRequiredMixin, DetailView):
         context['periods'] = periods
 
         return context
+
+
+class CheckExportLogsView(GenericCheckViewMixin, LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+
+        """
+        Returns the check's CheckLogs within the selected time period.
+        """
+
+        # Get the check
+        check = self.get_queryset().get(pk=kwargs['pk'])
+
+        # Get the period from the URL's query
+        period = request.GET.get('period', None)
+
+        # Fetch the logs
+        if period in ('last_24', None):
+            logs = check.logs.in_period(check_type=check.type_name, hours=24)
+
+        elif period == 'last_week':
+            logs = check.logs.in_period(check_type=check.type_name, days=7)
+
+        else:
+            logs = check.logs.in_period(check_type=check.type_name, days=30)
+
+        # Turn the logs into JSON
+        data = json.dumps([{
+            'date': o.date.isoformat(),
+            'status': o.status,
+            'status_extra': o.status_extra,
+            'response_time': o.response_time} for o in logs['objs']
+        ])
+
+        return HttpResponse(data, content_type="application/json")
+
+
+class CheckExportStatusesView(GenericCheckViewMixin, LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+
+        """
+        Returns the check's CheckStatuses within the selected time period.
+        """
+
+        # Get the check
+        check = self.get_queryset().get(pk=kwargs['pk'])
+
+        # Get the period from the URL's query
+        period = request.GET.get('period', None)
+
+        # Fetch the statuses
+        if period in ('last_24', None):
+            statuses = check.statuses.in_period(hours=24)
+
+        elif period == 'last_week':
+            statuses = check.statuses.in_period(days=7)
+
+        else:
+            statuses = check.statuses.in_period(days=30)
+
+        # Turn the statuses into JSON
+        data = json.dumps([{
+            'date_start': o.get_date_start(),
+            'date_end': o.get_date_end(),
+            'status': o.status,
+            'status_extra': o.status_extra} for o in statuses
+        ])
+
+        return HttpResponse(data, content_type="application/json")
