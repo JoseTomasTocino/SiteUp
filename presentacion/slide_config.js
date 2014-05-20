@@ -25,9 +25,9 @@ var SLIDE_CONFIG = {
     name: 'José Tomás Tocino',
     company: 'PFC Ingeniería Informática',
     //gplus: 'http://plus.google.com/1234567890',
-    twitter: '@josetomastocino',
-    www: 'http://www.josetomastocino.com',
-    github: 'http://github.com/josetomastocino'
+    // twitter: '@josetomastocino',
+    www: 'http://siteup.josetomastocino.com',
+    github: 'http://github.com/josetomastocino/pfc-ii'
   }/*, {
     name: 'Second Name',
     company: 'Job Title, Google',

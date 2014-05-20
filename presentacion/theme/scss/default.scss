@@ -1086,9 +1086,13 @@ p {
 }
 
 hgroup {
-  margin-bottom: 0.8em;
+  margin-bottom: 0.4em;
 }
 
 slides>slide>article.vcenter{
   margin-top: 0;
+}
+
+article {
+  margin-top: 20px !important;
 }
