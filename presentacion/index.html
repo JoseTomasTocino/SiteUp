@@ -1,0 +1,545 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <span><img src="images/siteup_logo_128.png"> SiteUp</span>
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <aside class="gdbar"><img src="images/siteup_logo_128.png"></aside>
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Índice</h2>
+    </hgroup>
+
+    <article>
+      <ul>
+        <li>Introducción</li>
+        <li>Descripción general</li>
+        <li>Calendario</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="segue nobackground">
+    <!-- <aside class="gdbar"><img src="images/siteup_logo_128.png"></aside> -->
+    <hgroup class="auto-fadein">
+      <h2 style="color: #333;">Introducción</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introducción</h2>
+      <h3>Contexto</h3>
+    </hgroup>
+
+    <article style="padding-top: 1em">
+      <div class="build">
+        <p class="centered" style="font-size:1.4em">
+          Las nuevas tecnologías son parte integral de la sociedad.
+        </p>
+
+        <p class="centered" style="font-size:1.4em">
+          Surgen nuevos modelos de negocio basados al 100% en las TIC.
+        </p>
+
+        <p class="centered" style="font-size:1.4em">
+          Queda manifiesta la importancia de la fiabilidad de los servicios.
+        </p>
+      </div>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introducción</h2>
+      <h3>Motivación personal</h3>
+    </hgroup>
+
+    <article>
+      <ul class="build">
+        <li>Octubre de 2013, proceso de selección con Google</li>
+        <li>Dirección: info@josetomastocino.com</li>
+        <li>La empresa de alojamiento borra accidentalmente los registros DNS</li>
+        <li>Resultado: <b class="red3">correos electrónicos perdidos</b>.</li>
+        <li>Se podría <span class="blue3">haber evitado teniendo monitorización</span> sobre las DNS.</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introducción</h2>
+      <h3>Objetivos</h3>
+    </hgroup>
+
+    <ul class="build">
+      <li>Adquisición de base de conocimientos.</li>
+      <li>Creación de un módulo para crear varios tipos de chequeos.</li>
+      <li>Construcción de una plataforma online para la creación y gestión de tales chequeos.</li>
+      <li>Desarrollo de un sistema de notificaciones a través de correo y mediante una aplicación Android.</li>
+    </ul>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Introducción</h2>
+      <h3>Objetivos transversales</h3>
+    </hgroup>
+
+    <ul class="build">
+      <li>Conocer los entresijos de una aplicación de monitorización.</li>
+      <li>Ampliar conocimientos sobre desarrollo web.</li>
+      <li>Adquirir experiencia en la programación de apps Android.</li>
+      <li>Descubrir nuevas tecnologías.</li>
+      <li>Aportar al software libre.</li>
+    </ul>
+  </slide>
+
+  <slide class="segue nobackground">
+    <!-- <aside class="gdbar"><img src="images/siteup_logo_128.png"></aside> -->
+    <hgroup class="auto-fadein">
+      <h2 style="color: #333;">Planificación</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Planificación</h2>
+      <h3>Desarrollo iterativo</h3>
+    </hgroup>
+
+    <article>
+      <ul class="build">
+        <li>Adquisición de base de conocimientos.</li>
+        <li>Desarrollo de módulo de chequeo básico.</li>
+        <li>Desarrollo de la plataforma web.</li>
+        <li>Integración del motor de tareas asíncronas.</li>
+        <li>Desarrollo de la aplicación Android.</li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="fill nobackground" style="background-size: contain; background-image: url(images/gantt.png)">
+
+  </slide>
+
+  <slide class="segue nobackground">
+    <!-- <aside class="gdbar"><img src="images/siteup_logo_128.png"></aside> -->
+    <hgroup class="auto-fadein">
+      <h2 style="color: #333;">Descripción</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Descripción</h2>
+      <h3>Qué es SiteUp</h3>
+    </hgroup>
+
+    <article class="centered">
+
+      <p>
+        <img src="images/logo.png" style="width: 25%;">
+      </p>
+
+      <p style="font-size: 30px; line-height: 1.5">
+        Herramienta de <b>monitorización</b> de servicios de Internet, accesible a
+        través de la web, con <b>notificaciones</b> mediante correo electrónico y
+        una <b>aplicación Android</b>.
+      </p>
+
+    </article>
+  </slide>
+
+  <slide>
+    <article class="flexbox vcenter">
+      <h2 class="centered">Plataforma web <br> + <br> Aplicación Android</h2>
+
+    </article>
+  </slide>
+
+<!--   <slide>
+    <hgroup>
+      <h2>Datos <i>surtidos</i></h2>
+    </hgroup>
+
+    <article>
+      <ul>
+        <li>4 meses de desarrollo (Dic - Abril)</li>
+        <li>2 meses funcionando (Feb - Abril) en <a href="#">siteup.josetomastocino.com</a></li>
+        <li>Tecnologías front-end: HTML5, CSS3, D3, jQuery, Sass, Compass, Grunt, RWD...</li>
+        <li>Tecnologías back-end: Nginx, Gunicorn, Django, South, Celery, RabbitMQ, Requests, PyDNS, VirtualEnv, Fabric, Supervisor...</li>
+        <li>~ 5300 líneas de código Python (sin contar framework ni bibliotecas)</li>
+        <li>Licencia GNU GPLv3</li>
+        <li>Forja en Github: <a href="http://github.com/josetomastocino/pfc-ii">github.com/josetomastocino</a></li>
+      </ul>
+    </article>
+
+  </slide> -->
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+    </hgroup>
+
+    <article>
+      <img src="images/web-dashboard.png" style="width: 100%">
+    </article>
+  </slide>
+
+<!--   <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Gestión de usuarios</h3>
+    </hgroup>
+
+    <article>
+      <ul>
+        <li>Los usuarios pueden crear cuentas <b>gratuitas</b>.</li>
+        <li>Registro mediante nombre de usuario, e-mail y contraseña.</li>
+        <li></li>
+      </ul>
+    </article>
+  </slide> -->
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Gestión de chequeos</h3>
+    </hgroup>
+    <article class="flexbox vcenter centered">
+      <p class="bigger">
+        Un <b>chequeo</b> representa un punto de <b>vigilancia</b> sobre un servicio remoto.
+      </p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Gestión de chequeos</h3>
+    </hgroup>
+    <article class="flexbox vcenter centered">
+      <p class="bigger">
+        <i>"Quiero verificar el tiempo de respuesta de un servidor"</i>
+      </p>
+
+      <p class="bigger">
+        <i>"Debo comprobar que la web X responde correctamente"</i>
+      </p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Detalles de los chequeos</h3>
+    </hgroup>
+    <article class="">
+      <p class="centered">
+
+        <b>SiteUp</b> permite crear y gestionar esta clase de chequeos. <br> Todos
+        los chequeos cuentan con:
+
+      </p>
+
+      <ul class="build">
+        <li>
+          <b>Título</b> y <b>descripción</b>
+        </li>
+        <li>
+          <b>Periodicidad</b>: máximo 1 chequeo por minuto
+        </li>
+        <li>
+          <b>Sensibilidad</b>: fallos consecutivos para considerar un error
+        </li>
+        <li>
+          Opciones de <b>notificación</b>: e-mail, aplicación Android.
+        </li>
+        <li>
+          <b>Activación y desactivación</b> temporal.
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Grupos de chequeos</h3>
+    </hgroup>
+    <article class="">
+      <p class="centered">
+
+        <b>SiteUp</b> permite agrupar chequeos para facilitar su gestión:
+
+      </p>
+
+      <ul class="build">
+        <li>
+          <b>Título</b> descriptivo.
+        </li>
+        <li>
+          Facilidad de creación y <b>borrado</b> de los chequeos agrupados.
+        </li>
+        <li>
+          <b>Activación</b> y desactivación en masa.
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Tipos de chequeos</h3>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <p class="centered bigger">
+
+        <b>SiteUp</b> cuenta con <b class="blue3">cuatro tipos</b> de chequeos
+
+      </p>
+    </article>
+  </slide>
+
+
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Chequeo tipo <b>Ping</b></h3>
+    </hgroup>
+
+    <article>
+
+      <p class="centered">
+        Permiten comprobar que un <b>servidor remoto está en línea</b> y responde.
+      </p>
+
+      <ul>
+        <li>Chequeo mediante <b>paquetes ICMP</b> (<i>ping</i>)</li>
+        <li>Opcionalmente se puede definir un <b>tiempo de respuesta máximo</b></li>
+        <li>Se generan <b>gráficas</b> y <b>estadísticas</b> según tiempo de respuesta</li>
+      </ul>
+
+    </article>
+  </slide>
+
+  <slide>
+    <article>
+      <img src="images/pantalla_detalle_chequeo.png" style="width:100%" alt="">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Chequeo de <b>puertos</b></h3>
+    </hgroup>
+
+    <article>
+
+      <p class="centered">
+        Permiten comprobar que un <b>puerto asociado a un servicio</b> en un
+        servidor remoto es <b>accesible</b> y permite conexiones.
+      </p>
+
+      <ul>
+        <li>Se abre una conexión al servidor remoto en el puerto indicado</li>
+        <li>Opcionalmente se puede revisar la respuesta textual del servidor</li>
+      </ul>
+
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Chequeo de registros DNS</h3>
+    </hgroup>
+
+    <article>
+      <p class="centered">
+        Comprueba que el contenido de un registro DNS de un dominio sea el adecuado.
+      </p>
+      <ul>
+        <li> Tipos soportados:
+          <ul>
+            <li><b>A</b>: address record</li>
+            <li><b>AAAA</b>: IPv6 address record</li>
+            <li><b>CNAME</b>: canonical name (alias)</li>
+            <li><b>MX</b>: mail exchange</li>
+            <li><b>TXT</b>: text record</li>
+          </ul>
+
+        </li>
+      </ul>
+
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>HTTP check</h3>
+    </hgroup>
+
+    <article>
+      <p class="centered">
+        Comprueba que las <b>peticiones HTTP</b> a un <br><b>servidor web</b> se responden
+        adecuadamente.
+      </p>
+
+      <ul>
+        <li>Permite revisar el <b>código de estado</b> de las respuestas, por ejemplo:
+        <ul>
+          <li><b>200</b>: OK</li>
+          <li><b>404</b>: Not found</li>
+          <li><b>301</b>: Moved permanently</li>
+        </ul>
+        </li>
+        <li>Opcionalmente, permite también revisar el <b>contenido</b>.</li>
+      </ul>
+
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Generación y procesado de datos</h3>
+    </hgroup>
+
+    <article>
+
+    <ul>
+      <li>Periódicamente se registra el <b>estado</b> de cada chequeo.</li>
+      <li>Los cambios de estado producen <b>eventos</b> que lanzan <b>notificaciones</b></li>
+      <li>La información generada es visible en la <b>página de detalle</b> del chequeo.</li>
+      <li>Se generan <b>resúmenes</b> para las últimas 24 horas, última semana y último mes.</li>
+      <li>También se ofrece la opción de <b>exportar los datos</b> en formato JSON.</li>
+    </ul>
+    </article>
+  </slide>
+
+
+  <!-- ######################################### -->
+
+  <slide>
+    <hgroup>
+      <h2>Aplicación Android</h2>
+    </hgroup>
+    <article class="centered">
+      <img src="images/android-3.png" style="width: 30%">
+      &nbsp;&nbsp;&nbsp;
+      <img src="images/android-4.png" style="width: 30%">
+      &nbsp;&nbsp;&nbsp;
+      <img src="images/android-5.png" style="width: 30%">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Arquitectura lógica</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="images/arq_logica.png">
+    </article>
+  </slide>
+
+  <slide class="segue dark nobackground">
+    <aside class="gdbar"><img src="images/siteup_logo_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Demostración</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Trabajo futuro</i></h2>
+    </hgroup>
+
+    <article>
+      <ul>
+        <li>Ampliación de chequeos</li>
+        <li>Monetización</li>
+        <li>SiteUp Probes</li>
+        <li>Más formas de notificación: Telegram, SMS</li>
+      </ul>
+    </article>
+
+  </slide>
+
+
+
+  <slide class="thank-you-slide segue nobackground">
+    <aside class="gdbar right"><img src="images/siteup_logo_128.png"></aside>
+    <article class="flexbox vleft auto-fadein">
+      <h2>¡Gracias!</h2>
+      <p>¿Tienes preguntas? ¡Tengo respuestas!</p>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>
