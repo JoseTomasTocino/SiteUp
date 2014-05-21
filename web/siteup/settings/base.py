@@ -67,7 +67,7 @@ if not os.path.isdir(db_folder):
 # LANGUAGE_CODE = 'es-es'
 LANGUAGE_CODE = 'en-US'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
@@ -229,6 +229,8 @@ CHECKLOG_COLLAPSE_TIME_1 = 24
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = 'Europe/Madrid'
 
 # EMAIL_BACKEND
 EMAIL_HOST = 'smtp.gmail.com'

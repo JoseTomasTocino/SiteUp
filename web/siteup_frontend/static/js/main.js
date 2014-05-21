@@ -36,12 +36,15 @@ function buildGraphD3(graphName, graphData) {
     width = $(graphName).width() - margin.left - margin.right,
     height = $(graphName).height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format.iso.parse;
-
-
     // Preprocess data
     data.forEach(function(d) {
-        d[0] = parseDate(d[0]);
+        var dstr = d[0];
+
+        // Remove miliseconds and the T divisor
+        dstr = dstr.substr(0, dstr.lastIndexOf('.')).replace('T', ' ');
+
+        // Build the date
+        d[0] = new Date(dstr);
     });
 
     var format = d3.time.format.multi([
@@ -58,7 +61,7 @@ function buildGraphD3(graphName, graphData) {
     // Init X scale3
     // d3.extent returns minimum and maximum
 
-    x = d3.time.scale()
+    x = d3.time.scale.utc()
         .range([0, width])
         .domain(d3.extent(data, function(d) { return d[0]; }));
 
