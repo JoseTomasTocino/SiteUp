@@ -61,7 +61,7 @@ rtt .* = \s+                         # Separator
         logger.error("END OF PING OUTPUT ERROR")
 
         # Most usual kind of error is bad host
-        if "unknown host" in ping_raw_response:
+        if "unknown host" in ping_raw_error:
             return {'valid': False, 'error': 'Unknown host'}
         else:
             return {'valid': False, 'error': 'Unknown error'}
