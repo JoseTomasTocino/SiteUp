@@ -5,7 +5,7 @@ var SLIDE_CONFIG = {
     subtitle: 'Plataforma de monitorización de servicios de Internet',
     eventInfo: {
       title: 'Universidad de Cádiz',
-      date: 'xx/05/2014'
+      date: '28/05/2014'
     },
     useBuilds: true, // Default: true. False will turn off slide animation builds.
     usePrettify: true, // Default: true
