@@ -55,7 +55,6 @@ URL: https://code.google.com/p/io-2012-slides
         <li>Desarrollo</li>
         <li>Conclusiones y difusión</li>
         <li>Demostración</li>
-        <li>Ronda de preguntas</li>
       </ul>
     </article>
   </slide>
@@ -162,7 +161,16 @@ URL: https://code.google.com/p/io-2012-slides
     </article>
   </slide>
 
-  <slide class="fill nobackground" style="background-size: contain; background-image: url(images/gantt.png)">
+  <!-- <slide class="fill nobackground" style="background-size: contain; background-image: url(images/gantt.png)"> -->
+  <slide class="nobackground">
+
+    <hgroup>
+      <h2>Planificación (Gantt)</h2>
+    </hgroup>
+
+    <article>
+      <img src="images/gantt.png" alt="" style="width: 100%">
+    </article>
   </slide>
 
   <!-- ############################################### -->
@@ -310,6 +318,18 @@ URL: https://code.google.com/p/io-2012-slides
   <slide>
     <hgroup>
       <h2>Plataforma web</h2>
+      <h3>Formulario de creación de chequeo</h3>
+    </hgroup>
+
+    <article class="centered">
+      <img src="images/detalle_formulario_chequeo.png" alt="" style="width: 60%">
+    </article>
+  </slide>
+
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
       <h3>Grupos de chequeos</h3>
     </hgroup>
     <article class="">
@@ -336,6 +356,17 @@ URL: https://code.google.com/p/io-2012-slides
   <slide>
     <hgroup>
       <h2>Plataforma web</h2>
+      <h3>Grupo de chequeos</h3>
+    </hgroup>
+
+    <article class="centered">
+      <img src="images/detalle_grupo.png" alt="" style="width: 81%">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
       <h3>Tipos de chequeos</h3>
     </hgroup>
     <article class="flexbox vcenter">
@@ -344,6 +375,17 @@ URL: https://code.google.com/p/io-2012-slides
         <b>SiteUp</b> cuenta con <b class="blue3">cuatro tipos</b> de chequeos
 
       </p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
+      <h3>Tipos de chequeos</h3>
+    </hgroup>
+
+    <article>
+      <img src="images/seleccion_tipo.png" style="width:100%" alt="">
     </article>
   </slide>
 
@@ -367,12 +409,6 @@ URL: https://code.google.com/p/io-2012-slides
         <li>Se generan <b>gráficas</b> y <b>estadísticas</b> según tiempo de respuesta.</li>
       </ul>
 
-    </article>
-  </slide>
-
-  <slide>
-    <article>
-      <img src="images/pantalla_detalle_chequeo.png" style="width:100%" alt="">
     </article>
   </slide>
 
@@ -470,6 +506,17 @@ URL: https://code.google.com/p/io-2012-slides
   <slide>
     <hgroup>
       <h2>Plataforma web</h2>
+      <h3>Generación y procesado de datos</h3>
+    </hgroup>
+
+    <article class="centered">
+      <img src="images/pantalla_detalle_chequeo.png" style="width:77%" alt="">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Plataforma web</h2>
       <h3>Notificaciones vía e-mail</h3>
     </hgroup>
 
@@ -493,8 +540,14 @@ URL: https://code.google.com/p/io-2012-slides
       <h3>Notificaciones diarias</h3>
     </hgroup> -->
 
-    <article class="centered" style="">
-      <img src="images/email_resumen.png" alt="" width="60%">
+      <hgroup>
+        <h2>Plataforma web</h2>
+        <h3>Resumen diario</h3>
+      </hgroup>
+
+      <article class="centered">
+        <img src="images/email_resumen.png" alt="" width="60%">
+      </article>
 <!--     <ul>
       <li>Los usuarios reciben un <b>resumen diario</b> sobre sus chequeos.</li>
       <li>La web tiene un diseño <i>responsive</i> compatible con dispositivos móviles.</li>
@@ -504,7 +557,6 @@ URL: https://code.google.com/p/io-2012-slides
       <li>Se generan <b>resúmenes</b> para las últimas 24 horas, última semana y último mes.</li>
       <li>También se ofrece la opción de <b>exportar los datos</b> en formato JSON.</li>
     </ul> -->
-    </article>
   </slide>
 
 
@@ -571,7 +623,7 @@ URL: https://code.google.com/p/io-2012-slides
         <!-- <li>Proyecto <b>muy variado</b> en tecnologías.</li> -->
         <li>En <b>front-end</b>:
           <ul>
-            <li><b>HTML5</b> como lenguaje de marcado, <b>SCSS</b> y <b>Compass</b> para estilos.</li>
+            <li><b>HTML5</b> como lenguaje de marcado, <b>SASS</b> y <b>Compass</b> para estilos.</li>
             <li><b>jQuery</b> y <b>D3</b> para interactividad y gráficas.</li>
           </ul>
         </li>
@@ -623,7 +675,35 @@ URL: https://code.google.com/p/io-2012-slides
         SiteUp usa el comando internamente y procesa su salida usando expresiones regulares.
       </p>
 
+      <pre class="prettyprint" data-lang="bash" style="text-align: left">
+$ ls -l `which ping`
+-rwsr-xr-x 1 root root 44176 may 16  2013 /bin/ping </pre>
+    </article>
+  </slide>
 
+  <slide>
+    <hgroup>
+      <h2>Desarrollo</h2>
+      <h3>Detalles de implementación: lanzamiento de Ping</h3>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="python">
+matcher = re.compile(r"""
+^PING \s+                                     # Header
+(?P&lt;host&gt;.*?) \s+                             # Host
+\((?P&lt;ip&gt;.*?)\)                               # IP address
+.*?                                           # Ignore individual pings
+(?P&lt;transmitted&gt;\d+) \s+ packets       .*?     # Packets transmitted
+(?P&lt;received&gt;\d+) \s+ received         .*?     # Packets received
+ms                                     \s*     # Ending of the statistics line
+(                                    # Non-capturing group for the stats
+rtt .* = \s+                         # Separator
+(?P&lt;min&gt;[^/]*)/                      # Min time
+(?P&lt;avg&gt;[^/]*)/                      # Avg time
+(?P&lt;max&gt;[^/]*)/                      # Max time
+(?P&lt;mdev&gt;.*?) \s ms                  # Mdev
+)?
+""", re.DOTALL | re.IGNORECASE | re.MULTILINE | re.VERBOSE)</pre>
     </article>
   </slide>
 
@@ -654,6 +734,46 @@ URL: https://code.google.com/p/io-2012-slides
       </p>
 
 
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Desarrollo</h2>
+      <h3>Detalles de implementación: resumen de registros</h3>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="images/reduccion_registros.png" style="width:100%">
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Desarrollo</h2>
+      <h3>Pruebas de software</h3>
+    </hgroup>
+
+    <article>
+      <p>Estrategia de pruebas híbrida:</p>
+
+      <ul class="build" style="line-height: 1.4">
+        <li>
+          Entorno de pruebas virtual con batería de <b>pruebas automatizadas</b>,
+          tanto funcionales como de integración y de sistema.
+        </li>
+        <li>
+          <b>Entorno de producción</b> real, con el software desplegado
+          y funcionando desde febrero.
+        </li>
+
+        <li>
+          Pruebas puntuales de <b>seguridad y accesibilidad</b> en dispositivos.
+        </li>
+
+        <li>
+          Verificación de <b>calidad del código</b> con herramientas automáticas (PEP8).
+        </li>
+      </ul>
     </article>
   </slide>
 
@@ -769,6 +889,22 @@ URL: https://code.google.com/p/io-2012-slides
     </article>
   </slide>
 
+  <slide>
+    <hgroup>
+      <h2>Conclusiones</h2>
+      <h3>Trabajo futuro</h3>
+    </hgroup>
+
+    <article class="">
+      <ul class="build">
+        <li>SiteUp Probes</li>
+        <li>Monetización</li>
+        <li>Ampliación de tipos de chequeos</li>
+        <li>Ampliación de notificaciones: sms, twitter, etc.</li>
+      </ul>
+    </article>
+  </slide>
+
   <!-- ######################################### -->
 
   <slide class="segue dark nobackground">
@@ -800,7 +936,6 @@ URL: https://code.google.com/p/io-2012-slides
     <aside class="gdbar right"><img src="images/siteup_logo_128.png"></aside>
     <article class="flexbox vleft auto-fadein">
       <h2>¡Gracias por su atención!</h2>
-      <p>Ronda de preguntas</p>
     </article>
     <p class="auto-fadein" data-config-contact>
       <!-- populated from slide_config.json -->
