@@ -13,6 +13,10 @@ function fetchGraphData(graphName, graphData) {
         });
     }
 
+    else if ($(graphName).data('already-drawn') != undefined) {
+        return;
+    }
+
     // Detail page already has the data
     else {
         buildGraphD3(graphName, graphData);
@@ -32,7 +36,14 @@ function buildGraphD3(graphName, graphData) {
         var dstr = d[0];
 
         // Remove miliseconds and the T divisor
-        dstr = dstr.substr(0, dstr.lastIndexOf('.')).replace('T', ' ');
+        // In collapsed logs, miliseconds are not included...
+        var lastDot = dstr.lastIndexOf('.');
+
+        if (lastDot == -1) {
+            dstr = dstr.replace('T', ' ');
+        } else {
+            dstr = dstr.substr(0, dstr.lastIndexOf('.')).replace('T', ' ');
+        }
 
         // Build the date
         d[0] = new Date(dstr);
@@ -178,6 +189,7 @@ function buildGraphD3(graphName, graphData) {
         .style("text-anchor", "end")
         .text("Price ($)") //*/
 
+    $(graphName).data('already-drawn', 1);
 
     $(graphName).find('.placeholder').fadeOut(function(){
         baseSvg
