@@ -18,5 +18,5 @@ On the front-end, SiteUp uses __Sass__ and __Compass__ to build the CSS, __D3__ 
 
 To run the web platform, the recommended setup is using __nginx__, __gunicorn__ and __supervisord__.
 
-This project has been developed as the Final Degree Project for my __MSc in Computer Engineering__ at the [University of Cádiz](http://uca.es), Spain. Public defense is expected to take place the last week of May.
+This project has been developed as the Final Degree Project for my __MSc in Computer Engineering__ at the [University of Cádiz](http://uca.es), Spain. Public defense took place on May 28th, and the project was awarded with honours.
 
