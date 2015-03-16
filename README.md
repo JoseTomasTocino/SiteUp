@@ -1,7 +1,7 @@
 SiteUp
 ======
 
-__SiteUp__ is an open source web platform for monitoring Internet services built using [Django](http://djangoproject.com). It's currently running at http://siteup.josetomastocino.com, although that's a __temporary__ location.
+__SiteUp__ is an open source web platform for monitoring Internet services built using [Django](http://djangoproject.com). It's not currently online but you can set it up yourself if you feel like it! That's the power of OSS right there.
 
 ![Dashboard](https://raw.githubusercontent.com/JoseTomasTocino/SiteUp/master/resumen/imagenes/detalle_dashboard.png)
 
